@@ -1,0 +1,1472 @@
+{
+  "routes": {
+    "dashboard": "Dashboard",
+    "owner": "Owner",
+    "guest": "Guest",
+    "property": "Property",
+    "prices": "Prices",
+    "geotag": "Geotag",
+    "gridReservation": "Reservation Grid",
+    "reservation": "Reservation",
+    "transaction": "Transaction"
+  },
+  "info": {
+    "title": "About the program",
+    "name": "FunQuest PM",
+    "version": "Build version: "
+  },
+  "component": {
+    "GoogleMap": {
+      "errText": "The address is not correct",
+      "dialog": "Specifity address",
+      "specifityAddress": "Address",
+      "close": "Close",
+      "select": "Selected",
+      "download": "Download..."
+    }
+  },
+  "Access": {
+    "addBed": "Add bed",
+    "propertyData": "Property data",
+    "pageData": "Page data",
+    "amenities": "Amenities",
+    "taxes": "Taxes",
+    "fees": "Fees",
+    "extras": "Extras",
+    "geotags": "Geo Tags",
+    "photos": "Photos",
+    "infoCard": "View",
+    "addCard": "Add owner",
+    "addPageDesc": "Add page description",
+    "delPageDesc": "Remove",
+    "pageDesc": "page description",
+    "editCard": "Edit",
+    "delCard": "Remove",
+    "active": "Activate",
+    "deActive": "Deactivate",
+    "requiredField": "Required field",
+    "clear": "Reset",
+    "saved": "Save",
+    "loading": "Loading...",
+    "deleted": "Deleted",
+    "del_reason": "Deleted by reason",
+    "delProperty": {
+      "title": "Remove property",
+      "text": "Are you sure you want to delete the property"
+    }
+  },
+  "Owner":{
+    "quickSearch": "Quick search for first name, last name, email",
+    "addOwner": "Add owner",
+    "infoOwner": "Info owner",
+    "editOwner": "Edit owner",
+    "editPass": "Change Password",
+    "generateHash": "Generate password",
+    "info": {
+      "id_owner": "ID",
+      "owner": "Owner",
+      "name" : "First name / Last name",
+      "last_name": "Last name",
+      "birthday": "Birthday",
+      "contacts": "Contacts",
+      "email": "Email / Phone",
+      "company": "Company",
+      "country": "Country",
+      "state": "State",
+      "city": "City / ZIP",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "region": "Region",
+      "location": "Location",
+      "post_code": "Post code",
+      "timezone_code": "Time zone",
+      "post_address": "Post address",
+      "phone": "Phone",
+      "fax": "Fax"
+    },
+    "tableHeader": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "verified": "Verified",
+      "active": "Activе",
+      "phone": "Phone",
+      "searchPlaceholder": "Search",
+      "formatted_address": "Formatted address",
+      "code": "Code",
+      "name": "Name",
+      "is_visible": "Is visible",
+      "is_active": "Is active",
+      "Can book": "Can book",
+      "Hot": "Hot"
+    },
+    "del": {
+      "title": "Remove owner",
+      "text": "Are you sure you want to delete the owner account",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "filterModel":{
+      "first_name": {
+        "text": "First name",
+        "placeholder": "enter first name"
+      },
+      "last_name": {
+        "text": "Last name",
+        "placeholder": "enter last name"
+      },
+      "active": {
+        "text": "Is active",
+        "placeholder": "Is active"
+      }
+    },
+    "form": {
+      "company": {
+        "prefix": "Company",
+        "placeholder": "Company",
+        "error": "Please enter a company",
+        "error2": "Length should be 1 to 250"
+      },
+      "first_name": {
+        "prefix": " First name",
+        "placeholder": "First name",
+        "error": "Enter a name",
+        "error2": "Length should be 1 to 150"
+      },
+      "last_name": {
+        "prefix": "Last name",
+        "placeholder": "Last name",
+        "error": "Enter your last name",
+        "error2": "Length should be 1 to 150"
+      },
+      "email": {
+        "prefix": "Email",
+        "placeholder": "Email",
+        "error": "Enter Email",
+        "error1": "Length should be 1 to 150",
+        "error2": "Email entered is incorrect"
+      },
+      "phone": {
+        "prefix": "Phone",
+        "placeholder": "Phone",
+        "error": "Enter the phone",
+        "error2": "Length should be 1 to 50"
+      },
+      "country_code": {
+        "prefix": "Country",
+        "placeholder": "Country code",
+        "error": "Enter country code"
+      },
+      "state_code": {
+        "prefix": "State",
+        "placeholder": "State",
+        "error": "Please state",
+        "error2": "Length should be 1 to 150"
+      },
+      "city": {
+        "prefix": "City",
+        "placeholder": "City",
+        "error": "Specify the city",
+        "error2": "Length should be 1 to 150"
+      },
+      "post_code": {
+        "prefix": "ZIP",
+        "placeholder": "ZIP",
+        "error": "Enter zip code",
+        "error2": "Length should be 1 to 15"
+      },
+      "address1": {
+        "prefix": "Address 1",
+        "placeholder": "Address 1",
+        "error": "Enter the address 1",
+        "error2": "Length should be 1 to 150"
+      },
+      "address2": {
+        "prefix": "Address 2",
+        "placeholder": "Address 2",
+        "error": "Enter the address 2",
+        "error2": "Length should be 1 to 150"
+      },
+      "verified": {
+        "prefix": "",
+        "placeholder": "is verified",
+        "error": "Is verified?"
+      },
+      "active": {
+        "prefix": "",
+        "placeholder": "is active",
+        "error": "Is active?"
+      },
+      "login": {
+        "prefix": "Login",
+        "placeholder": "Profile login",
+        "error": "Enter login profile",
+        "error2": "Length should be 1 to 100",
+        "error3": "Profile with the same login already exists"
+      },
+      "hash": {
+        "prefix": "Password",
+        "placeholder": "Profile Password",
+        "error": "Enter profile Password",
+        "error2": "Length should be 1 to 100",
+        "error3": "Passwords do not match"
+      },
+      "hash2": {
+        "prefix": "Confirm password",
+        "placeholder": "Confirm password",
+        "error": "Repeat profile password",
+        "error2": "Length should be 1 to 100"
+      },
+      "file": {
+        "prefix": "Documents",
+        "button": "Add document"
+      },
+      "sendMail": {
+        "prefix": "Submit registration data"
+      }
+    }
+  },
+  "Guest":{
+    "quickSearch": "Quick search for first name, last name, email",
+    "addGuest": "Add client",
+    "infoGuest": "Info guest",
+    "editGuest": "Edit guest",
+    "editPass": "Change Password",
+    "generateHash": "Generate password",
+    "info": {
+      "id_guest": "ID",
+      "guest": "Guest",
+      "name" : "First name / Last name",
+      "last_name": "Last name",
+      "birthday": "Birthday",
+      "contacts": "Contacts",
+      "email": "Email / Phone",
+      "company": "Company",
+      "country": "Country",
+      "state": "State",
+      "city": "City / ZIP",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "region": "Region",
+      "location": "Location",
+      "post_code": "Post code",
+      "timezone_code": "Time zone",
+      "post_address": "Post address",
+      "phone": "Phone",
+      "fax": "Fax"
+    },
+    "tableHeader": {
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "verified": "Verified",
+      "active": "Activе",
+      "phone": "Phone",
+      "searchPlaceholder": "Search",
+      "formatted_address": "Formatted address",
+      "code": "Code",
+      "name": "Name",
+      "is_visible": "Is visible",
+      "is_active": "Is active",
+      "Can book": "Can book",
+      "Hot": "Hot"
+    },
+    "del": {
+      "title": "Remove guest",
+      "text": "Are you sure you want to delete the guest account",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "filterModel":{
+      "first_name": {
+        "text": "First name",
+        "placeholder": "enter first name"
+      },
+      "last_name": {
+        "text": "Last name",
+        "placeholder": "enter last name"
+      },
+      "active": {
+        "text": "Is active",
+        "placeholder": "Is active"
+      }
+    },
+    "form": {
+      "company": {
+        "prefix": "Company",
+        "placeholder": "Company",
+        "error": "Please enter a company",
+        "error2": "Length should be 1 to 250"
+      },
+      "first_name": {
+        "prefix": " First name",
+        "placeholder": "First name",
+        "error": "Enter a name",
+        "error2": "Length should be 1 to 150"
+      },
+      "last_name": {
+        "prefix": "Last name",
+        "placeholder": "Last name",
+        "error": "Enter your last name",
+        "error2": "Length should be 1 to 150"
+      },
+      "email": {
+        "prefix": "Email",
+        "placeholder": "Email",
+        "error": "Enter Email",
+        "error1": "Length should be 1 to 150",
+        "error2": "Email entered is incorrect"
+      },
+      "phone": {
+        "prefix": "Phone",
+        "placeholder": "Phone",
+        "error": "Enter the phone",
+        "error2": "Length should be 1 to 50"
+      },
+      "country_code": {
+        "prefix": "Country",
+        "placeholder": "Country code",
+        "error": "Enter country code"
+      },
+      "state_code": {
+        "prefix": "State",
+        "placeholder": "State",
+        "error": "Please state",
+        "error2": "Length should be 1 to 150"
+      },
+      "city": {
+        "prefix": "City",
+        "placeholder": "City",
+        "error": "Specify the city",
+        "error2": "Length should be 1 to 150"
+      },
+      "post_code": {
+        "prefix": "ZIP",
+        "placeholder": "ZIP",
+        "error": "Enter zip code",
+        "error2": "Length should be 1 to 15"
+      },
+      "address1": {
+        "prefix": "Address 1",
+        "placeholder": "Address 1",
+        "error": "Enter the address 1",
+        "error2": "Length should be 1 to 150"
+      },
+      "address2": {
+        "prefix": "Address 2",
+        "placeholder": "Address 2",
+        "error": "Enter the address 2",
+        "error2": "Length should be 1 to 150"
+      },
+      "verified": {
+        "prefix": "",
+        "placeholder": "is verified",
+        "error": "Is verified?"
+      },
+      "active": {
+        "prefix": "",
+        "placeholder": "is active",
+        "error": "Is active?"
+      },
+      "login": {
+        "prefix": "Login",
+        "placeholder": "Profile login",
+        "error": "Enter login profile",
+        "error2": "Length should be 1 to 100",
+        "error3": "Profile with the same login already exists"
+      },
+      "hash": {
+        "prefix": "Password",
+        "placeholder": "Profile Password",
+        "error": "Enter profile Password",
+        "error2": "Length should be 1 to 100",
+        "error3": "Passwords do not match"
+      },
+      "hash2": {
+        "prefix": "Confirm password",
+        "placeholder": "Confirm password",
+        "error": "Repeat profile password",
+        "error2": "Length should be 1 to 100"
+      },
+      "sendMail": {
+        "prefix": "Submit registration data"
+      }
+    }
+  },
+  "Geotag":{
+    "getListProperty": "Go to the list of properties",
+    "getListChildGeoTags": "Go to the list of geotags",
+    "quickSearch": "Quick search for name and search keys",
+    "choose": "Choose",
+    "remove": "remove",
+    "name": "Tag name",
+    "path": "Path",
+    "search": "Search string",
+    "primary": "Primary",
+    "titleAddGeoTag": "Add geo tag",
+    "save": "Save",
+    "saveUse": "Save and use",
+    "cancel": "Cancel",
+    "addGeotag": "Add geotag",
+    "editGeotag": "Edit geotag",
+    "del": {
+      "title": "Remove geo tag",
+      "text": "Are you sure you want to delete the geo tag",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "tableHeader": {
+      "name": "Name",
+      "searchKeys": "Search keys",
+      "path": "Path"
+    },
+    "filterModel":{
+      "group": "",
+      "name": {
+        "text": "Name",
+        "placeholder": "enter  name"
+      },
+      "search": {
+        "text": "Search key",
+        "placeholder": "enter search key"
+      }
+    },
+    "form": {
+      "parent": {
+        "prefix": "Parent tag",
+        "placeholder": "Choose parent tag",
+        "tooltip": "Type in the required value in the field"
+      },
+      "name": {
+        "prefix": "Name new tag",
+        "placeholder": "Enter tag name",
+        "tooltip": "Enter tag name",
+        "error": "Enter tag name",
+        "error2": "Length should be 1 to 250",
+        "error3": "A similar tag has already been added."
+      },
+      "search": {
+        "prefix": "Search hash tags",
+        "placeholder": "Specify hash tags for search",
+        "tooltip": "Specify hash tags for search"
+      }
+    }
+  },
+  "Reservation":{
+    "quickSearch": "Quick search by first name, last name, customer email",
+    "addRreservation": "Add reservation",
+    "editRreservation": "Edit reservation",
+    "editTransactions": "Edit transaction",
+    "info": {
+      "calendar_status": "Calendar status",
+      "booked_by": "Booked by",
+      "comment": "Block reason",
+      "comment2": "Comment",
+      "guests": "Number of Adults / children",
+      "guest_comment": "Guest comment",
+      "name": "First name / Last name",
+      "email": "Email / Phone",
+      "company": "Company",
+      "country": "Country / State",
+      "city": "City / ZIP",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "client": "Client",
+      "owner": "Owner",
+      "integrator": "Integrator",
+      "total": "Total",
+      "total_sum": "Total sum",
+      "nights": "nights",
+      "total_rent": "rent",
+      "total_fees": "fees",
+      "total_taxes": "taxes",
+      "total_extras": "extras",
+      "paid": "Paid",
+      "del_reason": "Del reason",
+      "del_dt": "Date delete"
+    },
+    "tableHeader": {
+      "id": "Number",
+      "property_name": "Property",
+      "calendar_status_name": "Calendar status",
+      "booked_by_name": "Booked by",
+      "verified": "Verified",
+      "approved": "Approved",
+      "country": "Country",
+      "state": "State",
+      "del": "Deleted",
+      "del_reason": "Del reason",
+      "total": "Total",
+      "paid": "Paid",
+      "checkin": "Check in",
+      "checkout": "Check out",
+      "paid_till": "Balance due date"
+    },
+    "filterModel":{
+      "property_id":{
+        "text": "Property",
+        "placeholder": "Select property"
+      },
+      "client_id": {
+        "text": "Client or Owner",
+        "placeholder": "Select client or owner"
+      },
+      "booked_by_id": {
+        "text": "Booked by",
+        "placeholder": "Select booked by"
+      },
+      "nights": {
+        "text": "Number of nights",
+        "placeholder": "Number of nights"
+      },
+      "checkin": {
+        "text": "Check in",
+        "placeholder": "Check in"
+      },
+      "checkout": {
+        "text": "Check out",
+        "placeholder": "Check out"
+      },
+      "approved": {
+        "text": "Is approved",
+        "placeholder": "Is approved"
+      },
+      "verified": {
+        "text": "Is verified",
+        "placeholder": "Is verified"
+      },
+      "del": {
+        "text": "Is deleted",
+        "placeholder": "Is deleted"
+      }
+    },
+    "del": {
+      "title": "Remove reservation",
+      "text": "Are you sure you want to delete the reservation?",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "form": {
+      "addNewClient":{
+        "prefix": "Make an order under a new customer"
+      },
+      "calculation":{
+        "rent": "Rent",
+        "nights": "nights",
+        "taxes": "Taxes:",
+        "fees": "Fees:",
+        "extras": "Extras:",
+        "total": "Total:"
+      },
+      "property_id":{
+        "prefix": "Property",
+        "placeholder": "Choose property",
+        "tooltip": "Choose value",
+        "error": "Property not selected"
+      },
+      "daterange":{
+        "prefix": "Reservation date",
+        "placeholder": "Reservation date",
+        "start-placeholder": "Date start",
+        "end-placeholder": "Date end",
+        "error": "Enter reservation dates",
+        "tooltip": "Choose start and end of period"
+      },
+      "paid_till":{
+        "prefix": "Balance due date",
+        "placeholder": "Balance due date ",
+        "error": "Enter balance due date",
+        "tooltip": "Choose balance due date"
+      },
+      "calendar_status_id":{
+        "prefix": "Status type",
+        "placeholder": "Choose status type",
+        "tooltip": "Choose value",
+        "error": "Status type not selected"
+      },
+      "booked_by_id":{
+        "prefix": "Reservation type",
+        "placeholder": "Choose reservation type",
+        "tooltip": "Choose value",
+        "error": "Reservation type not selected"
+      },
+      "client_id": {
+        "prefix": "Reservation client",
+        "placeholder": "Client",
+        "error": "Select client"
+      },
+      "integrator_id":{
+        "prefix": "Integrator",
+        "placeholder": "Choose an integrator",
+        "tooltip": "Choose value",
+        "error": "Integrator not selected"
+      },
+      "comment": {
+        "prefix": "Reason for blocking",
+        "prefix2": "Comment",
+        "placeholder": "Reason for blocking",
+        "placeholder2": "Comment",
+        "tooltip": "Reason for blocking",
+        "error": "Iindicate the reason for blocking"
+      },
+      "guests_adult": {
+        "prefix": "Number of Adults",
+        "placeholder": "Number of Adults",
+        "error": "Enter number of adults"
+      },
+      "guests_children": {
+        "prefix": "Number of Children",
+        "placeholder": "Number of Children",
+        "error": "Enter number of children"
+      },
+      "owner_rate": {
+        "prefix": "Owner rate %",
+        "placeholder": "Owner rate %",
+        "error": "Enter owner rate"
+      },
+      "price": {
+        "placeholder": "Date price"
+      },
+      "company": {
+        "prefix": "Company",
+        "placeholder": "Company",
+        "error": "Please enter a company",
+        "error2": "Length should be 1 to 250"
+      },
+      "first_name": {
+        "prefix": "First name",
+        "placeholder": "First name",
+        "error": "Enter a name",
+        "error2": "Length should be 1 to 150"
+      },
+      "last_name": {
+        "prefix": "Last name",
+        "placeholder": "Last name",
+        "error": "Enter your last name",
+        "error2": "Length should be 1 to 150"
+      },
+      "email": {
+        "prefix": "Email",
+        "placeholder": "Email",
+        "error": "Enter Email",
+        "error1": "Length should be 1 to 150",
+        "error2": "Email entered is incorrect"
+      },
+      "phone": {
+        "prefix": "Phone",
+        "placeholder": "Phone",
+        "error": "Enter the phone",
+        "error2": "Length should be 1 to 50"
+      },
+      "country_code": {
+        "prefix": "Country",
+        "placeholder": "Country code",
+        "error": "Enter country code"
+      },
+      "state_code": {
+        "prefix": "State",
+        "placeholder": "State",
+        "error": "Please state",
+        "error2": "Length should be 1 to 150"
+      },
+      "city": {
+        "prefix": "City",
+        "placeholder": "City",
+        "error": "Specify the city",
+        "error2": "Length should be 1 to 150"
+      },
+      "post_code": {
+        "prefix": "ZIP",
+        "placeholder": "ZIP",
+        "error": "Enter zip code",
+        "error2": "Length should be 1 to 15"
+      },
+      "address1": {
+        "prefix": "Address 1",
+        "placeholder": "Address 1",
+        "error": "Enter the address 1",
+        "error2": "Length should be 1 to 150"
+      },
+      "address2": {
+        "prefix": "Address 2",
+        "placeholder": "Address 2",
+        "error": "Enter the address 2",
+        "error2": "Length should be 1 to 150"
+      }
+    }
+  },
+  "ReservationGrid":{
+    "amountCalculation": "Amount calculation",
+    "pane": {
+      "prices": "Prices",
+      "data": "Reservation data"
+    },
+    "notice": {
+      "errReserved": "Reservation is not possible. Current status:",
+      "errorDate": "Date must be different from check out date"
+    },
+    "addReservation": "Add reservation",
+    "editReservation": "Edit reservation"
+  },
+  "Transaction":{
+    "quickSearch": "Quick search by first name, last name, customer email",
+    "addTransaction": "Add transaction",
+    "editRreservation": "Edit reservation",
+    "editTransaction": "Edit transaction",
+    "byProperty": "By property",
+    "byReservationID": "By reservation number",
+    "byNameClient": "By customer name",
+    "search": "Search",
+    "transaction_data": "Transaction data",
+    "reservation_data": "Reservation data",
+    "number": "Reservation number",
+    "transaction": "Transaction",
+    "return": "Return of transaction",
+    "info": {
+      "company": "Company",
+      "name": "First name / Last name",
+      "email": "Email / Phone",
+      "country": "Country / State",
+      "city": "City / ZIP",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "amount": "Amount",
+      "del_reason": "Del reason",
+      "del_dt": "Date delete"
+    },
+    "tableHeader": {
+      "ref_num": "Transaction number",
+      "reservation_id": "Reservation number",
+      "pay_type_name": "Pay type",
+      "pay_date": "Pay date",
+      "client_name": "Client name",
+      "first_name":"First name",
+      "last_name": "Last name",
+      "company": "Company name",
+      "amount": "Amount",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "city": "City",
+      "country": "Country",
+      "calendar_status_name": "Calendar status",
+      "state": "State",
+      "post_code": "Post code",
+      "phone": "Phone",
+      "email":"Email",
+      "del": "Deleted",
+      "del_dt": "Date delete",
+      "del_reason": "Del reason"
+    },
+    "filterModel":{
+      "ref_num": {
+        "text": "Transaction number",
+        "placeholder": "Transaction number"
+      },
+      "reservation_id": {
+        "text": "Rreservation number",
+        "placeholder": "Reservation number"
+      },
+      "pay_date": {
+        "text": "Pay date",
+        "placeholder": "Pay date"
+      },
+      "pay_type_id": {
+        "text": "Pay type",
+        "placeholder": "Pay type"
+      },
+      "amount": {
+        "text": "Amount",
+        "placeholder": "amount"
+      },
+      "first_name": {
+        "text": " First name",
+        "placeholder": "first name"
+      },
+      "last_name": {
+        "text": " Last name",
+        "placeholder": "last name"
+      },
+      "company": {
+        "text": "Company",
+        "placeholder": "company name"
+      },
+      "del": {
+        "text": "Is deleted",
+        "placeholder": "Is deleted"
+      }
+    },
+    "del": {
+      "title": "Remove transaction",
+      "text": "Are you sure you want to delete the reservation?",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "form": {
+      "account": {
+        "prefix": "Account",
+        "placeholder": "Bank Account Number ",
+        "error": "Enter bank Account Number "
+      },
+      "routing": {
+        "prefix": "Routing number",
+        "placeholder": "Routing number",
+        "error": "8 or 9-digit Number"
+      },
+      "number":{
+        "prefix": "Card number",
+        "placeholder": "Card number",
+        "error": "Enter a 16-digit card number"
+      },
+      "expiration":{
+        "prefix": "Expiry date",
+        "placeholder": "Expiry date",
+        "error": "Invalid Expiration Date"
+      },
+      "cvv": {
+        "prefix": "Security code",
+        "placeholder": "Security code",
+        "error": "Invalid security code"
+      },
+      "cardholder": {
+        "prefix": "Name on card",
+        "placeholder": "Name on card",
+        "error": "Invalid name on card"
+      },
+      "idReservation":{
+        "prefix": "Rreservation number",
+        "placeholder": "Reservation number"
+      },
+      "property_id":{
+        "prefix": "Property",
+        "placeholder": "Choose property",
+        "tooltip": "Choose value",
+        "error": "Property not selected"
+      },
+      "client_name": {
+        "prefix": "Client name",
+        "placeholder": "Client name",
+        "error": "Enter a name"
+      },
+      "daterange":{
+        "prefix": "Period",
+        "prefix2": "Period",
+        "placeholder": "Reservation date",
+        "start-placeholder": "Date start",
+        "end-placeholder": "Date end",
+        "error": "Enter reservation dates",
+        "tooltip": "Choose start and end of period"
+      },
+      "reservation_id":{
+        "prefix": "Reservation",
+        "placeholder": "Choose reservation",
+        "tooltip": "Choose value",
+        "error": "Reservation not selected"
+      },
+      "pay_date":{
+        "prefix": "Pay date",
+        "placeholder": "Pay date",
+        "error": "Enter pay date",
+        "tooltip": "Choose pay date"
+      },
+      "pay_type_id":{
+        "prefix": "Pay type",
+        "placeholder": "Choose pay type",
+        "tooltip": "Choose  pay type",
+        "error": "Pay type not selected"
+      },
+      "amount":{
+        "prefix": "Amount",
+        "placeholder": "Amount",
+        "error": "Enter amount"
+      },
+      "amount_decimal": {
+        "prefix": "Amount",
+        "placeholder": "Amount",
+        "error": "Enter the amount",
+        "error2": "You can pay no more",
+        "error3": "The amount must be at least",
+        "error4": "and not more than",
+        "error5": "The refund must be no more than the amount paid"
+      },
+      "company": {
+        "prefix": "Company",
+        "placeholder": "Company",
+        "error": "Please enter a company",
+        "error2": "Length should be 1 to 250"
+      },
+      "first_name": {
+        "prefix": " First name",
+        "placeholder": "First name",
+        "error": "Enter a name",
+        "error2": "Length should be 1 to 150"
+      },
+      "last_name": {
+        "prefix": "Last name",
+        "placeholder": "Last name",
+        "error": "Enter your last name",
+        "error2": "Length should be 1 to 150"
+      },
+      "email": {
+        "prefix": "Email",
+        "placeholder": "Email",
+        "error": "Enter Email",
+        "error1": "Length should be 1 to 150",
+        "error2": "Email entered is incorrect"
+      },
+      "phone": {
+        "prefix": "Phone",
+        "placeholder": "Phone",
+        "error": "Enter the phone",
+        "error2": "Length should be 1 to 50"
+      },
+      "country_code": {
+        "prefix": "Country",
+        "placeholder": "Country code",
+        "error": "Enter country code"
+      },
+      "state_code": {
+        "prefix": "State",
+        "placeholder": "State",
+        "error": "Please state",
+        "error2": "Length should be 1 to 150"
+      },
+      "city": {
+        "prefix": "City",
+        "placeholder": "City",
+        "error": "Specify the city",
+        "error2": "Length should be 1 to 150"
+      },
+      "post_code": {
+        "prefix": "ZIP",
+        "placeholder": "ZIP",
+        "error": "Enter zip code",
+        "error2": "Length should be 1 to 15"
+      },
+      "address1": {
+        "prefix": "Address 1",
+        "placeholder": "Address 1",
+        "error": "Enter the address 1",
+        "error2": "Length should be 1 to 150"
+      },
+      "address2": {
+        "prefix": "Address 2",
+        "placeholder": "Address 2",
+        "error": "Enter the address 2",
+        "error2": "Length should be 1 to 150"
+      }
+    }
+  },
+  "Property":{
+    "selectPropertyForEditPrice": "Select property for edit price",
+    "quickSearch": "Quick search for name",
+    "addProperty": "Add property",
+    "editProperty": "Edit property",
+    "editPrice": "Edit price",
+    "price" : "Price",
+    "infoProperty": "Info property",
+    "tax": {
+      "add": "Add tax",
+      "remove": "remove",
+      "name": "Tax name",
+      "percentage": "Percentage %",
+      "fix": "Per reservation $",
+      "night": "Per night $",
+      "taxable": "Taxable",
+      "refundable": "Refundable"
+    },
+    "fee": {
+      "name": "Fee name",
+      "add": "Add fee"
+    },
+    "extra": {
+      "name": "Extra name",
+      "add": "Add extra"
+    },
+    "info": {
+      "property": "Property",
+      "amenities": "Amenities",
+      "is_active": "Is active",
+      "is_visible": "Is visible",
+      "is_visible1": "is visible",
+      "not_visible": "not visible",
+      "can_book": "Can book",
+      "can_book1": "can book", 
+      "not_can_book": "not can book",
+      "hot": "Hot",
+      "hot1": "hot",  
+      "approved": "Approved",
+      "owner_id": "Owner",
+      "name": "Property name",
+      "code": "Property code",
+      "city": "City",
+      "country_code": "Country code",
+      "post_code": "Post code",
+      "region": "Region",
+      "timezone_code": "Time zone code",
+      "type": "Property type",
+      "formatted_address": "Address",
+      "max_occupancy": "Max occupancy",
+      "bedrooms": "Bedrooms",
+      "bathrooms_full": "Bathrooms full",
+      "bathrooms_half": "Bathrooms half",
+      "wifi": "Wifi",
+      "wifi_name": "pass",
+      "wifi_pass": "name",
+      "owner": "Owner",
+      "beds": "Beds",
+      "false": "No",
+      "true": "Yes",
+      "prefix": {
+        "page_lang": "Language: ",
+        "visible": "Visible: "
+      }
+    },
+    "alert": {
+      "taxAlert": ""
+    },
+    "notify": {
+      "successSetPrice" : "The cost of reservations for the selected properties has been successfully changed"
+    },
+    "tableHeader": {
+      "full_address": "Full address",
+      "formatted_address": "Formatted address",
+      "code": "Code",
+      "name": "Name",
+      "is_visible": "Is visible",
+      "is_active": "Is active",
+      "can_book": "Can book",
+      "hot": "Hot"
+    },
+    "del": {
+      "title": "Remove property",
+      "text": "Are you sure you want to delete the property",
+      "loading": "removing",
+      "cancel": "Cancel",
+      "remove": "Remove",
+      "prefix": "Delete comment",
+      "placeholder": "Delete comment"
+    },
+    "filterModel":{
+      "name": {
+        "text": "Property name",
+        "placeholder": "enter property name"
+      },
+      "is_active": {
+        "text": "Is active",
+        "placeholder": "Is active"
+      }
+    },
+    "form": {
+      "price":{
+        "placeholder": "price",
+        "daterange": {
+          "start-placeholder": "Date start",
+          "end-placeholder": "Date end"
+        },
+        "setPrice": "setPrice"
+      },
+      "tax":{
+        "name": {
+          "placeholder": "Tax"
+        },
+        "percentage": {
+          "placeholder": "Percentage %"
+        },
+        "fix": {
+          "placeholder": "Per reservation $"
+        },
+        "night": {
+          "placeholder": "Per night $"
+        },
+        "taxable": {
+          "placeholder": "Taxable"
+        },
+        "refundable": {
+          "placeholder": "Refundable"
+        }
+      },
+      "geoTag":{
+        "name": {
+          "placeholder": "Geo tag"
+        },
+        "search": {
+          "placeholder": "Search string"
+        },
+        "path": {
+          "placeholder": "Path"
+        }
+      },
+      "fee":{
+        "name": {
+          "placeholder": "Fee"
+        }
+      },
+      "extra":{
+        "name": {
+          "placeholder": "Extra"
+        }
+      },
+      "first_name": {
+        "prefix": " First name",
+        "placeholder": "first name",
+        "error": "Enter a name"
+      },
+      "last_name": {
+        "prefix": "Last name",
+        "placeholder": "last name",
+        "error": "Enter your last name"
+      },
+      "birthday": {
+        "prefix": "Birthday",
+        "placeholder": "birthday",
+        "error": "Enter your birthday"
+      },
+      "email": {
+        "prefix": "Email",
+        "placeholder": "Email",
+        "error": "Enter Email"
+      },
+      "country_code": {
+        "prefix": "Country",
+        "placeholder": "country code",
+        "error": "Enter country code"
+      },
+      "region": {
+        "prefix": "State",
+        "placeholder": "State",
+        "error": "Please state"
+      },
+      "city": {
+        "prefix": "",
+        "placeholder": "city",
+        "error": "Specify the city"
+      },
+      "post_code": {
+        "prefix": "ZIP",
+        "placeholder": "ZIP",
+        "error": "Enter zip code"
+      },
+      "timezone_code": {
+        "prefix": "Timezone",
+        "placeholder": "timezone code",
+        "error": "Select timezone code"
+      },
+      "post_address": {
+        "prefix": "Post address",
+        "placeholder": "specifity post address",
+        "error": "Pick the post address"
+      },
+      "formatted_address": {
+        "prefix": "Google map address",
+        "placeholder": "specifity address",
+        "error": "Select the address",
+        "error2": "Length should be 1 to 250",
+        "error3": "There is no entry in the directory for this district"
+      },
+      "full_address": {
+        "prefix": "Full address",
+        "placeholder": "specifity address",
+        "error": "Enter the address",
+        "error2": "Length should be 1 to 250"
+      },
+      "phone": {
+        "prefix": "Phone",
+        "placeholder": "phone",
+        "error": "Enter the phone"
+      },
+      "fax": {
+        "prefix": "Fax",
+        "placeholder": "fax",
+        "error": "Enter a fax number"
+      },
+      "location": {
+        "prefix": "Location",
+        "placeholder": "google map locationn",
+        "error": "Enter a location"
+      },
+      "time_zone": {
+        "prefix": "Time zone",
+        "placeholder": "time zone",
+        "error": "Enter your time zone"
+      },
+      "def_price": {
+        "prefix": "Price default $",
+        "placeholder": "Price default $",
+        "error": "Enter price default"
+      },
+      "owner_rate": {
+        "prefix": "Owner rate %",
+        "placeholder": "Owner rate %",
+        "error": "Enter owner rate"
+      },
+      "max_occupancy": {
+        "prefix": "Max occupancy",
+        "placeholder": "Max occupancy",
+        "error": "Enter max occupancy"
+      },
+      "min_nights": {
+        "prefix": "Min night",
+        "placeholder": "Min night",
+        "error": "Enter min night"
+      },
+      "bedrooms": {
+        "prefix": "Bedrooms",
+        "placeholder": "Bedrooms",
+        "error": "Enter count bedrooms"
+      },
+      "bathrooms_full": {
+        "prefix": "Bathrooms full",
+        "placeholder": "Bathrooms full",
+        "error": "Enter count bathrooms full"
+      },
+      "bathrooms_half": {
+        "prefix": "Bathrooms half",
+        "placeholder": "Bathrooms half",
+        "error": "Enter count bathrooms half"
+      },
+      "beds": {
+        "prefix": "Beds",
+        "placeholder": "beds",
+        "error": "Select beds"
+      },
+      "beds_count": {
+        "prefix": "Count",
+        "placeholder": "count",
+        "error": "Enter count beds"
+      },
+      "amenities": {
+        "prefix": "Amenities",
+        "placeholder": "amenities",
+        "error": "Enter amenities"
+      },
+      "wifi_name": {
+        "prefix": "WiFi Network Name",
+        "placeholder": "WiFi Network Name",
+        "error": "Enter WiFi Network Name",
+        "error2": "Length should be 2 to 50"
+      },
+      "wifi_pass": {
+        "prefix": "Password",
+        "placeholder": "WiFi Network Password",
+        "error": "Enter WiFi Network Password",
+        "error2": "Length should be 2 to 50"
+      },
+      "owner_id": {
+        "prefix": "Owner",
+        "placeholder": "owner",
+        "error": "Select owner"
+      },
+      "type_id": {
+        "prefix": "Type property",
+        "placeholder": "type property",
+        "error": "Select type property"
+      },
+      "is_visible": {
+        "prefix": "",
+        "placeholder": "is visible",
+        "error": "Is visible?"
+      },
+      "is_active": {
+        "prefix": "",
+        "placeholder": "is active",
+        "error": "Is active?"
+      },
+      "can_book": {
+        "prefix": "",
+        "placeholder": "can book",
+        "error": "Can book?"
+      },
+      "hot": {
+        "prefix": "",
+        "placeholder": "hot",
+        "error": "Hot?"
+      },
+      "name": {
+        "prefix": "Name:",
+        "placeholder": "Name",
+        "error": "Enter a name",
+        "error2": "Length should be 2 to 50"
+      },
+      "code": {
+        "prefix": "Code:",
+        "placeholder": "Code",
+        "error": "Enter a code",
+        "error2": "Length should be 2 to 50"
+      },
+      "page_lang": {
+        "prefix": "Language",
+        "placeholder": "language"
+      },
+      "page_visible": {
+        "prefix": "Visible",
+        "placeholder": "is visible"
+      },
+      "page_title": {
+        "prefix": "Page title",
+        "placeholder": "page title",
+        "error": "Enter a title"
+      },
+      "page_content": {
+        "prefix": "Page content",
+        "placeholder": "page content",
+        "error": "Enter a page content"
+      }
+    }
+  },
+  "app": {
+    "openCloseMenu": "Open / Close menu",
+    "info": "Information",
+    "fullScreen": "Full screen",
+    "loadingModules": "Load modules...",
+    "exit": "Exit"
+  },
+  "notify": {
+    "issetPaid": "Reservation is available. Before you delete, you need to make a refund.",
+    "basicData":"Fill in the basic data first",
+    "pastDate": "Unable to change past price",
+    "activateText": "Property activated",
+    "activateText1": "Property deactivated",
+    "visibleText": "Property published",
+    "visibleText1": "Property unpublished",
+    "canBookText": "Сan be booked",
+    "canBookText1": "Сannot be booked",
+    "hotText": "Marked as a hot offer",
+    "hotText1": "Not hot offer",
+    "activeText": "Record published",
+    "activeText1": "Record unpublished",
+    "verifiedText": "Record checked",
+    "verifiedText1": "Record not verified",
+    "attention": "Attention",
+    "noChanges": "No changes",
+    "editChildGeotag": "Unable to edit geotag because there are child geotags",
+    "editRelatedGeotag": "Unable to edit geo tag because it is used in property",
+    "childGeotag": "Unable to delete geotag because there are child geotags",
+    "relatedGeotag": "Unable to delete geo tag because it is used in property",
+    "noImage": "The file is not an image!",
+    "noPrimaryGeotag": "No primary geotag selected",
+    "errorData": "Part of the data is not filled, or not filled correctly",
+    "analogCard": "Record with the same email has already been made",
+    "success": "Success",
+    "warning": "Attention",
+    "error": "An unexpected error has occurred",
+    "successText": "Record successfully updated",
+    "successText1": "Record successfully added",
+    "successText2": "Record successfully changed",
+    "successTextDel": "Record successfully deleted",
+    "cardDel": "Record deleted: ",
+    "dublicate": "Such a record has already been made: ",
+    "dublicateTag": "Tag already added",
+    "dublicateUser": "User with this email has already been entered",
+    "dublicateClient": "A client with the same email already exists",
+    "dublicateOwnerEmail": "Owner with this email has already been entered",
+    "dublicateOwnerLogin": "Owner with this login has already been entered",
+    "dublicateGeotagName": "A similar tag has already been added.",
+    "brouserNotWork": "Your browser does not support this functionality",
+    "filterAdd": "The current filter value has already been added",
+    "noSelectBadType": "No bed type selected",
+    "pageDescriptionNotFound": "Property description field is empty"
+  },
+  "Login": {
+    "title": "Property management",
+    "form": {
+      "loginPlaceholder": "login",
+      "passPlaceholder": "password",
+      "authBtn": "Login in"
+    },
+    "notify":{
+      "err": "Error connecting to server! Check your internet connection.",
+      "err1": "An error has occurred in the service...",
+      "403": "Wrong login or password!",
+      "400": "Service is unavailable!",
+      "404": "Service is unavailable!",
+      "default": "Error connecting to serverу!"
+    }
+  },
+  "filters": {
+    "conditionFilter": "Search condition:",
+    "all_filters": "All filters",
+    "loading": "Loading...",
+    "conditionSearch": "Search terms",
+    "operation": "Operation",
+    "nameField": "Name field",
+    "condition": "Condition",
+    "value": "Value",
+    "addCondition": "add condition",
+    "selectFilter": "Select filter",
+    "search": "Search",
+    "hide": "Hide",
+    "reset": "Reset",
+    "workTemplate": "work with templates",
+    "setNameTemplate": "Enter the name of the template to be saved",
+    "quickSearch": {
+      "form":{
+        "name":{
+          "prefix": "Quick search",
+          "placeholder": "uick search",
+          "error": "Line length from 0 to 250 characters",
+          "error1": "Invalid characters are available"
+        },
+        "send": "Search"
+      }
+    },
+    "operations": {
+      "and": "AND",
+      "or": "OR"
+    },
+    "conditions": {
+      "eq": "=",
+      "gt": ">",
+      "gte": ">=",
+      "lt": "<",
+      "lte": "<=",
+      "neq": "!=",
+      "is": "=",
+      "ilike": "contains",
+      "ilike*": "starts on",
+      "*ilike": "ends on",
+      "cs": "contains"
+    },
+    "notify": {
+      "warning": "Attention",
+      "text": "<span>Filter name cannot be empty</span>",
+      "text1": "<span>A similar filter name has already been added</span>"
+    },
+    "components": {
+      "CompDate": {
+        "formatTemplate": "MM-dd-yyyy",
+        "formatTemplateValue": "yyyy-MM-dd"
+      },
+      "CompDateTime" : {
+        "errText" : "date format dd.mm.yyyy", 
+        "formatTemplate" : "dd.MM.yyyy HH:mm", 
+        "formatTemplateValue" : "yyyy-MM-dd HH:mm",
+        "now" : "Now",
+        "tomorrow": "Tomorrow",
+        "weekLater": "Week Later"
+      },
+      "CompBool": {
+        "true": "Yes",
+        "false": "No"
+      }
+    }
+  },
+  "excel": {
+    "export": "Export to Excel",
+    "title": "Exported data"
+  }
+}
