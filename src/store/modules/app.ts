@@ -1,7 +1,10 @@
 
+interface Data {
+    [key: string]: unknown
+  }
 const app = {
     namespaced: true,
-    state: {
+    state: () => ({
         sidebar: false,
         countLoad: 0,
         opacityLoad: 1,
@@ -15,7 +18,7 @@ const app = {
             limit: 25,
             pageSize: [25, 50, 100]
         }
-    },
+    }),
     mutations: {
         SET_DATA: (state: any, { type, items }): void => {
             state[type] = items;

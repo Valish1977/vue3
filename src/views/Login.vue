@@ -1,5 +1,6 @@
 <template>
     <div class="login-container">
+      <h1>Hello Vue3!</h1>
     <!-- <el-form 
       class="login-form"
       :class="$store.getters['app/windowWidth'] < 768 ? 'login-form-mobile' : 'login-form-full'"
@@ -38,6 +39,7 @@ interface LoginForm {
   password: "" 
 }
 import { defineComponent } from 'vue';
+import loginPageComposition from '@/composition/login_page_composition'
 const LoginView = defineComponent({
   data() {
     return {
@@ -45,6 +47,12 @@ const LoginView = defineComponent({
       passwordType: "password" as String,
       loading: false,
       showDialog: false */
+    }
+  },
+  setup() {
+    const  { onMountFn } = loginPageComposition();
+     return {
+      onMountFn
     }
   }
 /*   

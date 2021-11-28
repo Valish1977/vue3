@@ -2,12 +2,15 @@ import { useStore } from 'vuex';
 export class DoomElementById {
     static hellopreloaderPreload = 'hellopreloader_preload';
 }
-export class StoreSetters {
-    static appSetLoading = 'app/setLoading';
+export class LoadingAppStore {
+    static setter = 'app/setLoading';
+    static getter = 'app/getLoading';
 }
 export class AppSettersName {
     static windowOnload = 'App.vue/window.onload';
 }
+
+
 export class AppService {
     private static _instance: AppService;
     private constructor(){
@@ -27,16 +30,20 @@ export class AppService {
 
     private setupInstance(): void {
         window.onload = () => {
-            this.store!.dispatch(StoreSetters.appSetLoading, { name: AppSettersName.windowOnload, value: false });
+            this.hellopreloader = document.getElementById(DoomElementById.hellopreloaderPreload);
+            this.stopLoader(AppSettersName.windowOnload);
             setTimeout(() => {
-                this.stopLoader();
+                this._loaderDisabled();
             }, 250);
         };
     }
-    public startLoader(val: any): void {
-        if (this.hellopreloader === null) {
-            this.hellopreloader = document.getElementById(DoomElementById.hellopreloaderPreload);
-        }
+    public startLoader(name: string): void {
+        this.store?.dispatch(LoadingAppStore.setter, { name, value: true });
+    }
+    public stopLoader(name: string): void {
+        this.store?.dispatch(LoadingAppStore.setter, { name, value: false }); 
+    }
+    private _loaderEnabled(val: any): void {
         if (this.hellopreloader !== null) {
             this.hellopreloaderStatus = true;
             this.hellopreloader.style.display = "block";
@@ -44,7 +51,7 @@ export class AppService {
                 if (!this.hellopreloaderStatus) {
                     clearInterval(interhellopreloader);
                 }
-                const newOpacityVal = parseFloat(this.hellopreloader!.style.opacity) + 0.05;
+                const newOpacityVal = parseFloat(this.hellopreloader!.style.opacity? this.hellopreloader!.style.opacity : '0') + 0.05;
                 this.hellopreloader!.style.opacity = newOpacityVal.toString();
                 if (newOpacityVal >= val) {
                     clearInterval(interhellopreloader);
@@ -53,24 +60,24 @@ export class AppService {
         }
     }
     public get countLoaded() {
-        return this.store?.getters["app/getLoading"]; // отслеживаем загрузку модулей
+        return this.store?.getters[LoadingAppStore.getter]; // отслеживаем загрузку модулей
     }
     public watchCountLoaded(): void {
         // управление окном загрузки вкл/выкл
         if (this.countLoaded > 0) {
-            this.startLoader(this.store.state.app.opacityLoad); // выставляем полупрозрачность
+            this._loaderEnabled(this.store.state.app.opacityLoad); // выставляем полупрозрачность
         } else {
-            this.stopLoader();
+            this._loaderDisabled();
         }
     }
-    private stopLoader(): void {
-        if (this.hellopreloader !== null) {
+    private _loaderDisabled(): void {
+        if (this.hellopreloader) {
             this.hellopreloaderStatus = false;
             const interhellopreloader2 = setInterval(() => {
                 if (this.hellopreloaderStatus) {
                     clearInterval(interhellopreloader2);
                 }
-                const newOpacityVal = parseFloat(this.hellopreloader!.style.opacity) + 0.05;
+                const newOpacityVal = parseFloat(this.hellopreloader!.style.opacity? this.hellopreloader!.style.opacity : '0') + 0.05;
                 this.hellopreloader!.style.opacity = newOpacityVal.toString();
                 if (newOpacityVal <= 0.05) {
                     clearInterval(interhellopreloader2);

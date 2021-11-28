@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref} from "vue";
+import appComposition from '@/composition/app_composition'
 import { AppService} from '@/services/app_service';
 const App = defineComponent({
   data() {
@@ -14,17 +15,9 @@ const App = defineComponent({
     }
   },
   setup() {
-    const appService = AppService.Instance;
-    const countLoaded = ref(0);
-    countLoaded.value = appService.countLoaded;
-    return {
-      appService,
+    const  { countLoaded } = appComposition();
+     return {
       countLoaded
-    }
-  },
-  watched() {
-    this.countLoaded, (count: number, prevCount: number) => {
-      this.appService.watchCountLoaded;
     }
   }
 
