@@ -56,10 +56,6 @@ const LoginView = defineComponent({
     }
   }
 /*   
-  @Emit()
-  addToCount(n: number) {
-    this.count += n
-  }
   private created(): any {
     this.$store.dispatch("app/setWindowWidth", window.innerWidth);
   }

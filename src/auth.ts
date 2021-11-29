@@ -1,44 +1,45 @@
-/* import Vue from "vue";
-import store from "@/store/index";
-import Filter from "@/components/filters/api/filters";
-const filter = new Filter();
+import Vue from "vue";
+import { StoreService }  from "@/store/index";
+// import Filter from "@/components/filters/api/filters";
+// const filter = new Filter();
 import { router, resetRouter } from "./router";
-
-// tslint:disable-next-line:class-name
+import { UserApi } from "./domain/api/user";
+import { AxiosService } from "./services/axios_service";
 export default class Auth {
-    public loginIn(login: string, pass: string): any {
-        return new Promise((resolve) => {
-            Vue.$axios.post("/api/rpc/login", {
-                ulogin: login,
-                upass: pass,
-                udata: {
-                    user_agent: navigator.userAgent,
-                    disp_width: window.screen.width,
-                    disp_height: window.screen.height,
-                    app_width: window.innerWidth,
-                    app_height: window.innerHeight,
-                    ratio: window.devicePixelRatio || 1,
-                    referrer: document.referrer
-                }
-            }).then((response: any) => {
-                if (response.status === 200) {
-                    const user = this.makeUserFromResponse(response);
-                    this.setUser(user);
-                    filter.testVersions(response.data[0].ref_version);
-                    router.push({ path: store.getters.getFirstRoute(store.getters.getUser.RoleCode) });
-                } else {
-                    resolve({ type: "error", status: response.status, text: "Login.notify.err1" });
-                }
-            }, (err: any) => {
-                resolve(this.getAxiosErr(err));
-            });
+    private _store = StoreService.Instance.store;
+    private _userApi = new UserApi();
+    private get _axios() {
+        return AxiosService.Instance.axios;
+    }
+    public loginIn(login: string, pass: string) {
+        this._userApi.loginIn(login, pass, {
+            user_agent: navigator.userAgent,
+            disp_width: window.screen.width,
+            disp_height: window.screen.height,
+            app_width: window.innerWidth,
+            app_height: window.innerHeight,
+            ratio: window.devicePixelRatio || 1,
+            referrer: document.referrer
+        }).then((response: any) => {
+            if (response.status === 200) {
+                const user = this.makeUserFromResponse(response);
+                this.setUser(user);
+                // filter.testVersions(response.data[0].ref_version);
+                router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
+            } else {
+                return { type: "error", status: response.status, text: "Login.notify.err1" };
+            }
+        }).catch((err: any) => {
+            return(this.getAxiosErr(err));
         });
     }
+
     public logOut() {
-        Vue.$axios.defaults.headers.common.Authorization = "";
+        this._axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
-        store.dispatch("unsetUser");
-        resetRouter();
+        this._store.dispatch("unsetUser");
+        const app = Vue.getCurrentInstance()!.appContext.app;
+        resetRouter(app);
         router.push({ path: "/login" });
     }
     public checkUserInLocalStorage(): boolean {
@@ -77,11 +78,12 @@ export default class Auth {
         return user;
     }
     public setUser(user: any): void {
-        Vue.$axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
+        this._axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
-        store.dispatch("setUser", user);
-        const routes: any = store.getters.getRoutes(user.RoleCode);
-        router.addRoutes(routes, {resolve: true});
+        this._store.dispatch("setUser", user);
+        const routes: any = this._store.getters.getRoutes(user.RoleCode);
+        const router = Vue.getCurrentInstance()!.appContext.config.globalProperties.router;
+        router.addRoutes(routes, { resolve: true });
     }
     private getAxiosErr(err: any): any {
         let status: string = "0";
@@ -109,4 +111,3 @@ export default class Auth {
         return ({ type: "error", status, text });
     }
 }
- */

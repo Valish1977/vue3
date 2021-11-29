@@ -6,8 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref} from "vue";
-import appComposition from '@/composition/app_composition'
-import { AppService} from '@/services/app_service';
+import appPreloadComposition from '@/composition/app_preload_composition'
 const App = defineComponent({
   data() {
     return {
@@ -15,13 +14,10 @@ const App = defineComponent({
     }
   },
   setup() {
-    const  { countLoaded } = appComposition();
-     return {
-      countLoaded
-    }
+    appPreloadComposition();
   }
 
-/*   
+/*
     
     // server-sent events
     this.connectSse();
