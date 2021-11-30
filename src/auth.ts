@@ -6,17 +6,12 @@ import { RouterService } from "@/router";
 import { UserApi } from "./domain/api/user";
 import { AxiosService } from "@/vuex";
 export default class Auth {
-    private _routerService: RouterService = RouterService.Instance;
+    private _routerService = RouterService.Instance;
+    private _store = StoreService.Instance.store;
+    private _router = RouterService.Instance.router;
     private _userApi = new UserApi();
-    private get _axios() {
-        return AxiosService.Instance.axios;
-    }
-    private get _store() {
-        return StoreService.Instance.store;
-    }
-    private get _router() {
-        return this._routerService.router;
-    }
+    private _axios = AxiosService.Instance.axios;
+
     public loginIn(login: string, pass: string) {
         this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
@@ -28,7 +23,7 @@ export default class Auth {
             referrer: document.referrer
         }).then((response: any) => {
             if (response.status === 200) {
-                const user = this.makeUserFromResponse(response);
+                const user = this._makeUserFromResponse(response);
                 this.setUser(user);
                 // filter.testVersions(response.data[0].ref_version);
                 this._router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
@@ -39,7 +34,19 @@ export default class Auth {
             return(this.getAxiosErr(err));
         });
     }
-
+    public refreshTokenAuth() {
+        return this._userApi.refreshToken(this._store.getters.getUser.refresh_token)
+        .then((refreshResponse: any) => {
+            // console.log("refreshResponse", refresh_response);
+            const user: any = this._makeUserFromResponse(refreshResponse);
+            this.setUser(user);
+            return user.auth_token
+        })
+        .catch((err: any) => {
+            throw(err);
+          // console.log("Произошла ошибка в работе сервиса...", err);
+        });
+    }
     public logOut() {
         this._axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
@@ -62,7 +69,7 @@ export default class Auth {
             return false;
         }
     }
-    public makeUserFromResponse(response: any): any {
+    private _makeUserFromResponse(response: any): any {
         const authToken = response.data[0].auth_token;
         const refreshToken = response.data[0].refresh_token;
         const atArr = authToken.split(".");
@@ -92,7 +99,7 @@ export default class Auth {
         router.addRoutes(routes, { resolve: true });
     }
     private getAxiosErr(err: any): any {
-        let status: string = "0";
+        let status = "0";
         let text = "Login.notify.err";
         if (err.response) {
             status = err.response.status;

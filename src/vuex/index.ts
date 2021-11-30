@@ -1,6 +1,5 @@
-import { UserApi } from '@/domain/api/user';
 import axios, { AxiosStatic } from 'axios'
-import { StoreService }  from "@/store/index";
+import { StoreService } from "@/store/index";
 import Auth from "@/auth";
 
 /* import Filter from "@/components/filters/api/filters";
@@ -29,20 +28,21 @@ export class AxiosService {
   private _store = StoreService.Instance.store;
   private static _instance: AxiosService;
   private _instanceAxios: AxiosStatic;
-  private constructor(){
+  private constructor() {
     this._instanceAxios = axios;
-    this._setInterceptorResponse();
   }
   public static get Instance(): AxiosService {
-      return this._instance?? new this();
+    if (!this._instance) {
+      this._instance = new this();
+    }
+    return this._instance;
   }
-  private _api = new UserApi();
-  private auth = new Auth();
-  private _isRefreshing: boolean = false;
+  private _isRefreshing = false;
   public get axios() {
     return this._instanceAxios;
   }
-  private _setInterceptorResponse(): void {
+  public setInterceptorResponse(): void {
+    const _auth = new Auth();
     this._instanceAxios.interceptors.response.use(undefined, (interceptorErr: any) => {
       // Do something with response error
       // console.log("interceptors error");
@@ -50,22 +50,21 @@ export class AxiosService {
       const mainResponce: any = interceptorErr.response;
       if (mainResponce.status === 401 && !this._isRefreshing) {
         this._isRefreshing = true;
-        return this._api?.refreshToken(this._store.getters.getUser.refresh_token).then((refreshResponse: any) => {
+        return new Promise((resolve, reject) => {
+          _auth.refreshTokenAuth().then((newToken: String) => {
             this._isRefreshing = false;
-            // console.log("refreshResponse", refresh_response);
-            const user: any = this.auth.makeUserFromResponse(refreshResponse);
-            this.auth.setUser(user);
             //filter.testVersions(refreshResponse.data[0].ref_version);
-            mainResponce.config.headers = { Authorization: "Bearer " + user.auth_token };
-            this._instanceAxios(mainResponce.config);
+            mainResponce.config.headers = { Authorization: "Bearer " + newToken };
+            resolve(this._instanceAxios(mainResponce.config));
           })
-          .catch((err: any) => {
-            this._isRefreshing = false;
-            if (err.request.status === 403) {
-              this.auth.logOut();
-            }
-            // console.log("Произошла ошибка в работе сервиса...", err);
-          });
+            .catch((err) => {
+              this._isRefreshing = false;
+              if (err.request.status === 403) {
+                _auth.logOut();
+              }
+              reject(err);
+            });
+        });
       } else {
         return Promise.reject(interceptorErr);
       }

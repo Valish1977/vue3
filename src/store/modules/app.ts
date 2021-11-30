@@ -1,7 +1,4 @@
 
-interface Data {
-    [key: string]: unknown
-  }
 const app = {
     namespaced: true,
     state: () => ({

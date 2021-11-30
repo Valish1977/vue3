@@ -2,12 +2,15 @@ import { App } from "vue";
 import { StoreService } from '@/store'
 import { createWebHistory, createRouter, Router, RouterOptions } from "vue-router";
 import { AppPreloadService, PreloaderSettersName, HelloPreloaderOpacitySettings } from '@/services/app_preload_service';
-import Error404 from "./views/Error404.vue";
-import LoginView from "./views/Login.vue";
+import Error404 from "@/views/Error404.vue";
+import LoginView from "@/views/Login.vue";
 export class RouterService{
   private static _instance: RouterService;
   public static get Instance(): RouterService {
-    return this._instance?? new this();
+    if (!this._instance) {
+      this._instance = new this();
+    }
+    return this._instance;
   }
   private _router: Router;
   private _redirectRoute = false;
@@ -35,14 +38,14 @@ export class RouterService{
     this._router = createRouter(this._routerOtions);
     this._ititialRouterEach();
   }
-  public get router() { return this._router };
+  public get router() { return this._router }
 
   public resetRouter(app: App<Element>): void {
     const newRouter: Router = createRouter(this._routerOtions);
     //  TODO: проверить на правильность реализацию newRouter.install(app);
     this._router = newRouter;
     newRouter.install(app);
-  };
+  }
 
   private _ititialRouterEach() {
     this._redirectRoute = false;

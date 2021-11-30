@@ -7,9 +7,9 @@ import lang from "./modules/lang";
 import app from "./modules/app";
 export class StoreService {
   private static _instance: StoreService;
-  /* private _store: Store<any>; */
+  private _store: Store<any>;
   private constructor(){
-    /* this._store =  */createStore({
+    this._store = createStore({
       strict: true,
       modules: {
         routes,
@@ -21,9 +21,12 @@ export class StoreService {
     });
   }
   public get store(): Store<any> {
-    return useStore();
+    return this._store;
   }
   public static get Instance(): StoreService {
-      return this._instance?? new this();
+    if (!this._instance) {
+      this._instance = new this();
+    }
+    return this._instance;
   }
 }

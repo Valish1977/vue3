@@ -1,4 +1,5 @@
 const lang = {
+    namespaced: true,
     state: {
         language: "en"
     },

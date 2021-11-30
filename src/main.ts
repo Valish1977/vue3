@@ -12,6 +12,8 @@ const router = RouterService.Instance.router;
 import { locale } from '@/plugins/element';
 import { AxiosService } from '@/vuex';
 const axios = AxiosService.Instance.axios;
+AxiosService.Instance.setInterceptorResponse();
+
 // import Ref from "@/ref";
 import VueAxios from 'vue-axios'
 import { FontAwesomeIcon } from '@/plugins/icons';
