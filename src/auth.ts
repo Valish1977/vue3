@@ -2,14 +2,20 @@ import Vue from "vue";
 import { StoreService }  from "@/store/index";
 // import Filter from "@/components/filters/api/filters";
 // const filter = new Filter();
-import { router, resetRouter } from "./router";
+import { RouterService } from "@/router";
 import { UserApi } from "./domain/api/user";
-import { AxiosService } from "./services/axios_service";
+import { AxiosService } from "@/vuex";
 export default class Auth {
-    private _store = StoreService.Instance.store;
+    private _routerService: RouterService = RouterService.Instance;
     private _userApi = new UserApi();
     private get _axios() {
         return AxiosService.Instance.axios;
+    }
+    private get _store() {
+        return StoreService.Instance.store;
+    }
+    private get _router() {
+        return this._routerService.router;
     }
     public loginIn(login: string, pass: string) {
         this._userApi.loginIn(login, pass, {
@@ -25,7 +31,7 @@ export default class Auth {
                 const user = this.makeUserFromResponse(response);
                 this.setUser(user);
                 // filter.testVersions(response.data[0].ref_version);
-                router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
+                this._router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" };
             }
@@ -39,8 +45,8 @@ export default class Auth {
         localStorage.removeItem("user");
         this._store.dispatch("unsetUser");
         const app = Vue.getCurrentInstance()!.appContext.app;
-        resetRouter(app);
-        router.push({ path: "/login" });
+        this._routerService.resetRouter(app);
+        this._router.push({ path: "/login" });
     }
     public checkUserInLocalStorage(): boolean {
         const userJSON = localStorage.getItem("user");

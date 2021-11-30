@@ -1,23 +1,22 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import { StoreService } from './store'
+import { StoreService } from '@/store'
 const store = StoreService.Instance.store;
 /* import ElementPlus from 'element-plus' */
 /* import 'element-plus/lib/theme-chalk/index.css'*/
 import '@/styles/index.scss' // global css 
-import { i18n } from '@/i18n';
-import { router } from '@/router';
+import { I18nService } from '@/i18n';
+const i18n = I18nService.Instance.i18n;
+import { RouterService } from '@/router';
+const router = RouterService.Instance.router;
 import { locale } from '@/plugins/element';
-import { AxiosService } from '@/services/axios_service';
+import { AxiosService } from '@/vuex';
+const axios = AxiosService.Instance.axios;
 // import Ref from "@/ref";
 import VueAxios from 'vue-axios'
 import { FontAwesomeIcon } from '@/plugins/icons';
 import { AppPreloadService, PreloaderSettersName, HelloPreloaderOpacitySettings } from './services/app_preload_service';
 
-
-
-const axiosService = AxiosService.Instance;
-const axios = axiosService.axios;
 
 const app = createApp(App);
 // const ref = new Ref(app);

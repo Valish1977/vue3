@@ -1,6 +1,6 @@
 // load DTO from server and transform to internal format
 import {StoreService} from "@/store/index";
-import { AxiosService } from "@/services/axios_service";
+import { AxiosService } from "@/vuex";
 
 export class UserApi {
     private _store = StoreService.Instance.store;

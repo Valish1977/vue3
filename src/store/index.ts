@@ -1,4 +1,4 @@
-import Vuex, { Store } from "vuex";
+import { Store, createStore, useStore } from "vuex";
 import VuexORM from "@vuex-orm/core";
 import database from "./database";
 import routes from "./modules/routes";
@@ -7,9 +7,9 @@ import lang from "./modules/lang";
 import app from "./modules/app";
 export class StoreService {
   private static _instance: StoreService;
-  private _store: Store<any>;
+  /* private _store: Store<any>; */
   private constructor(){
-    this._store = new Vuex.Store({
+    /* this._store =  */createStore({
       strict: true,
       modules: {
         routes,
@@ -21,7 +21,7 @@ export class StoreService {
     });
   }
   public get store(): Store<any> {
-    return this._store;
+    return useStore();
   }
   public static get Instance(): StoreService {
       return this._instance?? new this();

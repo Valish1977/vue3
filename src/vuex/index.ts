@@ -1,7 +1,6 @@
 import { UserApi } from '@/domain/api/user';
 import axios, { AxiosStatic } from 'axios'
 import { StoreService }  from "@/store/index";
-import { getCurrentInstance } from 'vue'
 import Auth from "@/auth";
 
 /* import Filter from "@/components/filters/api/filters";
