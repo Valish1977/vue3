@@ -110,7 +110,7 @@ const delta = 15;
     ...mapGetters("app", ["getLoading"])
   }
 }) */
-
+console.log("layuoofidofd");
 import { defineComponent } from 'vue';
 const Layout = defineComponent({
   data() {

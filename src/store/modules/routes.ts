@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
-
+import Layout from "@/views/layout/Layout.vue";
+import Dashboard from "@/views/dashboard/Dashboard.vue";
 // tslint:disable:max-line-length
 function loadComp(component: string) {
     return () => import(`@/views/${component}`);
@@ -14,10 +15,10 @@ const routes = {
         routes: {
             guest: [
                 {
-                    path: "/", alias: "/", name: "layout", component: loadComp("layout/Layout"), meta: { pageName: "routes.index" },
+                    path: "/", alias: "/", name: "Layout", component: Layout, meta: { pageName: "routes.index" },
                     children: [
                         // tslint:disable-next-line:max-line-length
-                        { path: "/dashboard", name: "dashboard", component: loadComp("dashboard/Dashboard.vue"), meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
+                        { path: "/dashboard", name: "dashboard", component: Dashboard, meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } } as RouteRecordRaw,
                     ]
                 }
             ],
@@ -31,7 +32,7 @@ const routes = {
         }
     },
     getters: {
-        getRoutes: (state: any) => (RoleCode: string) => state.routes[
+        getRoutes: (state: any) => (RoleCode: string): RouteRecordRaw => state.routes[
             (state.routerAlias[RoleCode] ? state.routerAlias[RoleCode] : "guest")
         ],
         getPath: (state: any) => (RoleCode: string) => state.routerAlias[RoleCode],
