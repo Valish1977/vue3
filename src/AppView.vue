@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref} from "vue";
 import appPreloadComposition from '@/composition/app_preload_composition'
-const App = defineComponent({
+const AppView = defineComponent({
   data() {
     return {
       sseConnect: null as number | null
@@ -81,7 +81,7 @@ const App = defineComponent({
     }, 16);
   } */
   });
-  export default App;
+  export default AppView;
 </script>
 <style type="text/css" scoped>
 .fade-enter-active,

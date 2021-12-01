@@ -34,10 +34,10 @@
 </template>
 
 <script lang="ts">
-interface LoginForm {
+/* interface LoginForm {
   username: "",
   password: "" 
-}
+} */
 import { defineComponent } from 'vue';
 import loginPageComposition from '@/composition/login_page_composition'
 const LoginView = defineComponent({

@@ -12,15 +12,15 @@ const auth = {
         prefs: ""
     },
     mutations: {
-        SET_USER: (state: any, { item }) => {
+        SET_USER: (state: any, { item }: any) => {
             state.user = item;
         }
     },
     actions: {
-        setUser({ commit }, newUser: any) {
+        setUser({ commit }: any, newUser: any) {
             commit("SET_USER", { item: newUser });
         },
-        unsetUser({ commit }) {
+        unsetUser({ commit }: any) {
             commit("SET_USER", { item: { auth: false } });
         }
     },

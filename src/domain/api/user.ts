@@ -1,10 +1,10 @@
 // load DTO from server and transform to internal format
-import {StoreService} from "@/store/index";
-import { AxiosService } from "@/vuex";
+import StoreService from "@/store/index";
+import VuexService from "@/core/vuex_service";
 
-export class UserApi {
+export default class UserApi {
     private _store = StoreService.Instance.store;
-    private _axios =  AxiosService.Instance.axios;
+    private _axios =  VuexService.Instance.axios;
     public refreshToken(token: string) {
       return new Promise((resolve, reject) => {
         this._axios!({
@@ -306,7 +306,7 @@ public searchDuplicateField(field: any) {  // проверка на наличи
   });
 }
 
-public uploadFile(fileList) {
+public uploadFile(fileList: any[]) {
   return new Promise((resolve, reject) => {
     if (fileList.length > 0) {
       const formData = new FormData();

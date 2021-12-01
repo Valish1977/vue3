@@ -5,7 +5,7 @@ import routes from "./modules/routes";
 import auth from "./modules/auth";
 import lang from "./modules/lang";
 import app from "./modules/app";
-export class StoreService {
+export default class StoreService {
   private static _instance: StoreService;
   private _store: Store<any>;
   private constructor(){

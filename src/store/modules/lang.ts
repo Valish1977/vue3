@@ -4,12 +4,12 @@ const lang = {
         language: "en"
     },
     mutations: {
-        SET_LANGUAGE: (state: any, { item }) => {
+        SET_LANGUAGE: (state: any, { item }: any) => {
             state.language = item;
         }
     },
     actions: {
-        setLanguage({ commit }, newData: any) { // добавляем автоматически добавляемые фильтры
+        setLanguage({ commit }: any, newData: any) { // добавляем автоматически добавляемые фильтры
             commit("SET_LANGUAGE", { item: newData });
         }
     },

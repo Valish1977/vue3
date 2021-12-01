@@ -1,9 +1,10 @@
 
-import {StoreService} from "@/store";
+import StoreService from "@/store";
 import { createI18n, I18nOptions, LocaleMessages} from "vue-i18n";
 import enLocale from "element-plus/lib/locale/lang/en";
 import esLocale from "element-plus/lib/locale/lang/es";
-export class I18nService {
+
+export default class I18nService {
   private static _instance: I18nService;
   private _store = StoreService.Instance.store;
   public static get Instance(): I18nService {
@@ -24,7 +25,7 @@ export class I18nService {
   private get _startLang() { return localStorage.getItem("language")?? (process.env.VUE_APP_I18N_LOCALE || "en"); }
   
   private _i18n;
-  public get i18n() { return this._i18n }
+  public get i18n(): any { return this._i18n; }
   
   private _loadElementLocale(locale: string): any {
     switch (locale) {

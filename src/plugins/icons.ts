@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faStethoscope,
@@ -40,7 +41,6 @@ import {
     faHouseUser,
     faArrowLeft
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(faInfoCircle);
 library.add(faInfo);
@@ -82,4 +82,4 @@ library.add(faHome);
 library.add(faHouseUser);
 library.add(faArrowLeft);
 
-export { FontAwesomeIcon };
+export default FontAwesomeIcon;

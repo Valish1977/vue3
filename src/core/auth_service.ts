@@ -1,17 +1,16 @@
-import Vue from "vue";
-import { StoreService }  from "@/store/index";
-// import Filter from "@/components/filters/api/filters";
-// const filter = new Filter();
-import { RouterService } from "@/router";
-import { UserApi } from "./domain/api/user";
-import { AxiosService } from "@/vuex";
-export default class Auth {
+import StoreService  from "@/store/index";
+import Filter from "@/components/filters/api/filters";
+import RouterService from "@/core/router_service";
+import UserApi from "@/domain/api/user";
+import VuexService from "@/core/vuex_service";
+
+export default class AuthService {
     private _routerService = RouterService.Instance;
     private _store = StoreService.Instance.store;
     private _router = RouterService.Instance.router;
     private _userApi = new UserApi();
-    private _axios = AxiosService.Instance.axios;
-
+    private _axios = VuexService.Instance.axios;
+    private _filter = new Filter();
     public loginIn(login: string, pass: string) {
         this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
@@ -25,7 +24,7 @@ export default class Auth {
             if (response.status === 200) {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
-                // filter.testVersions(response.data[0].ref_version);
+                this._filter.testVersions(response.data[0].ref_version);
                 this._router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" };
@@ -51,8 +50,7 @@ export default class Auth {
         this._axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
         this._store.dispatch("unsetUser");
-        const app = Vue.getCurrentInstance()!.appContext.app;
-        this._routerService.resetRouter(app);
+        this._routerService.resetRouter();
         this._router.push({ path: "/login" });
     }
     public checkUserInLocalStorage(): boolean {
@@ -95,8 +93,8 @@ export default class Auth {
         localStorage.setItem("user", JSON.stringify(user));
         this._store.dispatch("setUser", user);
         const routes: any = this._store.getters.getRoutes(user.RoleCode);
-        const router = Vue.getCurrentInstance()!.appContext.config.globalProperties.router;
-        router.addRoutes(routes, { resolve: true });
+        const router = RouterService.Instance.router;
+        router.addRoute(routes);
     }
     private getAxiosErr(err: any): any {
         let status = "0";

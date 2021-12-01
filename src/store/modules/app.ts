@@ -17,7 +17,7 @@ const app = {
         }
     }),
     mutations: {
-        SET_DATA: (state: any, { type, items }): void => {
+        SET_DATA: (state: any, { type, items }: any): void => {
             state[type] = items;
         },
         SET_LOAD: (state: any, data: any): void => {
@@ -63,22 +63,22 @@ const app = {
         }
     },
     actions: {
-        setPaginationData({ commit }, data: any) { // данные пагинации
+        setPaginationData({ commit }: any, data: any) { // данные пагинации
             commit("SET_PAGINATION_DATA", {paginationName: data.paginationName, name: data.name, data: data.data});
         },
-        resetPaginationData({ commit }, paginationName: any) { // данные пагинации
+        resetPaginationData({ commit }: any, paginationName: any) { // данные пагинации
             commit("RESET_PAGINATION_DATA", paginationName);
         },
-        setWindowWidth({ commit }, newData) { // изменяем значение сайдбара
+        setWindowWidth({ commit }: any, newData: any) { // изменяем значение сайдбара
             commit("SET_DATA", { type: "windowWidth", items: newData });
         },
-        setSideBar({ commit }, newData: any) { // изменяем значение сайдбара
+        setSideBar({ commit }: any, newData: any) { // изменяем значение сайдбара
             commit("SET_DATA", { type: "sidebar", items: newData });
         },
-        setLoading({ commit }, data) {
+        setLoading({ commit }: any, data: any) {
             commit("SET_LOAD", data);
         },
-        setBus({ commit }, data: any) {
+        setBus({ commit }: any, data: any) {
             commit("SET_BUS", data);
         }
     },

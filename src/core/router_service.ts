@@ -1,10 +1,12 @@
-import { App } from "vue";
-import { StoreService } from '@/store'
-import { createWebHistory, createRouter, Router, RouterOptions } from "vue-router";
+import StoreService from '@/store'
+import { createWebHistory, createRouter, Router, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 import { AppPreloadService, PreloaderSettersName, HelloPreloaderOpacitySettings } from '@/services/app_preload_service';
 import Error404 from "@/views/Error404.vue";
 import LoginView from "@/views/Login.vue";
-export class RouterService{
+import MainService from "@/core/main_service";
+
+
+export default class RouterService{
   private static _instance: RouterService;
   public static get Instance(): RouterService {
     if (!this._instance) {
@@ -38,18 +40,17 @@ export class RouterService{
     this._router = createRouter(this._routerOtions);
     this._ititialRouterEach();
   }
-  public get router() { return this._router }
+  public get router(): Router { return this._router }
 
-  public resetRouter(app: App<Element>): void {
-    const newRouter: Router = createRouter(this._routerOtions);
-    //  TODO: проверить на правильность реализацию newRouter.install(app);
+  public resetRouter(): void {
+    const newRouter = createRouter(this._routerOtions);
     this._router = newRouter;
-    newRouter.install(app);
+    newRouter.install(MainService.Instance.app);
   }
 
   private _ititialRouterEach() {
     this._redirectRoute = false;
-    this._router.beforeEach((to: any, from: any, next: any) => {
+    this._router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
       if ( !this._redirectRoute  ) {
         if (to.matched.length > 0) {
           // если роут существует и не выбросит в редирект
@@ -86,7 +87,7 @@ export class RouterService{
       }, 500);
     });
     // eslint-disable-next-line
-    this._router.afterEach((to: any) => {
+    this._router.afterEach((to: RouteLocationNormalized): void => {
       this._store.dispatch("setCurrentRoute", to); // без этого не работает пагинация !!!
       this._appPreloadService.stopLoader(PreloaderSettersName.RouterAfterEach);
     });

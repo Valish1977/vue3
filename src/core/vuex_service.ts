@@ -1,6 +1,6 @@
 import axios, { AxiosStatic } from 'axios'
-import { StoreService } from "@/store/index";
-import Auth from "@/auth";
+import StoreService from "@/store/index";
+import AuthService from "@/core/auth_service";
 
 /* import Filter from "@/components/filters/api/filters";
 
@@ -24,25 +24,26 @@ Vue.use(VueNativeSock, "ws://127.0.0.1:8090/ws?id=1", { store });
 });
 const filter = new Filter(); */
 
-export class AxiosService {
+export default class VuexService {
   private _store = StoreService.Instance.store;
-  private static _instance: AxiosService;
+  private static _instance: VuexService;
   private _instanceAxios: AxiosStatic;
   private constructor() {
     this._instanceAxios = axios;
+    this.setInterceptorResponse();
   }
-  public static get Instance(): AxiosService {
+  public static get Instance(): VuexService {
     if (!this._instance) {
       this._instance = new this();
     }
     return this._instance;
   }
   private _isRefreshing = false;
-  public get axios() {
+  public get axios(): AxiosStatic {
     return this._instanceAxios;
   }
   public setInterceptorResponse(): void {
-    const _auth = new Auth();
+    const _auth = new AuthService();
     this._instanceAxios.interceptors.response.use(undefined, (interceptorErr: any) => {
       // Do something with response error
       // console.log("interceptors error");
@@ -51,7 +52,7 @@ export class AxiosService {
       if (mainResponce.status === 401 && !this._isRefreshing) {
         this._isRefreshing = true;
         return new Promise((resolve, reject) => {
-          _auth.refreshTokenAuth().then((newToken: String) => {
+          _auth.refreshTokenAuth().then((newToken: string) => {
             this._isRefreshing = false;
             //filter.testVersions(refreshResponse.data[0].ref_version);
             mainResponce.config.headers = { Authorization: "Bearer " + newToken };
