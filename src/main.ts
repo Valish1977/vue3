@@ -6,7 +6,6 @@ import VueAxios from 'vue-axios'
 import VuexService from '@/core/vuex_service';
 import ElementPlus from 'element-plus';
 import ElementUiService from '@/services/element_ui_service';
-
 import 'element-plus/dist/index.css';
 import "@/styles/index.scss"; // global css
 
@@ -14,15 +13,6 @@ import "@/styles/index.scss"; // global css
 MainService.Instance.app.config.globalProperties.$API_ROOT = process.env.VUE_APP_API_ROOT;
 MainService.Instance.app.config.globalProperties.$FILE_PATH = process.env.VUE_APP_FILE_PATH ? process.env.VUE_APP_FILE_PATH : '';
 MainService.Instance.app.config.globalProperties.$VERSION = process.env.VUE_APP_VERSION;
-
-
-
-
-
-
-
-// import Ref from "@/ref";
-
 
 
 MainService.Instance.app.use(StoreService.Instance.store)

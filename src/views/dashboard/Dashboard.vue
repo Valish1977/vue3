@@ -13,7 +13,7 @@
 <script lang='ts'>
 
 import { defineComponent } from 'vue';
-const DashboardAdm = defineComponent({
+const Dashboard = defineComponent({
   data() {
     return {
     }
@@ -21,7 +21,7 @@ const DashboardAdm = defineComponent({
 /*   setup() {
   } */
 });
-export default DashboardAdm;
+export default Dashboard;
 </script>
 <style lang="scss">
 .box-card {

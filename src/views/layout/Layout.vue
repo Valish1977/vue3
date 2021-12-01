@@ -95,6 +95,7 @@
       <p>{{$t('info.version')}}{{$VERSION}}</p>
     </el-dialog> -->
   </div>
+  
 </template>
 
 <script lang="ts">
@@ -111,7 +112,7 @@ const delta = 15;
 }) */
 
 import { defineComponent } from 'vue';
-const LayoutAdm = defineComponent({
+const Layout = defineComponent({
   data() {
     return {
     }
@@ -119,7 +120,7 @@ const LayoutAdm = defineComponent({
 /*   setup() {
   } */
 });
-export default LayoutAdm;
+export default Layout;
  /*export default class LayoutAdm extends Vue {
   private getLoading!: any;
   private top: any = 0;

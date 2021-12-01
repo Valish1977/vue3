@@ -33,19 +33,32 @@ export default class RouterService{
         component: LoginView,
         meta: { showToolbar: false, showDrawer: false, showAddItem: false, showInMenu: false }
       },
-      
     ]
   }
   private constructor () {
     this._router = createRouter(this._routerOtions);
+    this.setCurrentRoutes();
     this._ititialRouterEach();
   }
-  public get router(): Router { return this._router }
+  public get router(): Router { return this._router; }
 
   public resetRouter(): void {
-    const newRouter = createRouter(this._routerOtions);
-    this._router = newRouter;
-    newRouter.install(MainService.Instance.app);
+    this._router = createRouter(this._routerOtions);
+     this._router.install(MainService.Instance.app);
+    this.setCurrentRoutes();
+  }
+
+  public setCurrentRoutes() {
+    const routes: any = JSON.parse(
+      JSON.stringify(
+        StoreService.Instance.store.getters.getRoutes(
+          StoreService.Instance.store.getters.getUser.RoleCode
+        )
+      )
+    );
+    console.log(this._router.getRoutes());
+    this._router.addRoute(routes[0]);
+    console.log(this._router.getRoutes());
   }
 
   private _ititialRouterEach() {
@@ -59,8 +72,8 @@ export default class RouterService{
         }
       }
       setTimeout(() => {  // this delay is necessary for "loading.." window has time to appear
-        // console.log("beforeEach",to.path, to.matched.length)
-        // console.log(router)
+        console.log("beforeEach",to.path, to.matched.length)
+        console.log(this._router);
         if (to.matched.length > 0) { // is route exist?
           switch ((to.path).toLowerCase()) { // route processing
             case "/login":

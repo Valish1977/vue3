@@ -25,7 +25,6 @@ Vue.use(VueNativeSock, "ws://127.0.0.1:8090/ws?id=1", { store });
 const filter = new Filter(); */
 
 export default class VuexService {
-  private _store = StoreService.Instance.store;
   private static _instance: VuexService;
   private _instanceAxios: AxiosStatic;
   private constructor() {
@@ -43,11 +42,11 @@ export default class VuexService {
     return this._instanceAxios;
   }
   public setInterceptorResponse(): void {
-    const _auth = new AuthService();
     this._instanceAxios.interceptors.response.use(undefined, (interceptorErr: any) => {
       // Do something with response error
       // console.log("interceptors error");
       // console.log(interceptor_err.response);
+      const _auth = new AuthService();
       const mainResponce: any = interceptorErr.response;
       if (mainResponce.status === 401 && !this._isRefreshing) {
         this._isRefreshing = true;

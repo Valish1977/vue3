@@ -12,30 +12,30 @@ const routes = {
             stf_adm: "adm",
         },
         routes: {
-            views: [
+            guest: [
                 {
-                    path: "/", alias: "/", component: loadComp("layout/Layout"), meta: { pageName: "routes.index" },
+                    path: "/", alias: "/", name: "layout", component: loadComp("layout/Layout"), meta: { pageName: "routes.index" },
                     children: [
                         // tslint:disable-next-line:max-line-length
-                        { path: "/adm/dashboard", name: "dashboard", component: loadComp("dashboard/DashboardAdm.vue"), meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } } as RouteRecordRaw,
+                        { path: "/dashboard", name: "dashboard", component: loadComp("dashboard/Dashboard.vue"), meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
                     ]
-                } as RouteRecordRaw
+                }
             ],
             adm: [
                 {
-                    path: "/adm", alias: "/", component: loadComp("layout/LayoutAdm"),
+                    path: "/adm", alias: "/", component: loadComp("layout/Layout"),
                     children: [
                     ]
-                } as RouteRecordRaw
+                }
             ],
         }
     },
     getters: {
-        getRoutes: (state: any) => (RoleCode: string): RouteRecordRaw => state.routes[
-            (state.routerAlias[RoleCode] ? state.routerAlias[RoleCode] : "views")
+        getRoutes: (state: any) => (RoleCode: string) => state.routes[
+            (state.routerAlias[RoleCode] ? state.routerAlias[RoleCode] : "guest")
         ],
         getPath: (state: any) => (RoleCode: string) => state.routerAlias[RoleCode],
-        getFirstRoute: (state: any) => (RoleCode: string) => state.routes[state.routerAlias[RoleCode]][0].children[0].path,
+        getFirstRoute: (state: any) => (RoleCode: string) => state.routes[RoleCode !== "" ? state.routerAlias[RoleCode] : "guest" ][0].children[0].path,
         getCurrentRoute: (state: any) => state.currentRoute
     },
     mutations: {

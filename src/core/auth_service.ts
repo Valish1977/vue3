@@ -5,11 +5,7 @@ import UserApi from "@/domain/api/user";
 import VuexService from "@/core/vuex_service";
 
 export default class AuthService {
-    private _routerService = RouterService.Instance;
-    private _store = StoreService.Instance.store;
-    private _router = RouterService.Instance.router;
     private _userApi = new UserApi();
-    private _axios = VuexService.Instance.axios;
     private _filter = new Filter();
     public loginIn(login: string, pass: string) {
         this._userApi.loginIn(login, pass, {
@@ -25,7 +21,7 @@ export default class AuthService {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
                 this._filter.testVersions(response.data[0].ref_version);
-                this._router.push({ path: this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode) });
+                RouterService.Instance.router.push({ path: StoreService.Instance.store.getters.getFirstRoute(StoreService.Instance.store.getters.getUser.RoleCode) });
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" };
             }
@@ -34,7 +30,7 @@ export default class AuthService {
         });
     }
     public refreshTokenAuth() {
-        return this._userApi.refreshToken(this._store.getters.getUser.refresh_token)
+        return this._userApi.refreshToken(StoreService.Instance.store.getters.getUser.refresh_token)
         .then((refreshResponse: any) => {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
@@ -47,11 +43,11 @@ export default class AuthService {
         });
     }
     public logOut() {
-        this._axios.defaults.headers.common.Authorization = "";
+        VuexService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
-        this._store.dispatch("unsetUser");
-        this._routerService.resetRouter();
-        this._router.push({ path: "/login" });
+        StoreService.Instance.store.dispatch("unsetUser");
+        RouterService.Instance.resetRouter();
+        RouterService.Instance.router.push({ path: "/login" });
     }
     public checkUserInLocalStorage(): boolean {
         const userJSON = localStorage.getItem("user");
@@ -89,12 +85,10 @@ export default class AuthService {
         return user;
     }
     public setUser(user: any): void {
-        this._axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
+        VuexService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
-        this._store.dispatch("setUser", user);
-        const routes: any = this._store.getters.getRoutes(user.RoleCode);
-        const router = RouterService.Instance.router;
-        router.addRoute(routes);
+        StoreService.Instance.store.dispatch("setUser", user);
+        RouterService.Instance.resetRouter();
     }
     private getAxiosErr(err: any): any {
         let status = "0";
