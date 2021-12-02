@@ -13,7 +13,7 @@ export enum LoadingAppStore {
     Setter = 'app/setLoading',
     Getter = 'app/getLoading'
 }
-export enum PreloaderSettersName {
+export enum PreloaderSettersNameCore {
     WindowOnload = 'App.vue/window.onload',
     StartMain = 'main.ts/start main',
     RouterBeforeEach = "main.ts/router.beforeEach",
@@ -40,7 +40,7 @@ export class AppPreloadService {
     private setupInstance(): void {
         window.onload = () => {
             this.hellopreloader = document.getElementById(DoomElementById.HellopreloaderPreload);
-            this.stopLoader(PreloaderSettersName.WindowOnload);
+            this.stopLoader(PreloaderSettersNameCore.WindowOnload);
             setTimeout(() => {
                 this._loaderDisabled();
             }, 250);

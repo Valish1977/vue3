@@ -1,7 +1,7 @@
 import AppView from '@/AppView.vue'
 import { App, createApp } from "vue";
 import FontAwesomeIcon from '@/plugins/icons';
-import { AppPreloadService, PreloaderSettersName, HelloPreloaderOpacitySettings } from '@/services/app_preload_service';
+import { AppPreloadService, HelloPreloaderOpacitySettings, PreloaderSettersNameCore } from '@/services/app_preload_service';
 import StoreService from '@/store';
 import AuthService from './auth_service';
 import RouterService from './router_service';
@@ -26,7 +26,7 @@ export default class MainService {
     }
     public runApp(): void {
         const auth = new AuthService();
-        AppPreloadService.Instance.startLoader(PreloaderSettersName.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);
+        AppPreloadService.Instance.startLoader(PreloaderSettersNameCore.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);
         // if no auth, user exist in local store?
         if (!StoreService.Instance.store.getters.getUser.auth) {
             // console.log("no user");

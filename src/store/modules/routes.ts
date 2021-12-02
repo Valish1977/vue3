@@ -1,10 +1,6 @@
 import { RouteRecordRaw } from "vue-router";
 import Layout from "@/views/layout/Layout.vue";
-import Dashboard from "@/views/dashboard/Dashboard.vue";
 // tslint:disable:max-line-length
-function loadComp(component: string) {
-    return () => import(`@/views/${component}`);
-}
 
 const routes = {
     state: {
@@ -13,18 +9,32 @@ const routes = {
             stf_adm: "adm",
         },
         routes: {
+            default: [
+                {
+                  path: '/:pathMatch(.*)*',
+                  name: "error404",
+                  component: "Error404.vue",
+                  meta: { showToolbar: false, showDrawer: false, showAddItem: false, showInMenu: false }
+                },
+                {
+                  path: "/login",
+                  name: "login",
+                  component: "Login.vue",
+                  meta: { showToolbar: false, showDrawer: false, showAddItem: false, showInMenu: false }
+                },
+            ],
             guest: [
                 {
-                    path: "/", alias: "/", name: "Layout", component: Layout, meta: { pageName: "routes.index" },
+                    path: "/", name: "layout", component: "layout/Layout.vue", meta: { pageName: "routes.index" },
                     children: [
                         // tslint:disable-next-line:max-line-length
-                        { path: "/dashboard", name: "dashboard", component: Dashboard, meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } } as RouteRecordRaw,
+                        { path: "/dashboard", name: "dashboard", component: "dashboard/Dashboard.vue", meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
                     ]
                 }
             ],
             adm: [
                 {
-                    path: "/adm", alias: "/", component: loadComp("layout/Layout"),
+                    path: "/adm", alias: "/", name: "layout", component: "layout/Layout.vue",
                     children: [
                     ]
                 }
@@ -32,6 +42,7 @@ const routes = {
         }
     },
     getters: {
+        getDefaultRoutes: (state: any): RouteRecordRaw => state.routes["default"],
         getRoutes: (state: any) => (RoleCode: string): RouteRecordRaw => state.routes[
             (state.routerAlias[RoleCode] ? state.routerAlias[RoleCode] : "guest")
         ],
