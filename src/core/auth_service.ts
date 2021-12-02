@@ -2,7 +2,7 @@ import StoreService  from "@/store/index";
 import Filter from "@/components/filters/api/filters";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
-import VuexService from "@/core/vuex_service";
+import AxiosService from "@/core/axios_service";
 
 export default class AuthService {
     private _userApi = new UserApi();
@@ -43,7 +43,7 @@ export default class AuthService {
         });
     }
     public logOut() {
-        VuexService.Instance.axios.defaults.headers.common.Authorization = "";
+        AxiosService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
         StoreService.Instance.store.dispatch("unsetUser");
         RouterService.Instance.resetRouter();
@@ -85,7 +85,7 @@ export default class AuthService {
         return user;
     }
     public setUser(user: any): void {
-        VuexService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
+        AxiosService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
         StoreService.Instance.store.dispatch("setUser", user);
         RouterService.Instance.resetRouter();

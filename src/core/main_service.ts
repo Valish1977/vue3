@@ -6,7 +6,7 @@ import StoreService from '@/store';
 import AuthService from './auth_service';
 import RouterService from './router_service';
 import Filter from "@/components/filters/api/filters";
-import VuexService from './vuex_service';
+import AxiosService from './axios_service';
 import { ReferenceConfig, RouterPath } from '@/config';
 import { FilterApi, FilterDispatch } from '@/components/filters/enums';
 
@@ -44,7 +44,7 @@ export default class MainService {
     }
     private _setReferences() {
         StoreService.Instance.store.dispatch(FilterDispatch.SET_REFERENCES, ReferenceConfig.referenceList);
-        VuexService.Instance.axios.get(FilterApi.GET_REF_VERSION, {
+        AxiosService.Instance.axios.get(FilterApi.GET_REF_VERSION, {
         }).then((response: any) => {
             Filter.testVersions( response.data );
         }, (err: any) => {

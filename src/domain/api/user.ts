@@ -1,10 +1,10 @@
 // load DTO from server and transform to internal format
 import StoreService from "@/store/index";
-import VuexService from "@/core/vuex_service";
+import AxiosService from "@/core/axios_service";
 
 export default class UserApi {
     private _store = StoreService.Instance.store;
-    private _axios =  VuexService.Instance.axios;
+    private _axios =  AxiosService.Instance.axios;
     public refreshToken(token: string) {
       return new Promise((resolve, reject) => {
         this._axios!({

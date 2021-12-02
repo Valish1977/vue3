@@ -1,10 +1,10 @@
 import Vue from "vue";
-import VuexService from "@/core/vuex_service";
+import AxiosService from "@/core/axios_service";
 import StoreService from "@/store";
 
 export default class Filter {
   public static async getPrefs() {
-    const items = await VuexService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters.getUser.id).then(
+    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters.getUser.id).then(
       (response: any) => {
         if (response.status === 200) {
           return response.data[0].prefs;
@@ -25,7 +25,7 @@ export default class Filter {
   }
 
   public static async updatePrefs(prefs: any) {
-    const prefsChanges = await VuexService.Instance.axios.post(
+    const prefsChanges = await AxiosService.Instance.axios.post(
       "/api/rpc/update_prefs",
       { p: prefs }
     ).then(
@@ -97,7 +97,7 @@ export default class Filter {
     return new Promise((resolve, reject) => {
       let i = 0;
       for (const reference of arrayLoadReferences) {
-        VuexService.Instance.axios.get("/api/" + reference).then((response: any) => {
+        AxiosService.Instance.axios.get("/api/" + reference).then((response: any) => {
           // handle success
           if (response.status === 200) {
             i++;

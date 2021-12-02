@@ -5,81 +5,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref} from "vue";
-import appPreloadComposition from '@/composition/app_preload_composition'
+import { defineComponent, getCurrentInstance, onMounted, ref, Slots} from "vue";
+import appPreloadComposition from '@/composition/app_preload_composition';
+import appSseComposition from '@/composition/app_sse_composition';
+interface Data {
+  [key: string]: unknown
+}
+
+interface SetupContext {
+  attrs: Data
+  slots: Slots
+  emit: (event: string, ...args: unknown[]) => void
+  expose: (exposed?: Record<string, any>) => void
+}
+
+
 const AppView = defineComponent({
   data() {
     return {
+      apiRoot: this.$API_ROOT,
       sseConnect: null as number | null
     }
   },
-  setup() {
+  setup(props: Data, context: SetupContext) {
+    const internalInstance = getCurrentInstance();
+    // appSseComposition();
     appPreloadComposition();
   }
-
-/*
-    
-    // server-sent events
-    this.connectSse();
-  }
-  private connectSse() {
-    // console.log("sse connect");
-    // this.sseConnect = new EventSource(Vue.prototype.$API_ROOT + "/sse");
-    // this.sseConnect.onmessage = (event: any) => {
-    //   const data = JSON.parse(event.data);
-    //   this.$store.dispatch("app/setBus", {
-    //     name: "sse_" + data.Messages[0].Values.obj,
-    //     data: JSON.parse(data.Messages[0].Values.rowdata)
-    //   });
-    // };
-    // this.sseConnect.onerror = (e) => {
-    //   console.log("sse disconnect");
-    //   this.sseConnect.close();
-    //   this.connectSse();
-    // };
-  }
-  private beforeDestroy() {
-    console.log("sse close");
-    this.sseConnect.close();
-  }
-  @Watch("countLoaded")
-  private watchCountLoaded(): void {
-    // управление окном загрузки вкл/выкл
-    if (this.countLoaded > 0) {
-      this.startLoader(this.$store.state.app.opacityLoad); // выставляем полупрозрачность
-    } else {
-      this.stopLoader();
-    }
-  }
-  get countLoaded() {
-    return this.$store.getters["app/getLoading"]; // отслеживаем загрузку модулей
-  }
-  private startLoader(val: any): void {
-    this.hellopreloaderStatus = true;
-    this.hellopreloader.style.display = "block";
-    const interhellopreloader = setInterval(() => {
-      if ( !this.hellopreloaderStatus ) {
-        clearInterval(interhellopreloader);
-      }
-      this.hellopreloader.style.opacity = parseFloat(this.hellopreloader.style.opacity) + 0.05;
-      if (this.hellopreloader.style.opacity >= val) {
-        clearInterval(interhellopreloader);
-      }
-    }, 16);
-  }
-  private stopLoader(): void {
-    this.hellopreloaderStatus = false;
-    const interhellopreloader2 = setInterval(() => {
-      if ( this.hellopreloaderStatus ) {
-        clearInterval(interhellopreloader2);
-      }
-      this.hellopreloader.style.opacity = parseFloat(this.hellopreloader.style.opacity) - 0.05;
-      if (this.hellopreloader.style.opacity <= 0.05) {
-        clearInterval(interhellopreloader2);
-        this.hellopreloader.style.display = "none";
-      }
-    }, 16);
-  } */
   });
   export default AppView;
 </script>

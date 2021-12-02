@@ -15,11 +15,10 @@
             active-text-color="#409EFF"
             :class="$store.getters['app/windowWidth'] < 768 ? 'is-mobile' : ''"
           >
-            <!-- <div class="menu-wrapper">
-              <template v-for="item in routes[0].children">
-                  <el-menu-item
+            <div class="menu-wrapper">
+                <el-menu-item
+                  v-for="item in routes[0].children" :key="item.name"
                     :index="item.path"
-                    :key="item.name"
                     @click="setRouter(item.path)"
                     :class="{'submenu-title-noDropdown':!isNest, 'is-mobile': $store.getters['app/windowWidth'] < 768}"
                   >
@@ -33,7 +32,6 @@
                     ></el-badge>
                     <span style="margin-left:15px">{{$t(item.meta.pageName)}}</span>
                   </el-menu-item>
-              </template>
               <el-menu-item v-if="$store.getters['app/windowWidth'] < 768"
                 @click="toggleSideBar"
                 :class="{'submenu-title-noDropdown':!isNest, 'is-mobile': $store.getters['app/windowWidth'] < 768}"
@@ -110,7 +108,6 @@ const delta = 15;
     ...mapGetters("app", ["getLoading"])
   }
 }) */
-console.log("layuoofidofd");
 import { defineComponent } from 'vue';
 const Layout = defineComponent({
   data() {

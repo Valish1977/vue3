@@ -3,7 +3,7 @@ import StoreService from '@/store'
 import I18nService from '@/core/i18n_service';
 import RouterService from '@/core/router_service';
 import VueAxios from 'vue-axios'
-import VuexService from '@/core/vuex_service';
+import AxiosService from '@/core/axios_service';
 import ElementPlus from 'element-plus';
 import ElementUiService from '@/services/element_ui_service';
 import 'element-plus/dist/index.css';
@@ -19,7 +19,7 @@ MainService.Instance.app.use(StoreService.Instance.store)
   .use(RouterService.Instance.router)
   .use(ElementPlus, ElementUiService.Instance.options)
   .use(I18nService.Instance.i18n)
-  .use(VueAxios, VuexService.Instance.axios);
+  .use(VueAxios, AxiosService.Instance.axios);
 
   /* import VueNativeSock from "vue-native-websocket";
 Vue.use(VueNativeSock, "ws://127.0.0.1:8090/ws?id=1", { store });
