@@ -6,7 +6,6 @@ import VuexService from "@/core/vuex_service";
 
 export default class AuthService {
     private _userApi = new UserApi();
-    private _filter = new Filter();
     public loginIn(login: string, pass: string) {
         this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
@@ -20,7 +19,7 @@ export default class AuthService {
             if (response.status === 200) {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
-                this._filter.testVersions(response.data[0].ref_version);
+                Filter.testVersions(response.data[0].ref_version);
                 RouterService.Instance.router.push({ path: StoreService.Instance.store.getters.getFirstRoute(StoreService.Instance.store.getters.getUser.RoleCode) });
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" };
@@ -35,6 +34,7 @@ export default class AuthService {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
             this.setUser(user);
+            Filter.testVersions(refreshResponse.data[0].ref_version);
             return user.auth_token
         })
         .catch((err: any) => {

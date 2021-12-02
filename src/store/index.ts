@@ -5,6 +5,7 @@ import routes from "./modules/routes";
 import auth from "./modules/auth";
 import lang from "./modules/lang";
 import app from "./modules/app";
+import filters from "@/components/filters/store/filters";
 export default class StoreService {
   private static _instance: StoreService;
   private _store: Store<any>;
@@ -15,7 +16,8 @@ export default class StoreService {
         routes,
         auth,
         app,
-        lang
+        lang,
+        filters
       },
       plugins: [VuexORM.install(database)]
     });

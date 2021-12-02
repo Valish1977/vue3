@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Filter from "../api/filters";
-const filter = new Filter();
 /*
  * Public
  */
@@ -63,10 +62,10 @@ export default {
             return parseState(state, "insert");
         },
         [GETTERS.ARR_VIEW](state: any, getters: any, rootState: any) {
-            const result: any = [];
-            let reference: any = [];
-            let value: string = "";
-            let label: string = "name";
+            const result: any[] = [];
+            let reference: any[] = [];
+            let value = "";
+            let label = "name";
             for (const v of state.useFilter) {
                 label = "name";
                 if (state.model[v.filter].params.label !== undefined) {
@@ -241,7 +240,7 @@ export default {
                 || prefs.prefs_changed === undefined
                 || typeСast(rootGetters.getUser.prefs_changed) !== typeСast(prefs.prefs_changed)
             ) {
-                prefs = await filter.getPrefs();
+                prefs = await Filter.getPrefs();
                 if (!prefs || prefs === null || prefs === "") {
                     prefs = {};
                 }
@@ -350,7 +349,7 @@ export default {
             commit(SET_TEMPLATE, filterName); // добавляем фильтр
             const prefs: any = getPrefsLocalStorage();
             prefs.prefs.filters = state.prefs.filters;
-            const prefsChanged: any = await filter.updatePrefs(prefs.prefs); // пишем фильтр в базу
+            const prefsChanged: any = await Filter.updatePrefs(prefs.prefs); // пишем фильтр в базу
             commit(SET_LOADING, false);
             if (prefsChanged) {
                 // синхронизируем  prefs_changed в localStorage user и prefs
@@ -363,7 +362,7 @@ export default {
             commit(DEL_TEMPLATE, index); // добавляем фильтр
             const prefs: any = getPrefsLocalStorage();
             prefs.prefs.filters = state.prefs.filters;
-            const prefsChanged = await filter.updatePrefs(prefs.prefs); // пишем фильтр в базу
+            const prefsChanged = await Filter.updatePrefs(prefs.prefs); // пишем фильтр в базу
             commit(SET_LOADING, false);
             if (prefsChanged) {
                 // синхронизируем  prefs_changed в localStorage user и prefs
@@ -378,13 +377,13 @@ export default {
             commit(SET_REFERENCES, references);
         },
         [ACTIONS.SET_REFERENCE]({ state, dispatch, commit, rootState, rootGetters }: any, data: any) {
-            let items: any = [];
-            let lang: string = "ru";
-            let name: string = "";
+            let items: any[] = [];
+            let lang = "ru";
+            let name = "";
             if (typeof data === "object" && Array.isArray(data.items)) {
                 name = data.name;
                 if ( rootState.filters.model[name].remoteFn !== undefined ) {
-                    let key: string = "id";
+                    let key = "id";
                     if ( rootState.filters.model[name].params.key !== undefined ) {
                         key = rootState.filters.model[name].params.key;
                     }
@@ -423,7 +422,7 @@ export default {
                 }
                 if (state.references[name] !== undefined && state.references[name].length > 0) {
                     // проверка на соответствие масиивов
-                    let isEquals: boolean = true;
+                    let isEquals = true;
                     if (data.items.length !== state.references[name].length) {
                         isEquals = false;
                     }
@@ -526,7 +525,7 @@ function typeСast(v: any) {
   }
   return v;
 }
-function parseState(state: any, type: string = ""): string {
+function parseState(state: any, type = ""): string {
     let filterToCond = "=";
     let InsertBlock = "=";
     let andCond = "&";
@@ -538,9 +537,9 @@ function parseState(state: any, type: string = ""): string {
     if (state.useFilter.length === 0) {
         return "";
     }
-    let result: string = "";
-    let condition: string = "";
-    let value: string = "";
+    let result = "";
+    let condition = "";
+    let value = "";
     if (state.useFilter.length === 1) {
         condition = state.useFilter[0].condition;
         value = transformFn(state, state.useFilter[0]);
@@ -684,7 +683,7 @@ function parseState(state: any, type: string = ""): string {
         }
         result += v.filter + "." + condition + "." + value;
     }
-    let str: string = "";
+    let str = "";
     for (const arr of or) {
         str = "";
         for (const v of arr) {

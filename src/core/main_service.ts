@@ -5,6 +5,10 @@ import { AppPreloadService, HelloPreloaderOpacitySettings, PreloaderSettersNameC
 import StoreService from '@/store';
 import AuthService from './auth_service';
 import RouterService from './router_service';
+import Filter from "@/components/filters/api/filters";
+import VuexService from './vuex_service';
+import { ReferenceConfig, RouterPath } from '@/config';
+import { FilterApi, FilterDispatch } from '@/components/filters/enums';
 
 export default class MainService {
     private static _instance: MainService;
@@ -24,16 +28,27 @@ export default class MainService {
     public appComponents(): void {
         this._app.component('FontAwesomeIcon', FontAwesomeIcon).mount('#app');
     }
-    public runApp(): void {
-        const auth = new AuthService();
+    public runApp({ authorization = false } = {}): void {
         AppPreloadService.Instance.startLoader(PreloaderSettersNameCore.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);
         // if no auth, user exist in local store?
+        this._setReferences();
+        if (authorization) this._setupAuthorized();
+    }
+    private _setupAuthorized() {
+        const auth = new AuthService();
         if (!StoreService.Instance.store.getters.getUser.auth) {
-            // console.log("no user");
-            // check user in localStorage
             if (auth.checkUserInLocalStorage()) {
-                RouterService.Instance.router.push({ path: "/login" });
+                RouterService.Instance.router.push({ path: RouterPath.login });
             }
         }
+    }
+    private _setReferences() {
+        StoreService.Instance.store.dispatch(FilterDispatch.SET_REFERENCES, ReferenceConfig.referenceList);
+        VuexService.Instance.axios.get(FilterApi.GET_REF_VERSION, {
+        }).then((response: any) => {
+            Filter.testVersions( response.data );
+        }, (err: any) => {
+             //
+        });
     }
 }
