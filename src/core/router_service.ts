@@ -1,6 +1,7 @@
 import StoreService from '@/store'
 import { createWebHistory, createRouter, Router, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 import { AppPreloadService, PreloaderSettersNameCore, HelloPreloaderOpacitySettings } from '@/services/app_preload_service';
+import { AuthStoreGetters, RouterStoreActions, RouterStoreGetters } from '@/config';
 
 export default class RouterService{
   private static _instance: RouterService;
@@ -10,7 +11,7 @@ export default class RouterService{
     }
     return this._instance;
   }
-  private _defaultRouters = StoreService.Instance.store.getters.getDefaultRoutes;
+  private _defaultRouters = StoreService.Instance.store.getters[RouterStoreGetters.getDefaultRoutes];
   private _defaultAllRouterNames: string[] = [];
   private _router: Router;
   private _redirectRoute = false;
@@ -33,6 +34,7 @@ export default class RouterService{
     return () => import(`@/views/${component}`);
   }
   private _getDefaultAllRouterNames() {
+    console.log(this._defaultRouters);
     for( const v of this._defaultRouters ) {
       this._defaultAllRouterNames.push(v.name);
     }
@@ -49,8 +51,8 @@ export default class RouterService{
   }
 
   public setCurrentRoutes() {
-    const routes = StoreService.Instance.store.getters.getRoutes(
-      StoreService.Instance.store.getters.getUser.RoleCode
+    const routes = StoreService.Instance.store.getters[RouterStoreGetters.getRoutes](
+      StoreService.Instance.store.getters[AuthStoreGetters.getUser].RoleCode
     )
     this._addRouteFn(routes);
   }
@@ -84,31 +86,31 @@ export default class RouterService{
         if (to.matched.length > 0) { // is route exist?
           switch ((to.path).toLowerCase()) { // route processing
             case "/login":
-              if (this._store.getters.getUser.auth ) {
+              if (this._store.getters[AuthStoreGetters.getUser].auth ) {
                 this._redirectRoute  = true;
-                next(this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode));
+                next(this._store.getters[RouterStoreGetters.getFirstRoute](this._store.getters[AuthStoreGetters.getUser].RoleCode));
               } else {
                 if (to.path === "/") {
-                  next(this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode));
+                  next(this._store.getters[RouterStoreGetters.getFirstRoute](this._store.getters[AuthStoreGetters.getUser].RoleCode));
                 }
                 next();
               }
               break;
             default:
               if (to.path === "/") {
-                next(this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode));
+                next(this._store.getters[RouterStoreGetters.getFirstRoute](this._store.getters[AuthStoreGetters.getUser].RoleCode));
               }
               return next();
           }
         } else {
-          next(this._store.getters.getFirstRoute(this._store.getters.getUser.RoleCode));
+          next(this._store.getters[RouterStoreGetters.getFirstRoute](this._store.getters[AuthStoreGetters.getUser].RoleCode));
           // next("/404"); if route isn"t exist go to /404
         }
       }, 500);
     });
     // eslint-disable-next-line
     this._router.afterEach((to: RouteLocationNormalized): void => {
-      this._store.dispatch("setCurrentRoute", to); // без этого не работает пагинация !!!
+      this._store.dispatch(RouterStoreActions.setCurrentRoute, to); // без этого не работает пагинация !!!
       this._appPreloadService.stopLoader(PreloaderSettersNameCore.RouterAfterEach);
     });
   }

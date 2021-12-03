@@ -3,6 +3,7 @@ import Filter from "@/components/filters/api/filters";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
+import { AuthStoreActions, AuthStoreGetters, RouterStoreGetters } from "@/config";
 
 export default class AuthService {
     private _userApi = new UserApi();
@@ -20,7 +21,7 @@ export default class AuthService {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
                 Filter.testVersions(response.data[0].ref_version);
-                RouterService.Instance.router.push({ path: StoreService.Instance.store.getters.getFirstRoute(StoreService.Instance.store.getters.getUser.RoleCode) });
+                RouterService.Instance.router.push({ path: StoreService.Instance.store.getters[RouterStoreGetters.getFirstRoute](StoreService.Instance.store.getters[AuthStoreGetters.getUser].RoleCode) });
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" };
             }
@@ -29,7 +30,7 @@ export default class AuthService {
         });
     }
     public refreshTokenAuth() {
-        return this._userApi.refreshToken(StoreService.Instance.store.getters.getUser.refresh_token)
+        return this._userApi.refreshToken(StoreService.Instance.store.getters[AuthStoreGetters.getUser].refresh_token)
         .then((refreshResponse: any) => {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
@@ -45,7 +46,7 @@ export default class AuthService {
     public logOut() {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
-        StoreService.Instance.store.dispatch("unsetUser");
+        StoreService.Instance.store.dispatch(AuthStoreActions.unsetUser);
         RouterService.Instance.resetRouter();
         RouterService.Instance.router.push({ path: "/login" });
     }
@@ -87,7 +88,7 @@ export default class AuthService {
     public setUser(user: any): void {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
-        StoreService.Instance.store.dispatch("setUser", user);
+        StoreService.Instance.store.dispatch(AuthStoreActions.setUser, user);
         RouterService.Instance.resetRouter();
     }
     private getAxiosErr(err: any): any {

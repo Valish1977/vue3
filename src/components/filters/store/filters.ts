@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Filter from "../api/filters";
+import { FilterDispatch } from "../enums";
 /*
  * Public
  */
@@ -275,7 +276,7 @@ export default {
                             // искать его в store до хука mounted компонента CompFilter бесполезно
                             // tslint:disable-next-line:max-line-length
                             if (state.references[state.model[state.requestFilter[v].filter].params.reference] !== undefined) {
-                                dispatch("filters/SET_REFERENCE",
+                                dispatch(FilterDispatch.SET_REFERENCES,
                                     { name: state.model[state.requestFilter[v].filter].params.reference },
                                     { root: true }
                                 );
@@ -300,7 +301,7 @@ export default {
                         // в случае если справочник формируется пользовательской функцией
                         // искать его в store до хука mounted компонента CompFilter бесполезно
                         if (state.references[state.model[v].params.reference] !== undefined) {
-                            dispatch("filters/SET_REFERENCE",
+                            dispatch(FilterDispatch.SET_REFERENCES,
                                 { name: state.model[v].params.reference },
                                 { root: true });
                         }

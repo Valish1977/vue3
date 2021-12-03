@@ -2,6 +2,7 @@ import { RouteRecordRaw } from "vue-router";
 import { RouterConfig, RouterRoleNames } from "@/config";
 
 const routes = {
+    namespaced: true,
     state: {
         currentRoute: {},
         routerAlias: RouterConfig.routerAlias,

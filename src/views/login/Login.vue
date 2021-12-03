@@ -39,7 +39,7 @@
   password: "" 
 } */
 import { defineComponent } from 'vue';
-import loginPageComposition from '@/composition/login_page_composition'
+import loginPageComposition from './composition/login_page_composition'
 const LoginView = defineComponent({
   data() {
     return {
@@ -56,12 +56,9 @@ const LoginView = defineComponent({
     }
   }
 /*   
-  private created(): any {
-    this.$store.dispatch("app/setWindowWidth", window.innerWidth);
-  }
   private mounted(): void {
-    this.$store.dispatch("app/setLoading",
-      {name: this.$store.getters.getCurrentRoute.fullPath + ": after mounted component", value: false}
+    this.$store.dispatch(AppStoreActions.setLoading,
+      {name: this.$store.getters[RouterStoreGetters.getCurrentRoute].fullPath + ": after mounted component", value: false}
     ); // убираем окно после загрузки роута
   }
   private showPwd(): void {

@@ -21,7 +21,8 @@
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2",
     "vue-class-component": "^8.0.0-0",
-    "sse": "^0.0.8"
+    "sse": "^0.0.8",
+    "screenfull": "^4.2.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.18.0",

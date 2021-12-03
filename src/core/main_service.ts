@@ -1,4 +1,4 @@
-import AppView from '@/AppView.vue'
+import AppView from '@/views/app_view/AppView.vue'
 import { App, createApp } from "vue";
 import FontAwesomeIcon from '@/plugins/icons';
 import { AppPreloadService, HelloPreloaderOpacitySettings, PreloaderSettersNameCore } from '@/services/app_preload_service';
@@ -7,7 +7,7 @@ import AuthService from './auth_service';
 import RouterService from './router_service';
 import Filter from "@/components/filters/api/filters";
 import AxiosService from './axios_service';
-import { ReferenceConfig, RouterPath } from '@/config';
+import { AuthStoreGetters, ReferenceConfig, RouterPath } from '@/config';
 import { FilterApi, FilterDispatch } from '@/components/filters/enums';
 
 export default class MainService {
@@ -36,7 +36,7 @@ export default class MainService {
     }
     private _setupAuthorized() {
         const auth = new AuthService();
-        if (!StoreService.Instance.store.getters.getUser.auth) {
+        if (!StoreService.Instance.store.getters[AuthStoreGetters.getUser].auth) {
             if (auth.checkUserInLocalStorage()) {
                 RouterService.Instance.router.push({ path: RouterPath.login });
             }

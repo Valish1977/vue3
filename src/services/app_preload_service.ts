@@ -1,3 +1,4 @@
+import { AppStoreActions, AppStoreGetters } from '@/config';
 import { useStore } from 'vuex';
 export enum HelloPreloaderOpacitySettings {
     Step = 0.05,
@@ -8,10 +9,6 @@ export enum HelloPreloaderOpacitySettings {
 }
 export enum DoomElementById {
     HellopreloaderPreload = 'hellopreloader_preload'
-}
-export enum LoadingAppStore {
-    Setter = 'app/setLoading',
-    Getter = 'app/getLoading'
 }
 export enum PreloaderSettersNameCore {
     WindowOnload = 'App.vue/window.onload',
@@ -47,10 +44,10 @@ export class AppPreloadService {
         };
     }
     public startLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(LoadingAppStore.Setter, { name, value: true, opacity });
+        this.store?.dispatch(AppStoreActions.setLoading, { name, value: true, opacity });
     }
     public stopLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(LoadingAppStore.Setter, { name, value: false, opacity }); 
+        this.store?.dispatch(AppStoreActions.setLoading, { name, value: false, opacity }); 
     }
     private _loaderEnabled(val: any): void {
         if (this.hellopreloader !== null) {
@@ -69,7 +66,7 @@ export class AppPreloadService {
         }
     }
     public get countLoaded() {
-        return this.store?.getters[LoadingAppStore.Getter]; // отслеживаем загрузку модулей
+        return this.store?.getters[AppStoreGetters.getLoading]; // отслеживаем загрузку модулей
     }
     public watchCountLoaded(): void {
         // управление окном загрузки вкл/выкл

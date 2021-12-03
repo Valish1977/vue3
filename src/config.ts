@@ -1,3 +1,33 @@
+export enum AppStoreActions {
+  setLoading = 'app/setLoading',
+  setWindowWidth = "app/setWindowWidth",
+  setBus = 'app/setBus',
+  setSideBar = 'app/setSideBar',
+  setPaginationData = "app/setPaginationData",
+  resetPaginationData = 'app/resetPaginationData',
+}
+export enum AppStoreGetters {
+  getLoading = 'app/getLoading',
+  getSideBar = "app/getSideBar",
+  windowWidth = "app/windowWidth",
+  getBus = 'app/getBus',
+  getBusState = 'app/getBusState',
+  getPaginationData = 'app/getPaginationData'
+}
+export enum AuthStoreActions {
+  unsetUser = 'auth/unsetUser',
+  setUser = 'auth/setUser',
+}
+export enum AuthStoreGetters {
+  getUser = 'auth/getUser',
+}
+export enum LangStoreActions {
+  setLanguage = 'lang/setLanguage',
+}
+export enum LangStoreGetters {
+  language = 'lang/language',
+}
+
 export enum RouterRoleNames {
   adm = "adm",
   default = "default",
@@ -17,10 +47,21 @@ export enum RouterName {
 }
 export enum RouterComponent {
   layout = "layout/Layout.vue",
-  error = "Error404.vue",
-  login = "Login.vue",
+  error = "error/Error404.vue",
+  login = "login/Login.vue",
   dashboard = "dashboard/Dashboard.vue"
 }
+export enum RouterStoreActions {
+  setCurrentRoute = 'routes/setCurrentRoute',
+}
+export enum RouterStoreGetters {
+  getRoutes = 'routes/getRoutes',
+  getDefaultRoutes = "routes/getDefaultRoutes",
+  getPath = "routes/getPath",
+  getFirstRoute = "routes/getFirstRoute",
+  getCurrentRoute = "routes/getCurrentRoute",
+}
+
 export class RouterConfig {
   public static routerAlias = {
     stf_adm: RouterRoleNames.adm,

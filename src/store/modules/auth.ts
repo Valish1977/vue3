@@ -1,4 +1,5 @@
 const auth = {
+    namespaced: true,
     state: {
         user: {
             auth: false,

@@ -1,13 +1,11 @@
 <template>
-<div>
   <router-view></router-view>
-</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, onMounted, ref, Slots} from "vue";
-import appPreloadComposition from '@/composition/app_preload_composition';
-import appSseComposition from '@/composition/app_sse_composition';
+import appPreloadComposition from './composition/app_preload_composition';
+import appSseComposition from './composition/app_sse_composition';
 interface Data {
   [key: string]: unknown
 }
@@ -43,4 +41,4 @@ const AppView = defineComponent({
 .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
   opacity: 0;
 }
-</style>
+  </style>

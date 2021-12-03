@@ -3,6 +3,7 @@ import StoreService from "@/store";
 import { createI18n, I18nOptions, LocaleMessages} from "vue-i18n";
 import enLocale from "element-plus/lib/locale/lang/en";
 import esLocale from "element-plus/lib/locale/lang/es";
+import { LangStoreActions, LangStoreGetters } from "@/config";
 
 export default class I18nService {
   private static _instance: I18nService;
@@ -51,10 +52,10 @@ export default class I18nService {
     });
     const lang = localStorage.getItem("language");
     if (lang) {
-      this._store.dispatch("lang/setLanguage", lang);
+      this._store.dispatch(LangStoreActions.setLanguage, lang);
     } else {
-      this._store.dispatch("lang/setLanguage", this._startLang);
-      localStorage.setItem("language", this._startLang as string);
+      this._store.dispatch(LangStoreActions.setLanguage, this._startLang);
+      localStorage.setItem(LangStoreGetters.language, this._startLang as string);
     }
     return messages;
   }
