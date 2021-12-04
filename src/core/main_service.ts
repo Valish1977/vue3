@@ -37,7 +37,7 @@ export default class MainService {
     private _setupAuthorized() {
         const auth = new AuthService();
         if (!StoreService.Instance.store.getters[AuthStoreGetters.getUser].auth) {
-            if (auth.checkUserInLocalStorage()) {
+            if (!auth.checkUserInLocalStorage()) {
                 RouterService.Instance.router.push({ path: RouterPath.login });
             }
         }

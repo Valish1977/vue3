@@ -93,7 +93,8 @@ export class RouterConfig {
         {
             path: RouterPath.layout, name: RouterName.layout, component: RouterComponent.layout, meta: { pageName: "routes.index" },
             children: [
-            ]
+              { path: RouterPath.dashboard, name: RouterName.dashboard, component: RouterComponent.dashboard, meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
+          ]
         }
     ],
   };

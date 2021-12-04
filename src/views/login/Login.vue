@@ -1,6 +1,5 @@
 <template>
     <div class="login-container">
-      <h1>Hello Vue3!</h1>
     <el-form 
       class="login-form"
       :class="$store.getters['app/windowWidth'] < 768 ? 'login-form-mobile' : 'login-form-full'"
@@ -9,10 +8,10 @@
       ref="loginFormElement"
       label-position="left"
     >
-      <div class="title-container">
+      <!-- <div class="title-container">
         <h3 class="title">{{ $t('Login.title') }}</h3>
        <lang-select class="set-language"></lang-select>
-      </div>
+      </div> -->
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
           <font-awesome-icon icon="user" style="width: auto; height: 0.7em;" />
@@ -28,7 +27,7 @@
           <font-awesome-icon :icon="(passwordType === '')? 'eye': 'eye-slash' " style="width: auto; height: 1em;" />
         </span>
       </el-form-item>
-      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="authProcessLoading" @click.prevent="doLogin" size="medium">{{$t('Login.form.authBtn')}}</el-button>
+      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="authProcessLoading" @click.prevent="loginIn" size="medium">{{$t('Login.form.authBtn')}}</el-button>
     </el-form>
   </div>
 </template>

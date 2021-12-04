@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
-    proxy: 'https://api.liverez.com/',// 'https://dev.funquestvr.office:8080/', */
+    proxy: 'http://mnt.funquestvr.office:8080/', // 'https://api.liverez.com/', 'https://dev.funquestvr.office:8080/', */
   },
   pluginOptions: {
     i18n: {
