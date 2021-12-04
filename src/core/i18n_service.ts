@@ -25,7 +25,7 @@ export default class I18nService {
 
   private get _startLang() { return localStorage.getItem("language")?? (process.env.VUE_APP_I18N_LOCALE || "en"); }
   
-  private _i18n;
+  private _i18n: any;
   public get i18n(): any { return this._i18n; }
   
   private _loadElementLocale(locale: string): any {

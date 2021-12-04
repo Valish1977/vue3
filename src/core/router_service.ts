@@ -55,7 +55,7 @@ export default class RouterService{
     )
     this._addRouteFn(routes);
   }
-  private _addRouteFn(routes: any, parentRouteName = undefined): void {
+  private _addRouteFn(routes: any, parentRouteName: any = undefined): void {
     if (Array.isArray(routes)) {
       for (const route of routes) {
         const currentRoute = Object.assign({}, route);

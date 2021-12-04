@@ -51,7 +51,8 @@ const LoginView = defineComponent({
       loginIn,
       authProcessLoading,
       loginForm,
-      passwordType} = authComposition();
+      passwordType
+    } = authComposition();
   
     
      return {
