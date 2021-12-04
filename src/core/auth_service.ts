@@ -3,12 +3,17 @@ import Filter from "@/components/filters/api/filters";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
-import { AuthStoreActions, AuthStoreGetters, RouterStoreGetters } from "@/config";
+import { AuthStoreActions, AuthStoreGetters, RouterPath, RouterStoreGetters } from "@/config";
 
+interface AuthDataResponse {
+    type: string,
+    status: string,
+    text: string
+  }
 export default class AuthService {
     private _userApi = new UserApi();
-    public loginIn(login: string, pass: string) {
-        this._userApi.loginIn(login, pass, {
+    public loginIn(login: string, pass: string): Promise<any> {
+       return this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
             disp_width: window.screen.width,
             disp_height: window.screen.height,
@@ -22,11 +27,12 @@ export default class AuthService {
                 this.setUser(user);
                 Filter.testVersions(response.data[0].ref_version);
                 RouterService.Instance.router.push({ path: StoreService.Instance.store.getters[RouterStoreGetters.getFirstRoute](StoreService.Instance.store.getters[AuthStoreGetters.getUser].RoleCode) });
+                return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
-                return { type: "error", status: response.status, text: "Login.notify.err1" };
+                return { type: "error", status: response.status, text: "Login.notify.err1" } as AuthDataResponse;
             }
         }).catch((err: any) => {
-            return(this.getAxiosErr(err));
+            return { type: "error", status: "500", text: "Login.notify.err1" } as AuthDataResponse;
         });
     }
     public refreshTokenAuth() {
@@ -48,7 +54,7 @@ export default class AuthService {
         localStorage.removeItem("user");
         StoreService.Instance.store.dispatch(AuthStoreActions.unsetUser);
         RouterService.Instance.resetRouter();
-        RouterService.Instance.router.push({ path: "/login" });
+        RouterService.Instance.router.push({ path: RouterPath.login });
     }
     public checkUserInLocalStorage(): boolean {
         const userJSON = localStorage.getItem("user");

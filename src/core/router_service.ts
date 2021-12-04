@@ -34,7 +34,6 @@ export default class RouterService{
     return () => import(`@/views/${component}`);
   }
   private _getDefaultAllRouterNames() {
-    console.log(this._defaultRouters);
     for( const v of this._defaultRouters ) {
       this._defaultAllRouterNames.push(v.name);
     }

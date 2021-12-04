@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent} from "vue";
-import preloadComposition from './composition/preload_composition';
+import preloadComposition from '@/compositions/preload_composition';
 const Error404 = defineComponent({
   data() {
     return {}

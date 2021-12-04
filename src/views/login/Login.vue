@@ -1,12 +1,12 @@
 <template>
     <div class="login-container">
       <h1>Hello Vue3!</h1>
-    <!-- <el-form 
+    <el-form 
       class="login-form"
       :class="$store.getters['app/windowWidth'] < 768 ? 'login-form-mobile' : 'login-form-full'"
       autoComplete="on"
       :model="loginForm"
-      ref="loginForm"
+      ref="loginFormElement"
       label-position="left"
     >
       <div class="title-container">
@@ -23,64 +23,45 @@
         <span class="svg-container">
          <font-awesome-icon icon="unlock-alt" style="width: auto; height: 1em;" />
         </span>
-        <el-input name="password" :type="passwordType" @keyup.enter="doLogin" v-model="loginForm.password" autoComplete="on" :placeholder="$t('Login.form.passPlaceholder')" />
+        <el-input name="password" :type="passwordType" @keyup.enter="loginIn" v-model="loginForm.password" autoComplete="on" :placeholder="$t('Login.form.passPlaceholder')" />
         <span class="show-pwd" @click="showPwd">
           <font-awesome-icon :icon="(passwordType === '')? 'eye': 'eye-slash' " style="width: auto; height: 1em;" />
         </span>
       </el-form-item>
-      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="loading" @click.prevent="doLogin" size="medium">{{$t('Login.form.authBtn')}}</el-button>
-    </el-form> -->
+      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="authProcessLoading" @click.prevent="doLogin" size="medium">{{$t('Login.form.authBtn')}}</el-button>
+    </el-form>
   </div>
 </template>
 
 <script lang="ts">
-/* interface LoginForm {
-  username: "",
-  password: "" 
-} */
-import { defineComponent } from 'vue';
+
+import { defineComponent, reactive, ref } from 'vue';
+import preloadComposition from '@/compositions/preload_composition';
+import notificationComposition from "@/views/layout/composition/notification_composition";
+import authComposition from "@/compositions/auth_composition";
 import loginPageComposition from './composition/login_page_composition'
 const LoginView = defineComponent({
   data() {
-    return {
-      /* _loginForm: { username: "" as String, password: "" as String } as LoginForm,
-      passwordType: "password" as String,
-      loading: false,
-      showDialog: false */
-    }
+    return {}
   },
   setup() {
-    const  { onMountFn } = loginPageComposition();
+    preloadComposition();
+    notificationComposition();
+    const {
+      loginIn,
+      authProcessLoading,
+      loginForm,
+      passwordType} = authComposition();
+  
+    
      return {
-      onMountFn
+      loginIn,
+      authProcessLoading,
+      loginForm,
+      passwordType
     }
   }
-/*   
-  private mounted(): void {
-    this.$store.dispatch(AppStoreActions.setLoading,
-      {name: this.$store.getters[RouterStoreGetters.getCurrentRoute].fullPath + ": after mounted component", value: false}
-    ); // убираем окно после загрузки роута
-  }
-  private showPwd(): void {
-    if (this.passwordType === "password") {
-      this.passwordType = "";
-    } else {
-      this.passwordType = "password";
-    }
-  }
-  private doLogin(): void {
-    this.loading = true;
-    auth
-      .loginIn(this.loginForm.username, this.loginForm.password)
-      .then((data: any) => {
-        this.$notify({
-          title: this.$t("notify.attention") as string,
-          type: data.type,
-          message: this.$t(data.text) as string
-        });
-        this.loading = false;
-      });
-  } */
+
 });
 export default LoginView;
 </script>

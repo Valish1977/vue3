@@ -13,13 +13,15 @@
 <script lang='ts'>
 
 import { defineComponent } from 'vue';
+import preloadComposition from '@/compositions/preload_composition';
 const Dashboard = defineComponent({
   data() {
     return {
     }
   },
-/*   setup() {
-  } */
+  setup() {
+    preloadComposition();
+  }
 });
 export default Dashboard;
 </script>

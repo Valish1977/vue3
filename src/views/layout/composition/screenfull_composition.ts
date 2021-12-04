@@ -2,7 +2,7 @@ import screenfull, { Screenfull } from "screenfull";
 import { ElMessageBox, ElMessage } from 'element-plus'
 
 export default function screenfullComposition($t: any) {
-    const fullScreenClick = (): any => {
+    const fullScreenToggle = (): any => {
       if ( !( screenfull as Screenfull ).enabled ) {
         ElMessageBox.alert($t("notice.brouserNotWork"), 'Title', {
           confirmButtonText: 'OK',
@@ -17,4 +17,5 @@ export default function screenfullComposition($t: any) {
       }
       ( screenfull as Screenfull ).toggle();
     }
+    return { fullScreenToggle };
 }
