@@ -26,7 +26,8 @@ export default class AuthService {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
                 Filter.testVersions(response.data[0].ref_version);
-                RouterService.Instance.router.push({ path: StoreService.Instance.store.getters[RouterStoreGetters.getFirstRoute](StoreService.Instance.store.getters[AuthStoreGetters.getUser].RoleCode) });
+                const getters = StoreService.Instance.store.getters;
+                RouterService.Instance.router.push({ path: getters[RouterStoreGetters.getFirstRoute](getters[AuthStoreGetters.getUser].RoleCode) });
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
                 return { type: "error", status: response.status, text: "Login.notify.err1" } as AuthDataResponse;
