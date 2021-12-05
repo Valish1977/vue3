@@ -35,7 +35,7 @@ export default function authComposition() {
         title: i18n.t("notify.warning"),
         type: dataResult.type,
         message: i18n.t(dataResult.text),
-        setTimeOut: 500,
+        setTimeOut: 0,
         duration: 3000
       }});
     }
