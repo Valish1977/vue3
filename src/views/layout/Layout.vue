@@ -106,6 +106,7 @@
                 <font-awesome-icon
                   icon="sign-out-alt"
                   class="action-icon"
+                  style="margin-right: 0;"
                 />
               </span>
             </el-tooltip>
