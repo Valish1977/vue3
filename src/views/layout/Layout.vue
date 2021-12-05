@@ -64,26 +64,25 @@
       </div>
     </div>
     <div class="main-container" :class="windowWidth < 768 ? 'is-mobile' : ''">
-      <el-menu class="navbar" mode="horizontal">
-        <el-row>
-          <el-col :span="16" style="white-space: nowrap; overflow: hidden">
+      <el-menu class="navbar" mode="horizontal" style="justify-content: space-between;">
+          <el-menu-item disabled>
             <font-awesome-icon
               @click="sideBarToggle"
               icon="bars"
-              class="tooltip-btn left-btn"
+              class="action-icon"
             />
-            <span style="padding-left: 20px; font-size: 24px">{{
+            <span style="font-size: 24px">{{
               t(pageName)
             }}</span>
-          </el-col>
-          <el-col :span="8" align="right">
+          </el-menu-item>
+          <el-menu-item disabled>
             <el-tooltip
               effect="dark"
               :content="t('app.info')"
               placement="bottom"
             >
-              <span @click="infoDialog = true" style="font-size: 10px">
-                <font-awesome-icon icon="info" class="tooltip-btn right-btn" />
+              <span @click="infoDialog = true">
+                <font-awesome-icon icon="info" class="action-icon" />
               </span>
             </el-tooltip>
             <el-tooltip
@@ -94,7 +93,7 @@
               <span @click="fullScreenToggle">
                 <font-awesome-icon
                   icon="expand-arrows-alt"
-                  class="tooltip-btn right-btn"
+                  class="action-icon"
                 />
               </span>
             </el-tooltip>
@@ -106,12 +105,12 @@
               <span @click="logOut">
                 <font-awesome-icon
                   icon="sign-out-alt"
-                  class="tooltip-btn right-btn"
+                  class="action-icon"
                 />
               </span>
             </el-tooltip>
-          </el-col>
-        </el-row>
+          </el-menu-item >
+
       </el-menu>
       <section class="app-main" style="min-height: 100%">
         <el-col
@@ -209,8 +208,21 @@ export default Layout;
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 @import "src/styles/mixin.scss";
-@import "../../styles/variables.scss";
-
+@import "src/styles/variables.scss";
+.el-menu-item.is-disabled {
+  opacity: 1;
+  cursor: default;
+  svg {
+    vertical-align: text-bottom;
+  }
+  .action-icon {
+    cursor: pointer;
+    fill: #5a5e66;
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+  }
+}
 .app-wrapper {
   .el-badge__content.is-fixed {
     top: 100px !important;
@@ -239,6 +251,7 @@ export default Layout;
   margin: 15px 0 0 15px;
 }
 .navbar {
+  width: 100%;
   height: 50px;
   line-height: 50px;
   border-radius: 0px !important;
