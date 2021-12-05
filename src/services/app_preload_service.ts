@@ -1,4 +1,4 @@
-import { AppStoreActions, AppStoreGetters } from '@/config';
+import { CoreActionNames, CoreGetterNames } from '@/enums/core_enums';
 import { useStore } from 'vuex';
 export enum HelloPreloaderOpacitySettings {
     Step = 0.05,
@@ -44,10 +44,10 @@ export class AppPreloadService {
         };
     }
     public startLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(AppStoreActions.setLoading, { name, value: true, opacity });
+        this.store?.dispatch(CoreActionNames.setLoading, { name, value: true, opacity });
     }
     public stopLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(AppStoreActions.setLoading, { name, value: false, opacity }); 
+        this.store?.dispatch(CoreActionNames.setLoading, { name, value: false, opacity }); 
     }
     private _loaderEnabled(val: any): void {
         if (this.hellopreloader !== null) {
@@ -66,7 +66,7 @@ export class AppPreloadService {
         }
     }
     public get countLoaded() {
-        return this.store?.getters[AppStoreGetters.getLoading]; // отслеживаем загрузку модулей
+        return this.store?.getters[CoreGetterNames.getLoading]; // отслеживаем загрузку модулей
     }
     public watchCountLoaded(): void {
         // управление окном загрузки вкл/выкл

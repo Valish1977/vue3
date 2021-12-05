@@ -126,7 +126,9 @@
         </transition>
       </section>
     </div>
-    <el-dialog
+    
+  </div>
+  <el-dialog
       :title="t('info.title')"
       v-model="infoDialog"
       width="500px"
@@ -135,7 +137,6 @@
       <p>{{ t("info.name") }}</p>
       <p>{{ t("info.version") }}{{ $VERSION }}</p>
     </el-dialog>
-  </div>
 </template>
 <script lang="ts">
 import { mapGetters, useStore } from "vuex";
@@ -146,17 +147,12 @@ import scrollComposition from "./composition/scroll_composition";
 import sidebarComposition from "./composition/sidebar_composition";
 import routerComposition from "./composition/router_composition";
 import authComposition from "@/compositions/auth_composition";
-import notificationComposition from "./composition/notification_composition";
+import notificationComposition from "@/compositions/notification_composition";
 /* const auth = new Auth(); */
 const delta = 15;
 import { computed, defineComponent, getCurrentInstance, watch } from "vue";
-import {
-  AppStoreActions,
-  AppStoreGetters,
-  AuthStoreGetters,
-  RouterStoreGetters,
-} from "@/config";
 import { useRouter } from "vue-router";
+import { CoreGetterNames } from "@/enums/core_enums";
 const Layout = defineComponent({
   data() {
     return {
@@ -168,10 +164,10 @@ const Layout = defineComponent({
     const store = useStore();
     const router = useRouter();
     // const internalInstance = getCurrentInstance();
-    const routes = store.getters[RouterStoreGetters.getRoutes](
-      store.getters[AuthStoreGetters.getUser].RoleCode
+    const routes = store.getters[CoreGetterNames.getRoutes](
+      store.getters[CoreGetterNames.getUser].RoleCode
     );
-    const sidebar = computed(() => store.getters[AppStoreGetters.getSideBar]);
+    const sidebar = computed(() => store.getters[CoreGetterNames.getSideBar]);
 
     const { t, locale } = useI18n();
     const { logOut } = authComposition();
@@ -183,16 +179,16 @@ const Layout = defineComponent({
 
     return {
       $VERSION: computed(() => process.env.VUE_APP_VERSION),
-      windowidth: computed(() => store.getters[AppStoreGetters.windowWidth]),
+      windowidth: computed(() => store.getters[CoreGetterNames.windowWidth]),
       loadingState: computed(() =>
-        store.getters[AppStoreGetters.getLoading] > 0 ? true : false
+        store.getters[CoreGetterNames.getLoading] > 0 ? true : false
       ),
       pageName: computed(
-        () => store.getters[RouterStoreGetters.getCurrentRoute].meta.pageName
+        () => store.getters[CoreGetterNames.getCurrentRoute].meta.pageName
       ),
       routes: computed(() =>
-        store.getters[RouterStoreGetters.getRoutes](
-          store.getters[AuthStoreGetters.getUser].RoleCode
+        store.getters[CoreGetterNames.getRoutes](
+          store.getters[CoreGetterNames.getUser].RoleCode
         )
       ),
 
@@ -202,7 +198,7 @@ const Layout = defineComponent({
       scrollPosition,
       handleScroll,
       sidebar,
-      isCollapse: computed(() => !store.getters[AppStoreGetters.getSideBar]),
+      isCollapse: computed(() => !store.getters[CoreGetterNames.getSideBar]),
       sideBarToggle,
       logOut,
     };

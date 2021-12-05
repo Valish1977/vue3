@@ -1,7 +1,7 @@
 // load DTO from server and transform to internal format
 import StoreService from "@/store/index";
 import AxiosService from "@/core/axios_service";
-import { AppStoreActions } from "@/config";
+import { CoreActionNames } from "@/enums/core_enums";
 
 export default class UserApi {
     private _store = StoreService.Instance.store;
@@ -17,7 +17,7 @@ export default class UserApi {
           }
         })
           .then((response: any) => resolve(response))
-          .catch((err: any) => reject(err)
+          .catch((err: Error) => reject(err)
           );
       });
     }
@@ -28,7 +28,10 @@ export default class UserApi {
                 upass: pass,
                 udata
             }).then((response: any) => resolve(response))
-            .catch((err: any) => reject(err)
+            .catch((err: any) => { 
+              if (err.response) resolve(err.response); 
+              else reject(err.message);
+            }
             );
         });
     }
@@ -38,7 +41,7 @@ public async getItems(query: any) {
       if (response.status === 200 || response.status === 206) {
         if (query.pagination !== undefined && query.pagination) {
           const count = response.headers["content-range"].split("/");
-          this._store.dispatch(AppStoreActions.setPaginationData, {
+          this._store.dispatch(CoreActionNames.setPaginationData, {
             paginationName: query.paginationName,
             name: "total",
             data: parseInt(count[1], 10)
@@ -49,7 +52,7 @@ public async getItems(query: any) {
         return false;
       }
     },
-    (err: any) => {
+    (err: Error) => {
       console.log(err);
     }
   ).catch((error: any) => {
@@ -72,7 +75,7 @@ public async getUsers(query: any) {
       console.log(err);
       return false;
     }
-  ).catch((error: any) => {
+  ).catch((error: Error) => {
     console.log(error);
     return false;
   });
@@ -106,7 +109,7 @@ public  insertItem() {
         reject(err);
       }
     )
-      .catch((error: any) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
@@ -136,7 +139,7 @@ public sendMailFn(send: any, email: any, login: any, pass: any) {
       (err: any) => {
         reject("err sendMail - " + err);
       }
-    ).catch((error: any) => {
+    ).catch((error: Error) => {
       reject("err sendMail - " + error);
     });
   });
@@ -162,7 +165,7 @@ public active(val: any, id: any) {
         reject(err);
       }
     )
-      .catch((error: any) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
@@ -189,7 +192,7 @@ public verified(val: any, id: any) {
         reject(err);
       }
     )
-      .catch((error: any) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
@@ -223,7 +226,7 @@ public updateItem() {
           reject(err);
         }
       )
-      .catch((error: any) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
@@ -254,7 +257,7 @@ public updatePass() {
         (err: any) => {
           reject(err);
         }
-      ).catch((error: any) => {
+      ).catch((error: Error) => {
         reject(error);
       });
   });
@@ -277,7 +280,7 @@ public deleteItem(data: any) {
       (err: any) => {
         reject(err);
       }
-    ).catch((error: any) => {
+    ).catch((error: Error) => {
       reject(error);
     });
   });
@@ -301,7 +304,7 @@ public searchDuplicateField(field: any) {  // проверка на наличи
       (err: any) => {
         reject(err);
       }
-    ).catch((error: any) => {
+    ).catch((error: Error) => {
       reject(error);
     });
   });
@@ -326,7 +329,7 @@ public uploadFile(fileList: any[]) {
         }
       }, (err: any) => {
         reject(err);
-      }).catch((error: any) => {
+      }).catch((error: Error) => {
         reject(error);
       });
     } else {
@@ -357,7 +360,7 @@ public delFile(fileList: any) {
         } else {
           reject(err);
         }
-      }).catch((error: any) => {
+      }).catch((error: Error) => {
         reject(error);
       });
     }

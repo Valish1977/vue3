@@ -7,8 +7,9 @@ import AuthService from './auth_service';
 import RouterService from './router_service';
 import Filter from "@/components/filters/api/filters";
 import AxiosService from './axios_service';
-import { AuthStoreGetters, ReferenceConfig, RouterPath } from '@/config';
+import { ReferenceConfig, RouterPath } from '@/config';
 import { FilterApi, FilterDispatch } from '@/components/filters/enums';
+import { CoreGetterNames } from '@/enums/core_enums';
 
 export default class MainService {
     private static _instance: MainService;
@@ -36,7 +37,7 @@ export default class MainService {
     }
     private _setupAuthorized() {
         const auth = new AuthService();
-        if (!StoreService.Instance.store.getters[AuthStoreGetters.getUser].auth) {
+        if (!StoreService.Instance.store.getters[CoreGetterNames.getUser].auth) {
             if (!auth.checkUserInLocalStorage()) {
                 RouterService.Instance.router.push({ path: RouterPath.login });
             }

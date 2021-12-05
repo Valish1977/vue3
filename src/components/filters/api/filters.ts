@@ -1,11 +1,10 @@
-import Vue from "vue";
 import AxiosService from "@/core/axios_service";
 import StoreService from "@/store";
-import { AuthStoreGetters } from "@/config";
+import { CoreGetterNames } from "@/enums/core_enums";
 
 export default class Filter {
   public static async getPrefs() {
-    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters[AuthStoreGetters.getUser].id).then(
+    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters[CoreGetterNames.getUser].id).then(
       (response: any) => {
         if (response.status === 200) {
           return response.data[0].prefs;

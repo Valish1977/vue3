@@ -24,30 +24,30 @@ export default class AxiosService {
     return this._instanceAxios;
   }
   public setInterceptorResponse(): void {
-
-/* _axios.interceptors.request.use(
-  (cfg: any) => {
-    // Do something before request is sent
-    return cfg;
-  },
-  (err: any) => {
-    // Do something with request error
-    return Promise.reject(err);
-  }
-);
-*/
+    this._instanceAxios.interceptors.request.use(
+      (cfg: any) => {
+        // Do something before request is sent
+        return cfg;
+      },
+      (err: any) => {
+        // Do something with request error
+        return Promise.reject(err);
+      }
+    );
     this._instanceAxios.interceptors.response.use(undefined, (interceptorErr: any) => {
       const mainResponce: any = interceptorErr.response;
       if (mainResponce.status === 401 && !this._isRefreshing) {
         const _auth = new AuthService();
         this._isRefreshing = true;
         return new Promise((resolve, reject) => {
+          
           _auth.refreshTokenAuth().then((newToken: string) => {
             this._isRefreshing = false;
             mainResponce.config.headers = { Authorization: "Bearer " + newToken };
             resolve(this._instanceAxios(mainResponce.config));
           })
             .catch((err) => {
+              
               this._isRefreshing = false;
               if (err.request.status === 403) {
                 _auth.logOut();

@@ -1563,7 +1563,7 @@
       "403": "Wrong login or password!",
       "400": "Service is unavailable!",
       "404": "Service is unavailable!",
-      "default": "Error connecting to serverу!"
+      "0": "Error connecting to serverу!"
     }
   },
   "filters": {

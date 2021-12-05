@@ -1,0 +1,27 @@
+export enum CoreActionNames {
+    setCurrentRoute = 'routes/setCurrentRoute',
+    setLoading = 'app/setLoading',
+    setWindowWidth = "app/setWindowWidth",
+    setBus = 'app/setBus',
+    setSideBar = 'app/setSideBar',
+    setPaginationData = "app/setPaginationData",
+    resetPaginationData = 'app/resetPaginationData',
+    unsetUser = 'auth/unsetUser',
+    setUser = 'auth/setUser',
+    setLanguage = 'lang/setLanguage',
+}
+export enum CoreGetterNames {
+    getRoutes = 'routes/getRoutes',
+    getDefaultRoutes = "routes/getDefaultRoutes",
+    getPath = "routes/getPath",
+    getFirstRoute = "routes/getFirstRoute",
+    getCurrentRoute = "routes/getCurrentRoute",
+    getLoading = 'app/getLoading',
+    getSideBar = "app/getSideBar",
+    windowWidth = "app/windowWidth",
+    getBus = 'app/getBus',
+    getBusState = 'app/getBusState',
+    getPaginationData = 'app/getPaginationData',
+    getUser = 'auth/getUser',
+    language = 'lang/language',
+}

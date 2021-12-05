@@ -3,7 +3,8 @@ import Filter from "@/components/filters/api/filters";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
-import { AuthStoreActions, AuthStoreGetters, RouterPath, RouterStoreGetters } from "@/config";
+import { RouterPath } from "@/config";
+import { CoreActionNames, CoreGetterNames } from "@/enums/core_enums";
 
 export interface AuthDataResponse {
     type: string,
@@ -27,17 +28,17 @@ export default class AuthService {
                 this.setUser(user);
                 Filter.testVersions(response.data[0].ref_version);
                 const getters = StoreService.Instance.store.getters;
-                RouterService.Instance.router.push({ path: getters[RouterStoreGetters.getFirstRoute](getters[AuthStoreGetters.getUser].RoleCode) });
+                RouterService.Instance.router.push({ path: getters[CoreGetterNames.getFirstRoute](getters[CoreGetterNames.getUser].RoleCode) });
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
-                return { type: "error", status: response.status, text: "Login.notify.err1" } as AuthDataResponse;
+                return { type: "error", status: response.status, text: `Login.notify.${response.status}` } as AuthDataResponse;
             }
         }).catch((err: any) => {
-            return { type: "error", status: "500", text: "Login.notify.err1" } as AuthDataResponse;
+            return { type: "error", status: "0", text: err.message} as AuthDataResponse;
         });
     }
     public refreshTokenAuth() {
-        return this._userApi.refreshToken(StoreService.Instance.store.getters[AuthStoreGetters.getUser].refresh_token)
+        return this._userApi.refreshToken(StoreService.Instance.store.getters[CoreGetterNames.getUser].refresh_token)
         .then((refreshResponse: any) => {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
@@ -53,7 +54,7 @@ export default class AuthService {
     public logOut() {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
-        StoreService.Instance.store.dispatch(AuthStoreActions.unsetUser);
+        StoreService.Instance.store.dispatch(CoreActionNames.unsetUser);
         RouterService.Instance.resetRouter();
         RouterService.Instance.router.push({ path: RouterPath.login });
     }
@@ -95,7 +96,7 @@ export default class AuthService {
     public setUser(user: any): void {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
-        StoreService.Instance.store.dispatch(AuthStoreActions.setUser, user);
+        StoreService.Instance.store.dispatch(CoreActionNames.setUser, user);
         RouterService.Instance.resetRouter();
     }
     private getAxiosErr(err: any): any {
