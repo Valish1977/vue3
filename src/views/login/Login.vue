@@ -48,6 +48,7 @@ const LoginView = defineComponent({
     notificationComposition();
     const {
       loginIn,
+      showPwd,
       authProcessLoading,
       loginForm,
       passwordType
@@ -55,6 +56,7 @@ const LoginView = defineComponent({
   
     
      return {
+      showPwd,
       loginIn,
       authProcessLoading,
       loginForm,

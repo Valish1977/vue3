@@ -27,7 +27,6 @@ export default function authComposition() {
     }
     const loginIn = async () => {
       authProcessLoading.value = true;
-      
       const dataResult = await auth.loginIn(loginForm.username, loginForm.password);
       authProcessLoading.value = false;
       if (dataResult.type === "success") return;
@@ -42,6 +41,7 @@ export default function authComposition() {
     return { 
       logOut,
       loginIn,
+      showPwd,
       authProcessLoading,
       loginForm,
       passwordType
