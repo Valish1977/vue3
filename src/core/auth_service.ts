@@ -5,14 +5,14 @@ import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
 import { AuthStoreActions, AuthStoreGetters, RouterPath, RouterStoreGetters } from "@/config";
 
-interface AuthDataResponse {
+export interface AuthDataResponse {
     type: string,
     status: string,
     text: string
   }
 export default class AuthService {
     private _userApi = new UserApi();
-    public loginIn(login: string, pass: string): Promise<any> {
+    public loginIn(login: string, pass: string): Promise<AuthDataResponse> {
        return this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
             disp_width: window.screen.width,

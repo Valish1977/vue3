@@ -1,4 +1,4 @@
-import AuthService from "@/core/auth_service";
+import AuthService, {AuthDataResponse} from "@/core/auth_service";
 import { reactive, ref } from "vue-demi";
 import { useStore } from "vuex";
 export interface LoginForm {
