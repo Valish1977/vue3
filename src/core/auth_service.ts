@@ -1,9 +1,7 @@
 import StoreService  from "@/store/index";
-import Filter from "@/components/filters/api/filters";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
-import { RouterPath } from "@/config";
 import { CoreActionNames, CoreGetterNames } from "@/enums/core_enums";
 
 export interface AuthDataResponse {
@@ -13,7 +11,7 @@ export interface AuthDataResponse {
   }
 export default class AuthService {
     private _userApi = new UserApi();
-    public loginIn(login: string, pass: string, callback: () => void): Promise<AuthDataResponse> {
+    public loginIn(login: string, pass: string, callback: (data: any) => void): Promise<AuthDataResponse> {
        return this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
             disp_width: window.screen.width,
@@ -26,8 +24,7 @@ export default class AuthService {
             if (response.status === 200) {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
-                Filter.testVersions(response.data[0].ref_version);
-                callback();
+                callback(response.data[0]);
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
                 return { type: "error", status: response.status, text: `Login.notify.${response.status}` } as AuthDataResponse;
@@ -36,13 +33,13 @@ export default class AuthService {
             return { type: "error", status: "0", text: err.message} as AuthDataResponse;
         });
     }
-    public refreshTokenAuth() {
+    public refreshTokenAuth(callback: (data: any) => void) {
         return this._userApi.refreshToken(StoreService.Instance.store.getters[CoreGetterNames.getUser].refresh_token)
         .then((refreshResponse: any) => {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
             this.setUser(user);
-            Filter.testVersions(refreshResponse.data[0].ref_version);
+            callback(refreshResponse.data[0]);
             return user.auth_token
         })
         .catch((err: any) => {

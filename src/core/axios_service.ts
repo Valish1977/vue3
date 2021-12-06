@@ -41,14 +41,12 @@ export default class AxiosService {
         const _auth = new AuthService();
         this._isRefreshing = true;
         return new Promise((resolve, reject) => {
-          
-          _auth.refreshTokenAuth().then((newToken: string) => {
+          _auth.refreshTokenAuth(AuthCallback.refreshToken).then((newToken: string) => {
             this._isRefreshing = false;
             mainResponce.config.headers = { Authorization: "Bearer " + newToken };
             resolve(this._instanceAxios(mainResponce.config));
           })
             .catch((err) => {
-              
               this._isRefreshing = false;
               if (err.request.status === 403) {
                 _auth.logOut(AuthCallback.logOut);
