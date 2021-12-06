@@ -13,7 +13,7 @@ export interface AuthDataResponse {
   }
 export default class AuthService {
     private _userApi = new UserApi();
-    public loginIn(login: string, pass: string): Promise<AuthDataResponse> {
+    public loginIn(login: string, pass: string, callback: () => void): Promise<AuthDataResponse> {
        return this._userApi.loginIn(login, pass, {
             user_agent: navigator.userAgent,
             disp_width: window.screen.width,
@@ -27,8 +27,7 @@ export default class AuthService {
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
                 Filter.testVersions(response.data[0].ref_version);
-                const getters = StoreService.Instance.store.getters;
-                RouterService.Instance.router.push({ path: getters[CoreGetterNames.getFirstRoute](getters[CoreGetterNames.getUser].RoleCode) });
+                callback();
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
                 return { type: "error", status: response.status, text: `Login.notify.${response.status}` } as AuthDataResponse;
@@ -51,12 +50,12 @@ export default class AuthService {
           // console.log("Произошла ошибка в работе сервиса...", err);
         });
     }
-    public logOut() {
+    public logOut(callback: () => void) {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
         StoreService.Instance.store.dispatch(CoreActionNames.unsetUser);
         RouterService.Instance.resetRouter();
-        RouterService.Instance.router.push({ path: RouterPath.login });
+        callback();
     }
     public checkUserInLocalStorage(): boolean {
         const userJSON = localStorage.getItem("user");

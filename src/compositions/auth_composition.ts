@@ -1,4 +1,5 @@
 import { BusState } from "@/config";
+import { AuthCallback } from "@/core/auth_callback";
 import AuthService from "@/core/auth_service";
 import { CoreActionNames } from "@/enums/core_enums";
 import { reactive, ref } from "vue-demi";
@@ -23,11 +24,11 @@ export default function authComposition() {
       }
     }
     const logOut = (): void => {
-      auth.logOut();
+      auth.logOut(AuthCallback.logOut);
     }
     const loginIn = async () => {
       authProcessLoading.value = true;
-      const dataResult = await auth.loginIn(loginForm.username, loginForm.password);
+      const dataResult = await auth.loginIn(loginForm.username, loginForm.password, AuthCallback.loginIn);
       authProcessLoading.value = false;
       if (dataResult.type === "success") return;
       store.dispatch(CoreActionNames.setBus, {name: BusState.notifyBus, data: {
