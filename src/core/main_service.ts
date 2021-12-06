@@ -1,6 +1,5 @@
 import AppView from '@/views/app_view/AppView.vue'
 import { App, createApp } from "vue";
-import FontAwesomeIcon from '@/plugins/icons';
 import { AppPreloadService, HelloPreloaderOpacitySettings, PreloaderSettersNameCore } from '@/services/app_preload_service';
 import StoreService from '@/store';
 import AuthService from './auth_service';
@@ -25,9 +24,6 @@ export default class MainService {
     }
     public get app(): App<Element> {
         return this._app;
-    }
-    public appComponents(): void {
-        this._app.component('FontAwesomeIcon', FontAwesomeIcon).mount('#app');
     }
     public runApp({ authorization = false } = {}): void {
         AppPreloadService.Instance.startLoader(PreloaderSettersNameCore.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);

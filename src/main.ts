@@ -6,6 +6,7 @@ import VueAxios from 'vue-axios'
 import AxiosService from '@/core/axios_service';
 import ElementPlus from 'element-plus';
 import ElementUiService from '@/services/element_ui_service';
+import FontAwesomeIcon from '@/plugins/icons';
 import 'element-plus/dist/index.css';
 import "@/styles/index.scss";
 
@@ -15,14 +16,15 @@ MainService.Instance.app.config.globalProperties.$FILE_PATH = process.env.VUE_AP
 MainService.Instance.app.config.globalProperties.$VERSION = process.env.VUE_APP_VERSION;
 
 
-MainService.Instance.app.use(StoreService.Instance.store)
+MainService.Instance.app
+  .use(StoreService.Instance.store)
   .use(RouterService.Instance.router)
   .use(ElementPlus, ElementUiService.Instance.options)
   .use(I18nService.Instance.i18n)
-  .use(VueAxios, AxiosService.Instance.axios);
+  .use(VueAxios, AxiosService.Instance.axios)
+  .component('FontAwesomeIcon', FontAwesomeIcon).mount('#app');
 
   /* import VueNativeSock from "vue-native-websocket";
 Vue.use(VueNativeSock, "ws://127.0.0.1:8090/ws?id=1", { store });
 в компоненте слушатель: Vue.prototype.$socket.onmessage = (data) => console.log(data); */
-MainService.Instance.appComponents();
 MainService.Instance.runApp({authorization: true});
