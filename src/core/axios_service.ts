@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import AuthService from "@/core/auth_service";
+import { AuthCallback } from './auth_callback';
 
 export default class AxiosService {
   private static _instance: AxiosService;
@@ -50,7 +51,7 @@ export default class AxiosService {
               
               this._isRefreshing = false;
               if (err.request.status === 403) {
-                _auth.logOut();
+                _auth.logOut(AuthCallback.logOut);
               }
               reject(err);
             });

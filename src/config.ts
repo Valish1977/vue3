@@ -4,7 +4,7 @@ export enum BusState {
   guest = "guest"
 }
 export enum RouterRoleNames {
-  client = "client",
+  adm = "adm",
   default = "default",
   guest = "guest"
 }
@@ -36,11 +36,10 @@ export enum RouterComponent {
 
 export class RouterConfig {
   public static routerAlias = {
-    client: RouterRoleNames.client,
+    stf_adm: RouterRoleNames.adm,
   };
   public static routes = {
     default: [
-        { path: RouterPath.index, alias: RouterPath.baseAlias, name: RouterName.index, component: RouterComponent.index, meta: { pageName: "routes.index", search: true, breadcrumbs: false, header: true, footer: "large" } },
         {
           path: RouterPath.error,
           name: RouterName.error,
@@ -57,13 +56,16 @@ export class RouterConfig {
     guest: [
         {
             path: RouterPath.layout, name: RouterName.layout, component: RouterComponent.layout, meta: { pageName: "routes.index" },
+            children: [
+                { path: RouterPath.dashboard, name: RouterName.dashboard, component: RouterComponent.dashboard, meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
+            ]
         }
     ],
-    client: [
+    adm: [
         {
             path: RouterPath.layout, name: RouterName.layout, component: RouterComponent.layout, meta: { pageName: "routes.index" },
             children: [
-              { path: RouterPath.cabinet, name: RouterName.cabinet, component: RouterComponent.cabinet, meta: { pageName: "routes.cabinet", search: false, breadcrumbs: true, header: true, footer: "large" } },
+              { path: RouterPath.dashboard, name: RouterName.dashboard, component: RouterComponent.dashboard, meta: { pageName: "routes.dashboard", icon: "chart-bar", showAddItem: true, showInMenu: true } },
           ]
         }
     ],
