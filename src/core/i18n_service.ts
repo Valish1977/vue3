@@ -2,7 +2,7 @@ import StoreService from "@/store";
 import { createI18n, I18nOptions, LocaleMessages} from "vue-i18n";
 import enLocale from "element-plus/lib/locale/lang/en";
 import esLocale from "element-plus/lib/locale/lang/es";
-import { CoreActionNames, CoreGetterNames } from "@/enums/core_enums";
+import { CoreActionNames, CoreGetterNames } from "@/core/core_enums";
 
 export default class I18nService {
   private static _instance: I18nService;

@@ -2,7 +2,7 @@ import StoreService  from "@/store/index";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
-import { CoreActionNames, CoreGetterNames } from "@/enums/core_enums";
+import { CoreActionNames, CoreGetterNames } from "@/core/core_enums";
 
 export interface AuthDataResponse {
     type: string,

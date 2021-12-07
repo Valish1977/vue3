@@ -1,5 +1,5 @@
 
-import { CoreActionNames } from "@/enums/core_enums";
+import { CoreActionNames } from "@/core/core_enums";
 import StoreService from "@/store";
 
 export default class SseService {

@@ -1,7 +1,7 @@
 import { BusState } from "@/config";
 import { CoreCallback } from "@/core/core_callback";
 import AuthService from "@/core/auth_service";
-import { CoreActionNames } from "@/enums/core_enums";
+import { CoreActionNames } from "@/core/core_enums";
 import { reactive, ref } from "vue-demi";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";

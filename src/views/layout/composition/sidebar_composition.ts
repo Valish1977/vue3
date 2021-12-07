@@ -1,4 +1,4 @@
-import { CoreActionNames, CoreGetterNames } from "@/enums/core_enums";
+import { CoreActionNames, CoreGetterNames } from "@/core/core_enums";
 import { useStore } from "vuex";
 
 export default function sidebarComposition() {

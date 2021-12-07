@@ -1,7 +1,7 @@
 import Filter from "@/components/filters/api/filters";
 import { FilterApi, FilterDispatch } from "@/components/filters/enums";
 import { ReferenceConfig, RouterPath } from "@/config";
-import { CoreGetterNames } from "@/enums/core_enums";
+import { CoreGetterNames } from "@/core/core_enums";
 import StoreService from "@/store";
 import AuthService from "./auth_service";
 import AxiosService from "./axios_service";

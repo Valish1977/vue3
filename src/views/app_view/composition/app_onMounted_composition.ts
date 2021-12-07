@@ -1,4 +1,4 @@
-import { CoreActionNames, CoreGetterNames } from '@/enums/core_enums';
+import { CoreActionNames, CoreGetterNames } from '@/core/core_enums';
 import { AppPreloadService } from '@/services/app_preload_service';
 import { onMounted } from 'vue'
 import { useStore } from 'vuex';

@@ -1,7 +1,7 @@
 // load DTO from server and transform to internal format
 import StoreService from "@/store/index";
 import AxiosService from "@/core/axios_service";
-import { CoreActionNames } from "@/enums/core_enums";
+import { CoreActionNames } from "@/core/core_enums";
 
 export default class UserApi {
     private _store = StoreService.Instance.store;

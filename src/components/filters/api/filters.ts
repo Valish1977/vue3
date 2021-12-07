@@ -1,6 +1,6 @@
 import AxiosService from "@/core/axios_service";
 import StoreService from "@/store";
-import { CoreGetterNames } from "@/enums/core_enums";
+import { CoreGetterNames } from "@/core/core_enums";
 
 export default class Filter {
   public static async getPrefs() {

@@ -1,4 +1,4 @@
-import { CoreActionNames, CoreGetterNames } from '@/enums/core_enums';
+import { CoreActionNames, CoreGetterNames } from '@/core/core_enums';
 import { useStore } from 'vuex';
 export enum HelloPreloaderOpacitySettings {
     Step = 0.05,

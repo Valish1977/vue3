@@ -1,7 +1,7 @@
 import StoreService from '@/store'
 import { createWebHistory, createRouter, Router, RouterOptions, RouteLocationNormalized, NavigationGuardNext } from "vue-router";
 import { AppPreloadService, PreloaderSettersNameCore, HelloPreloaderOpacitySettings } from '@/services/app_preload_service';
-import { CoreActionNames, CoreGetterNames } from '@/enums/core_enums';
+import { CoreActionNames, CoreGetterNames } from '@/core/core_enums';
 
 export default class RouterService{
   private static _instance: RouterService;

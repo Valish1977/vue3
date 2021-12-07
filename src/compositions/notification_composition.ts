@@ -1,6 +1,6 @@
 
 import { BusState } from '@/config';
-import { CoreGetterNames } from '@/enums/core_enums';
+import { CoreGetterNames } from '@/core/core_enums';
 import { ElNotification } from 'element-plus'
 import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
