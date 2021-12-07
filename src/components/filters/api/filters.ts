@@ -48,7 +48,9 @@ export default class Filter {
     return prefsChanges;
   }
 
-  public static testVersions(serverRefVersions: any): void { // проверка текущей версии справочников на актуальность
+  // проверка текущей версии справочников на актуальность
+  public static testVersions(serverRefVersions: any): void {
+    if (!Array.isArray(serverRefVersions)) return;
     const rv: string | null = localStorage.getItem("refVersions");
     let currentRefVersions = [];
     if (rv) {

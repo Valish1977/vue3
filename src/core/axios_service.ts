@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import AuthService from "@/core/auth_service";
-import { AuthCallback } from './auth_callback';
+import { CoreCallback } from '@/core/core_callback';
 
 export default class AxiosService {
   private static _instance: AxiosService;
@@ -41,7 +41,7 @@ export default class AxiosService {
         const _auth = new AuthService();
         this._isRefreshing = true;
         return new Promise((resolve, reject) => {
-          _auth.refreshTokenAuth(AuthCallback.refreshToken).then((newToken: string) => {
+          _auth.refreshTokenAuth(CoreCallback.refreshToken).then((newToken: string) => {
             this._isRefreshing = false;
             mainResponce.config.headers = { Authorization: "Bearer " + newToken };
             resolve(this._instanceAxios(mainResponce.config));
@@ -49,7 +49,7 @@ export default class AxiosService {
             .catch((err) => {
               this._isRefreshing = false;
               if (err.request.status === 403) {
-                _auth.logOut(AuthCallback.logOut);
+                _auth.logOut(CoreCallback.logOut);
               }
               reject(err);
             });

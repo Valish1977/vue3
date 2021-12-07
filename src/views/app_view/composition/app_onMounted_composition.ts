@@ -7,7 +7,6 @@ export default function appPreloadComposition() {
     const appPreloadService = AppPreloadService.Instance;
     const store = useStore();
     const onMountFn = (): void => {
-      store.dispatch(CoreActionNames.setWindowWidth, window.innerWidth);
       appPreloadService.stopLoader(store.getters[CoreGetterNames.getCurrentRoute].fullPath + ": after mounted component");
     }
     onMounted(onMountFn)

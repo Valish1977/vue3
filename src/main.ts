@@ -27,4 +27,4 @@ MainService.Instance.app
   /* import VueNativeSock from "vue-native-websocket";
 Vue.use(VueNativeSock, "ws://127.0.0.1:8090/ws?id=1", { store });
 в компоненте слушатель: Vue.prototype.$socket.onmessage = (data) => console.log(data); */
-MainService.Instance.runApp({authorization: true});
+MainService.Instance.runApp();
