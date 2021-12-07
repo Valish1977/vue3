@@ -140,7 +140,6 @@
 </template>
 <script lang="ts">
 import { mapGetters, useStore } from "vuex";
-/* import Auth from "@/auth"; */
 import { useI18n } from "vue-i18n";
 import screenfullComposition from "./composition/screenfull_composition";
 import scrollComposition from "./composition/scroll_composition";
@@ -152,7 +151,7 @@ import notificationComposition from "@/compositions/notification_composition";
 const delta = 15;
 import { computed, defineComponent, getCurrentInstance, watch } from "vue";
 import { useRouter } from "vue-router";
-import { CoreGetterNames } from "@/enums/core_enums";
+import { CoreGetterNames } from "@/core/core_enums";
 const Layout = defineComponent({
   data() {
     return {

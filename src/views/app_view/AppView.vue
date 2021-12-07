@@ -6,7 +6,7 @@
 import { defineComponent, getCurrentInstance, onMounted, ref, Slots} from "vue";
 import appPreloadComposition from './composition/app_preload_composition';
 import appSseComposition from './composition/app_sse_composition';
-import { CoreActionNames } from "@/enums/core_enums";
+import { CoreActionNames } from "@/core/core_enums";
 import { useStore } from "vuex";
 interface Data {
   [key: string]: unknown
