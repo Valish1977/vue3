@@ -38,7 +38,6 @@ import { defineComponent, reactive, ref } from 'vue';
 import preloadComposition from '@/compositions/preload_composition';
 import notificationComposition from "@/compositions/notification_composition";
 import authComposition from "@/compositions/auth_composition";
-import loginPageComposition from './composition/login_page_composition'
 const LoginView = defineComponent({
   data() {
     return {}
