@@ -9,8 +9,7 @@ export default function loginPageComposition() {
     // выставляем ширину окна
     
     const onMountFn = (): void => {
-      // сообщаем что страница загружена и выключаем лоадер
-      appPreloadService.stopLoader(store.getters[CoreGetterNames.getCurrentRoute].fullPath + ": after mounted component");
+
     }
     onMounted(onMountFn)
     return {
