@@ -7,11 +7,12 @@ import { useStore } from 'vuex';
 
 export default function notificationComposition() {
     const store = useStore();
-    const showNotification = ({title = "", message = "", setTimeOut = 0, duration = 0 } = {}) => {
+    const showNotification = ({title = "", type = undefined, message = "", setTimeOut = 0, duration = 0 } = {}) => {
         const notification = () => {
             ElNotification({
               title,
               message,
+              type,
               duration,
             });
         }
