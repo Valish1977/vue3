@@ -1,4 +1,4 @@
-import { ComputedRef } from "vue-demi";
+import { ComputedRef } from "vue";
 import { useRouter } from "vue-router";
 
 export default function routerComposition(sidebar: ComputedRef<boolean>, sideBarToggle: () => void) {

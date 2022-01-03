@@ -1,3 +1,10 @@
+export enum AUTH_DISPATCH {
+    UNSET_USER = 'auth/unsetUser',
+    SET_USER = 'auth/setUser',
+}
+export enum AUTH_GETTERS {
+    GET_USER = 'auth/getUser',
+}
 const auth = {
     namespaced: true,
     state: {

@@ -1,3 +1,9 @@
+export enum LANG_DISPATCH {
+    SET_LANGUAGE = 'lang/setLanguage',
+}
+export enum LANG_GETTERS {
+    LANGUAGE = 'lang/language',
+}
 const lang = {
     namespaced: true,
     state: {

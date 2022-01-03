@@ -1,5 +1,5 @@
-import { CoreActionNames, CoreGetterNames } from '@/core/core_enums';
-import { useStore } from 'vuex';
+import StoreService from '@/store';
+import { APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
 export enum HelloPreloaderOpacitySettings {
     Step = 0.05,
     OpacityFull = 1,
@@ -29,8 +29,6 @@ export class AppPreloadService {
         this._instance.setupInstance();
         return this._instance;
     }
-
-    private store = useStore();
     private hellopreloaderStatus = false;
     private hellopreloader: HTMLElement | null = null;
 
@@ -44,10 +42,10 @@ export class AppPreloadService {
         };
     }
     public startLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(CoreActionNames.setLoading, { name, value: true, opacity });
+        StoreService.Instance.store.dispatch(APP_DISPATCH.SET_LOADING, { name, value: true, opacity: opacity?? 0 });
     }
     public stopLoader(name: string, opacity?: number): void {
-        this.store?.dispatch(CoreActionNames.setLoading, { name, value: false, opacity }); 
+        StoreService.Instance.store.dispatch(APP_DISPATCH.SET_LOADING, { name, value: false, opacity: opacity?? 0 }); 
     }
     private _loaderEnabled(val: any): void {
         if (this.hellopreloader !== null) {
@@ -66,12 +64,12 @@ export class AppPreloadService {
         }
     }
     public get countLoaded() {
-        return this.store?.getters[CoreGetterNames.getLoading]; // отслеживаем загрузку модулей
+        return StoreService.Instance.store.getters[APP_GETTERS.GET_LOADING]; // отслеживаем загрузку модулей
     }
     public watchCountLoaded(): void {
         // управление окном загрузки вкл/выкл
         if (this.countLoaded > 0) {
-            this._loaderEnabled(this.store.state.app.opacityLoad); // выставляем полупрозрачность
+            this._loaderEnabled(StoreService.Instance.store.state.app.opacityLoad); // выставляем полупрозрачность
         } else {
             this._loaderDisabled();
         }

@@ -1,17 +1,17 @@
+import { ROUTES_GETTERS } from "@/store/modules/routes";
 import Vue from "vue";
 import Filter from "../api/filters";
-import { FilterDispatch } from "../enums";
-/*
- * Public
- */
-export const GETTERS = {
+
+const FILTER_STORE_NAME = "filters"; 
+const GETTERS = {
     STR_QUERY: "STR_QUERY", // возвращает строку фильтра для формирования запроса
     // возвращает строку фильтра для формирования запроса для вставки в блок and || or
     STR_QUERY_INSERT: "STR_QUERY_INSERT",
     // возвращает строку фильтра для отображения в компоненте (для показа пользователю в читабельном виде)
-    ARR_VIEW: "ARR_VIEW"
+    ARR_VIEW: "ARR_VIEW",
+    REFERENCE: "REFERENCE"
 };
-export const ACTIONS = {
+const ACTIONS = {
     SET_MODEL: "SET_MODEL",
     SET_CONDITIONS: "SET_CONDITIONS",
     SET_TEMPLATE: "SET_TEMPLATE",
@@ -21,9 +21,15 @@ export const ACTIONS = {
     SET_USE_FILTER: "SET_USE_FILTER",
     SET_QUICK_SEARCH: "SET_QUICK_SEARCH", // ставим отметку что прошли изменения в быстром поиске
     SET_REFERENCE: "SET_REFERENCE",
-    SET_REFERENCES: "SET_REFERENCES",
     SET_ITEMS: "SET_ITEMS"
 };
+export const FILTER_GETTERS = {
+    REFERENCE: `${FILTER_STORE_NAME}/${GETTERS.REFERENCE}`
+}
+export const FILTER_DISPATCH = {
+    SET_REFERENCE: `${FILTER_STORE_NAME}/${ACTIONS.SET_REFERENCE}`
+}
+
 /*
  * Private mutations
  */
@@ -39,7 +45,6 @@ const SET_LOADING = "P__SET_LOADING";
 const SET_USE_FILTER = "P__SET_USE_FILTER";
 const SET_QUICK_SEARCH = "P__SET_QUICK_SEARCH";
 const SET_REFERENCE = "P__SET_REFERENCE";
-const SET_REFERENCES = "P__SET_REFERENCES";
 const SET_ITEMS = "P__SET_ITEMS";
 export default {
     namespaced: true,
@@ -53,16 +58,57 @@ export default {
         requestFilter: [],
         useFilter: [],
         quickSearch: false, // переключается между true - false для отслеживания изменения в быстром поиске
-        references: {}
+        references: {
+            ref_lang: [],
+            ref_group: [],
+            ref_pm_role: [],
+            ref_role: [],
+            ref_tz: [],
+            ref_us_county: [],
+            ref_state: [],
+            ref_property_type: [],
+            ref_client_status: [],
+            ref_order_type: [],
+            ref_order_status: [],
+            ref_db_err: [],
+            ref_charged_from: [],
+            ref_bedroom: [
+                "All Bedrooms",
+                "Studio",
+                "1 Bedroom",
+                "2 Bedrooms",
+                "3 Bedrooms"
+            ],
+            ref_guest: [
+                "All Guests",
+                "1 Guest",
+                "2 Guests",
+                "3 Guests",
+                "4 Guests",
+                "5 Guests",
+                "6 Guests",
+                "7 Guests",
+                "8 Guests"
+            ],
+            ref_sortBy: [
+                "property",
+                "low to high",
+                "high to low"
+            ],
+            ref_advancedItems: [
+                {name: "In Condo Washer/Dryer", lrId: 1869}
+            ]
+        }
     },
     getters: {
-        [GETTERS.STR_QUERY](state: any, getters: any, rootState: any, rootGetters: any) {
+        [GETTERS.STR_QUERY](state: any) {
             return parseState(state);
         },
+        [GETTERS.REFERENCE]: (state: any) => (name: string) => state.references[name]?? [],
         [GETTERS.STR_QUERY_INSERT](state: any, getters: any, rootState: any, rootGetters: any) {
             return parseState(state, "insert");
         },
-        [GETTERS.ARR_VIEW](state: any, getters: any, rootState: any) {
+        [GETTERS.ARR_VIEW]: (state: any, getters: any, rootState: any) => {
             const result: any[] = [];
             let reference: any[] = [];
             let value = "";
@@ -154,9 +200,6 @@ export default {
         }
     },
     mutations: {
-        [SET_REFERENCES](state: any, references: any) {
-            state.references = references;
-        },
         [SET_REFERENCE](state: any, { name, items }: any) {
             state.references[name] = items;
         },
@@ -254,7 +297,7 @@ export default {
                 prefs = prefs.prefs;
             }
             commit(SET_PREFS, prefs);
-            const name: string = rootGetters.getCurrentRoute.name + "_" + rootGetters.getUser.RoleCode;
+            const name: string = rootGetters[ROUTES_GETTERS.GET_CURRENT_ROUTE].name + "_" + rootGetters.getUser.RoleCode;
             commit(SET_PAGE_NAME, name);
             if (prefs.filters !== undefined && prefs.filters[name] !== undefined) {
                 commit(SET_FILTERS, prefs.filters[name]);
@@ -276,7 +319,7 @@ export default {
                             // искать его в store до хука mounted компонента CompFilter бесполезно
                             // tslint:disable-next-line:max-line-length
                             if (state.references[state.model[state.requestFilter[v].filter].params.reference] !== undefined) {
-                                dispatch(FilterDispatch.SET_REFERENCES,
+                                dispatch(FILTER_DISPATCH.SET_REFERENCE,
                                     { name: state.model[state.requestFilter[v].filter].params.reference },
                                     { root: true }
                                 );
@@ -301,7 +344,7 @@ export default {
                         // в случае если справочник формируется пользовательской функцией
                         // искать его в store до хука mounted компонента CompFilter бесполезно
                         if (state.references[state.model[v].params.reference] !== undefined) {
-                            dispatch(FilterDispatch.SET_REFERENCES,
+                            dispatch(FILTER_DISPATCH.SET_REFERENCE,
                                 { name: state.model[v].params.reference },
                                 { root: true });
                         }
@@ -373,9 +416,6 @@ export default {
         },
         [ACTIONS.SELECT_TEMPLATE]({ state, commit }: any, index: any) {
             commit(SET_CONDITIONS, state.filters[index].code);
-        },
-        [ACTIONS.SET_REFERENCES]({ state, commit }: any, references: any) {
-            commit(SET_REFERENCES, references);
         },
         [ACTIONS.SET_REFERENCE]({ state, dispatch, commit, rootState, rootGetters }: any, data: any) {
             let items: any[] = [];

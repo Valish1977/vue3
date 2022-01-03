@@ -6,8 +6,8 @@
 import { defineComponent, getCurrentInstance, onMounted, ref, Slots} from "vue";
 import appPreloadComposition from './composition/app_preload_composition';
 import appSseComposition from './composition/app_sse_composition';
-import { CoreActionNames } from "@/core/core_enums";
 import { useStore } from "vuex";
+import { APP_DISPATCH } from "@/store/modules/app";
 interface Data {
   [key: string]: unknown
 }
@@ -32,7 +32,7 @@ const AppView = defineComponent({
     const store = useStore();
     // appSseComposition();
     const onMountFn = (): void => {
-      store.dispatch(CoreActionNames.setWindowWidth, window.innerWidth);
+      store.dispatch(APP_DISPATCH.SET_WINDOW_WIDTH, window.innerWidth);
     }
     onMounted(onMountFn)
     appPreloadComposition();

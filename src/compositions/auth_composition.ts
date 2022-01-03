@@ -1,10 +1,9 @@
-import { BusState } from "@/config";
 import { CoreCallback } from "@/core/core_callback";
 import AuthService from "@/core/auth_service";
-import { CoreActionNames } from "@/core/core_enums";
-import { reactive, ref } from "vue-demi";
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
+import { APP_BUS_STATE, APP_DISPATCH } from "@/store/modules/app";
 export interface LoginForm {
   username: "",
   password: "" 
@@ -31,7 +30,7 @@ export default function authComposition() {
       const dataResult = await auth.loginIn(loginForm.username, loginForm.password, CoreCallback.loginIn);
       authProcessLoading.value = false;
       if (dataResult.type === "success") return;
-      store.dispatch(CoreActionNames.setBus, {name: BusState.notifyBus, data: {
+      store.dispatch(APP_DISPATCH.SET_BUS, {name: APP_BUS_STATE.NOTIFY_BUS, data: {
         title: i18n.t("notify.warning"),
         type: dataResult.type,
         message: i18n.t(dataResult.text),

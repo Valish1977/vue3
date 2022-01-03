@@ -1,7 +1,7 @@
 // load DTO from server and transform to internal format
 import StoreService from "@/store/index";
 import AxiosService from "@/core/axios_service";
-import { CoreActionNames } from "@/core/core_enums";
+import { APP_DISPATCH } from "@/store/modules/app";
 
 export default class UserApi {
     private _store = StoreService.Instance.store;
@@ -41,7 +41,7 @@ public async getItems(query: any) {
       if (response.status === 200 || response.status === 206) {
         if (query.pagination !== undefined && query.pagination) {
           const count = response.headers["content-range"].split("/");
-          this._store.dispatch(CoreActionNames.setPaginationData, {
+          this._store.dispatch(APP_DISPATCH.SET_PAGINATION_DATA, {
             paginationName: query.paginationName,
             name: "total",
             data: parseInt(count[1], 10)

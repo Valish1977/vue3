@@ -245,7 +245,7 @@
 #  }
 #  private async setCurrentRoute() { // обновляем фильтр на текущем роуте
 #    const list = await this.getGeoTagList("?id=eq." + this.dataItem.id); // получаем соответствующую запись
-#    this.$store.dispatch("filters/SET_REFERENCE", { // добавляем запись в стор
+#    store.dispatch("filters/SET_REFERENCE", { // добавляем запись в стор
 #      name: "pid",
 #      items: list
 #    });
@@ -284,7 +284,7 @@
 #        ref.push( {id: z.id, name: z.name}); // name задаем обязательно !!!!
 #      }
 #    }
-#    this.$store.dispatch("filters/SET_REFERENCE", {
+#    store.dispatch("filters/SET_REFERENCE", {
 #      name: "geotags",
 #      items: ref
 #    });

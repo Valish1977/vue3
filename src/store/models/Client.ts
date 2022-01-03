@@ -4,7 +4,7 @@ export default class Client extends Model {
   public static entity = "client";
   public static fields() {
     return {
-      id: this.increment(),
+      id: this.uid(),
       saved: this.string("").nullable(),
       user_id: this.number(0).nullable(),
       first_name: this.string("").nullable(), // 150

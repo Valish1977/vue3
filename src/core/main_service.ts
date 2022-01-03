@@ -1,7 +1,7 @@
 import AppView from '@/views/app_view/AppView.vue'
 import { App, createApp } from "vue";
 import { AppPreloadService, HelloPreloaderOpacitySettings, PreloaderSettersNameCore } from '@/services/app_preload_service';
-import { CoreCallback } from './core_callback';
+import { CoreCallback } from '@/core/core_callback';
 
 export default class MainService {
     private static _instance: MainService;
@@ -20,6 +20,6 @@ export default class MainService {
     }
     public runApp(): void {
         AppPreloadService.Instance.startLoader(PreloaderSettersNameCore.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);
-        CoreCallback.runApp();
+        CoreCallback.runApp(); 
     }
 }

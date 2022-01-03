@@ -1,8 +1,8 @@
 import StoreService from "@/store";
-import { createI18n, I18nOptions, LocaleMessages} from "vue-i18n";
+import { LANG_DISPATCH } from "@/store/modules/lang";
 import enLocale from "element-plus/lib/locale/lang/en";
 import esLocale from "element-plus/lib/locale/lang/es";
-import { CoreActionNames, CoreGetterNames } from "@/core/core_enums";
+import { createI18n, I18nOptions, LocaleMessages} from "vue-i18n";
 
 export default class I18nService {
   private static _instance: I18nService;
@@ -17,7 +17,6 @@ export default class I18nService {
     this._i18n = createI18n({
       locale: 'en',
       fallbackLocale: this._startLang,
-      /* eslint-disable  @typescript-eslint/no-explicit-any */
       messages: this._loadLocaleMessages()
     } as I18nOptions);
   }
@@ -37,6 +36,8 @@ export default class I18nService {
       return enLocale;
     }
   }
+
+
   private _loadLocaleMessages(): LocaleMessages {
     const locales = require.context("@/locales", true, /[A-Za-z0-9-_,\s]+\.json$/i);
     const messages: LocaleMessages = {};
@@ -51,10 +52,10 @@ export default class I18nService {
     });
     const lang = localStorage.getItem("language");
     if (lang) {
-      this._store.dispatch(CoreActionNames.setLanguage, lang);
+      this._store.dispatch(LANG_DISPATCH.SET_LANGUAGE, lang);
     } else {
-      this._store.dispatch(CoreActionNames.setLanguage, this._startLang);
-      localStorage.setItem(CoreGetterNames.language, this._startLang as string);
+      this._store.dispatch(LANG_DISPATCH.SET_LANGUAGE, this._startLang);
+      localStorage.setItem('language', this._startLang);
     }
     return messages;
   }

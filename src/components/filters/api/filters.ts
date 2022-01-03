@@ -1,10 +1,13 @@
 import AxiosService from "@/core/axios_service";
 import StoreService from "@/store";
-import { CoreGetterNames } from "@/core/core_enums";
+import { AUTH_GETTERS } from "@/store/modules/auth";
 
+export enum FILTER_API {
+  GET_REF_VERSION = "/api/ref_version"
+}
 export default class Filter {
   public static async getPrefs() {
-    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters[CoreGetterNames.getUser].id).then(
+    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].id).then(
       (response: any) => {
         if (response.status === 200) {
           return response.data[0].prefs;
@@ -48,8 +51,7 @@ export default class Filter {
     return prefsChanges;
   }
 
-  // проверка текущей версии справочников на актуальность
-  public static testVersions(serverRefVersions: any): void {
+  public static testVersions(serverRefVersions: any): void { // проверка текущей версии справочников на актуальность
     if (!Array.isArray(serverRefVersions)) return;
     const rv: string | null = localStorage.getItem("refVersions");
     let currentRefVersions = [];
@@ -57,22 +59,13 @@ export default class Filter {
       currentRefVersions = JSON.parse(rv);
     }
     const arrayLoadReferences = [];
-    if (currentRefVersions.length < 1) {
-      // tslint:disable-next-line:prefer-for-of
+    if (currentRefVersions.length === 0) {
       for (let i = 0; i < serverRefVersions.length; i++) {
-        /* if (!serverRefVersions[i].local_update) {
-            continue;
-        } */
         arrayLoadReferences.push(serverRefVersions[i].name);
       }
     } else {
-      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < serverRefVersions.length; i++) {
-        /* if (!serverRefVersions[i].local_update) {
-            continue;
-        } */
         let issetName = false;
-        // tslint:disable-next-line:prefer-for-of
         for (let q = 0; q < currentRefVersions.length; q++) {
           if (currentRefVersions[q].name === serverRefVersions[i].name) {
             issetName = true;

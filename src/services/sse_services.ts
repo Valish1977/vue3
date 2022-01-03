@@ -1,6 +1,6 @@
 
-import { CoreActionNames } from "@/core/core_enums";
 import StoreService from "@/store";
+import { APP_DISPATCH } from "@/store/modules/app";
 
 export default class SseService {
     public sseConnect?: EventSource = undefined;
@@ -11,7 +11,7 @@ export default class SseService {
       this.sseConnect = new EventSource(process.env.VUE_APP_API_ROOT + "/sse");
       this.sseConnect.onmessage = (event: any) => {
         const data = JSON.parse(event.data);
-        StoreService.Instance.store.dispatch(CoreActionNames.setBus, {
+        StoreService.Instance.store.dispatch(APP_DISPATCH.SET_BUS, {
           name: "sse_" + data.Messages[0].Values.obj,
           data: JSON.parse(data.Messages[0].Values.rowdata)
         });

@@ -1,4 +1,3 @@
-import { useStore } from 'vuex';
 export class DoomElementById {
     static hellopreloaderPreload = 'hellopreloader_preload';
 }

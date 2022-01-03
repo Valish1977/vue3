@@ -2,7 +2,7 @@ import StoreService  from "@/store/index";
 import RouterService from "@/core/router_service";
 import UserApi from "@/domain/api/user";
 import AxiosService from "@/core/axios_service";
-import { CoreActionNames, CoreGetterNames } from "@/core/core_enums";
+import { AUTH_DISPATCH, AUTH_GETTERS } from "@/store/modules/auth";
 
 export interface AuthDataResponse {
     type: string,
@@ -34,11 +34,10 @@ export default class AuthService {
         });
     }
     public refreshTokenAuth(callback: (data: any) => void) {
-        return this._userApi.refreshToken(StoreService.Instance.store.getters[CoreGetterNames.getUser].refresh_token)
+        return this._userApi.refreshToken(StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].refresh_token)
         .then((refreshResponse: any) => {
             // console.log("refreshResponse", refresh_response);
             const user: any = this._makeUserFromResponse(refreshResponse);
-            this.setUser(user);
             callback(refreshResponse.data[0]);
             return user.auth_token
         })
@@ -50,7 +49,7 @@ export default class AuthService {
     public logOut(callback: () => void) {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "";
         localStorage.removeItem("user");
-        StoreService.Instance.store.dispatch(CoreActionNames.unsetUser);
+        StoreService.Instance.store.dispatch(AUTH_DISPATCH.UNSET_USER);
         RouterService.Instance.resetRouter();
         callback();
     }
@@ -92,7 +91,7 @@ export default class AuthService {
     public setUser(user: any): void {
         AxiosService.Instance.axios.defaults.headers.common.Authorization = "Bearer " + user.auth_token;
         localStorage.setItem("user", JSON.stringify(user));
-        StoreService.Instance.store.dispatch(CoreActionNames.setUser, user);
+        StoreService.Instance.store.dispatch(AUTH_DISPATCH.SET_USER, user);
         RouterService.Instance.resetRouter();
     }
     private getAxiosErr(err: any): any {

@@ -64,54 +64,44 @@
       </div>
     </div>
     <div class="main-container" :class="windowWidth < 768 ? 'is-mobile' : ''">
-      <el-menu class="navbar" mode="horizontal" style="justify-content: space-between;">
-          <el-menu-item disabled>
-            <font-awesome-icon
-              @click="sideBarToggle"
-              icon="bars"
-              class="action-icon"
-            />
-            <span style="font-size: 24px">{{
-              t(pageName)
-            }}</span>
-          </el-menu-item>
-          <el-menu-item disabled>
-            <el-tooltip
-              effect="dark"
-              :content="t('app.info')"
-              placement="bottom"
-            >
-              <span @click="infoDialog = true">
-                <font-awesome-icon icon="info" class="action-icon" />
-              </span>
-            </el-tooltip>
-            <el-tooltip
-              effect="dark"
-              :content="t('app.fullScreen')"
-              placement="bottom"
-            >
-              <span @click="fullScreenToggle">
-                <font-awesome-icon
-                  icon="expand-arrows-alt"
-                  class="action-icon"
-                />
-              </span>
-            </el-tooltip>
-            <el-tooltip
-              effect="dark"
-              :content="t('app.exit')"
-              placement="bottom"
-            >
-              <span @click="logOut">
-                <font-awesome-icon
-                  icon="sign-out-alt"
-                  class="action-icon"
-                  style="margin-right: 0;"
-                />
-              </span>
-            </el-tooltip>
-          </el-menu-item >
-
+      <el-menu
+        class="navbar"
+        mode="horizontal"
+        style="justify-content: space-between"
+      >
+        <el-menu-item disabled>
+          <font-awesome-icon
+            @click="sideBarToggle"
+            icon="bars"
+            class="action-icon"
+          />
+          <span style="font-size: 24px">{{ t(pageName) }}</span>
+        </el-menu-item>
+        <el-menu-item disabled>
+          <el-tooltip effect="dark" :content="t('app.info')" placement="bottom">
+            <span @click="infoDialog = true">
+              <font-awesome-icon icon="info" class="action-icon" />
+            </span>
+          </el-tooltip>
+          <el-tooltip
+            effect="dark"
+            :content="t('app.fullScreen')"
+            placement="bottom"
+          >
+            <span @click="fullScreenToggle">
+              <font-awesome-icon icon="expand-arrows-alt" class="action-icon" />
+            </span>
+          </el-tooltip>
+          <el-tooltip effect="dark" :content="t('app.exit')" placement="bottom">
+            <span @click="logOut">
+              <font-awesome-icon
+                icon="sign-out-alt"
+                class="action-icon"
+                style="margin-right: 0"
+              />
+            </span>
+          </el-tooltip>
+        </el-menu-item>
       </el-menu>
       <section class="app-main" style="min-height: 100%">
         <el-col
@@ -126,17 +116,11 @@
         </transition>
       </section>
     </div>
-    
   </div>
-  <el-dialog
-      :title="t('info.title')"
-      v-model="infoDialog"
-      width="500px"
-      center
-    >
-      <p>{{ t("info.name") }}</p>
-      <p>{{ t("info.version") }}{{ $VERSION }}</p>
-    </el-dialog>
+  <el-dialog :title="t('info.title')" v-model="infoDialog" width="500px" center>
+    <p>{{ t("info.name") }}</p>
+    <p>{{ t("info.version") }}{{ $VERSION }}</p>
+  </el-dialog>
 </template>
 <script lang="ts">
 import { mapGetters, useStore } from "vuex";
@@ -151,7 +135,9 @@ import notificationComposition from "@/compositions/notification_composition";
 const delta = 15;
 import { computed, defineComponent, getCurrentInstance, watch } from "vue";
 import { useRouter } from "vue-router";
-import { CoreGetterNames } from "@/core/core_enums";
+import { ROUTES_GETTERS } from "@/store/modules/routes";
+import { AUTH_GETTERS } from "@/store/modules/auth";
+import { APP_GETTERS } from "@/store/modules/app";
 const Layout = defineComponent({
   data() {
     return {
@@ -163,10 +149,13 @@ const Layout = defineComponent({
     const store = useStore();
     const router = useRouter();
     // const internalInstance = getCurrentInstance();
-    const routes = store.getters[CoreGetterNames.getRoutes](
-      store.getters[CoreGetterNames.getUser].RoleCode
+    const routes = computed(() =>
+      store.getters[ROUTES_GETTERS.GET_ROURES](
+        store.getters[AUTH_GETTERS.GET_USER].RoleCode
+      )
     );
-    const sidebar = computed(() => store.getters[CoreGetterNames.getSideBar]);
+    const sidebar = computed(() => store.getters[APP_GETTERS.GET_SIDE_BAR]);
+    const isCollapse = computed(() => !store.getters[APP_GETTERS.GET_SIDE_BAR]);
 
     const { t, locale } = useI18n();
     const { logOut } = authComposition();
@@ -178,26 +167,21 @@ const Layout = defineComponent({
 
     return {
       $VERSION: computed(() => process.env.VUE_APP_VERSION),
-      windowidth: computed(() => store.getters[CoreGetterNames.windowWidth]),
+      windowidth: computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]),
       loadingState: computed(() =>
-        store.getters[CoreGetterNames.getLoading] > 0 ? true : false
+        store.getters[APP_GETTERS.GET_LOADING] > 0 ? true : false
       ),
       pageName: computed(
-        () => store.getters[CoreGetterNames.getCurrentRoute].meta.pageName
+        () => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].meta.pageName
       ),
-      routes: computed(() =>
-        store.getters[CoreGetterNames.getRoutes](
-          store.getters[CoreGetterNames.getUser].RoleCode
-        )
-      ),
-
+      routes,
       t,
       pushRoute,
       fullScreenToggle,
       scrollPosition,
       handleScroll,
       sidebar,
-      isCollapse: computed(() => !store.getters[CoreGetterNames.getSideBar]),
+      isCollapse,
       sideBarToggle,
       logOut,
     };
