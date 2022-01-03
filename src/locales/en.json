@@ -1,6 +1,6 @@
 {
   "routes": {
-    "dashboard": "Dashboard",
+    "index": "Dashboard",
     "owner": "Owner",
     "guest": "Guest",
     "property": "Property",

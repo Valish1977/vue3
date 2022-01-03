@@ -58,6 +58,14 @@ export class RouterConfig {
         },
     ],
     guest: [
+      {
+          path: ROUTER_PATH.LAYOUT, name: ROUTER_NAME.LAYOUT, component: ROUTER_COMPONENT.LAYOUT, meta: { pageName: "routes.index" },
+          children: [
+            { path: ROUTER_PATH.INDEX, alias: ROUTER_PATH.BASE_ALISAS, name: ROUTER_NAME.INDEX, component: ROUTER_COMPONENT.INDEX, meta: { pageName: "routes.index", search: true, breadcrumbs: false, header: true, footer: "large" } },
+          ]
+      }
+    ],
+    adm: [
         {
             path: ROUTER_PATH.LAYOUT, name: ROUTER_NAME.LAYOUT, component: ROUTER_COMPONENT.LAYOUT, meta: { pageName: "routes.index" },
             children: [
