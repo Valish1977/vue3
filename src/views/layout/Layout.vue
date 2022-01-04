@@ -22,7 +22,7 @@
             active-text-color="#409EFF"
             :class="windowWidth < 768 ? 'is-mobile' : ''"
           >
-            <div class="menu-wrapper">
+            <div class="menu-wrapper" v-if="routes && routes[0] && routes[0].children">
               <el-menu-item
                 v-for="item in routes[0].children"
                 :key="item.name"
@@ -150,7 +150,7 @@ const Layout = defineComponent({
     const router = useRouter();
     // const internalInstance = getCurrentInstance();
     const routes = computed(() =>
-      store.getters[ROUTES_GETTERS.GET_ROURES](
+      store.getters[ROUTES_GETTERS.GET_ROUTES](
         store.getters[AUTH_GETTERS.GET_USER].RoleCode
       )
     );

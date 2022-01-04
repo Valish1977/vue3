@@ -51,9 +51,8 @@ export default class RouterService{
   }
 
   public setCurrentRoutes() {
-    const routes = StoreService.Instance.store.getters[ROUTES_GETTERS.GET_ROURES](
-      StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].RoleCode
-    )
+    const role = StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].RoleCode;
+    const routes = StoreService.Instance.store.getters[ROUTES_GETTERS.GET_ROUTES](role);
     this._addRouteFn(routes);
   }
   private _addRouteFn(routes: any, parentRouteName: any = undefined): void {
@@ -72,9 +71,12 @@ export default class RouterService{
       }
     }
   }
+  
   private _ititialRouterEach() {
     this._redirectRoute = false;
     this._router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
+      const arrRoutes = this._router.getRoutes();
+      const isRoute = arrRoutes.find((v: any) => to.path === v.path);
       if ( !this._redirectRoute  ) {
         if (to.matched.length > 0 && to.path !== ROUTER_PATH.BASE_ALISAS) {
           // если роут существует и не выбросит в редирект
@@ -83,28 +85,32 @@ export default class RouterService{
         }
       }
       setTimeout(() => {  // this delay is necessary for "loading.." window has time to appear
+        const isAuth = this._store.getters[AUTH_GETTERS.GET_USER].auth;
         if (to.matched.length > 0) { // is route exist?
           switch ((to.path).toLowerCase()) { // route processing
             case ROUTER_PATH.LOGIN:
-              if (this._store.getters[AUTH_GETTERS.GET_USER].auth ) {
+              if (isAuth) {
                 this._redirectRoute  = true;
                 next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
               } else {
                 if (to.path === ROUTER_PATH.BASE_ALISAS) {
-                  next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+                  next(ROUTER_PATH.LOGIN);
                 }
                 next();
               }
               break;
             default:
               if (to.path === ROUTER_PATH.BASE_ALISAS) {
-                next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+                return next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+              }
+              if (to.path !== "" && isRoute && to.matched[0].path === ROUTER_PATH.ERROR ) {
+                this._redirectRoute  = true;
+                return next(to.path);
               }
               return next();
           }
         } else {
-          next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
-          // next("/404"); if route isn"t exist go to /404
+          return next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
         }
       }, 500);
     });

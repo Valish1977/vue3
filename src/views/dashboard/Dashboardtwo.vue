@@ -6,7 +6,7 @@
         ? 'margin-right: 15px; margin-left: 15px'
         : ''
     "
-  >111
+  >222
   </div>
 </template>
 
@@ -14,7 +14,7 @@
 
 import { defineComponent } from 'vue';
 import preloadComposition from '@/compositions/preload_composition';
-const Dashboard = defineComponent({
+const Dashboardtwo = defineComponent({
   data() {
     return {
     }
@@ -23,7 +23,7 @@ const Dashboard = defineComponent({
     preloadComposition();
   }
 });
-export default Dashboard;
+export default Dashboardtwo;
 </script>
 <style lang="scss">
 .box-card {

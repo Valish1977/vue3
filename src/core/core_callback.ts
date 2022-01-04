@@ -42,8 +42,8 @@ export class CoreCallback {
     }
     // execute on logout
     public static logOut (): void {
-        /* if (StoreService.Instance.store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].fullPath === ROUTER_PATH.CABINET) { */
+        if (StoreService.Instance.store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].fullPath !== ROUTER_PATH.LOGIN) {
             RouterService.Instance.router.push({ path: ROUTER_PATH.LOGIN });
-        /* } */
+        }
     }
 }
