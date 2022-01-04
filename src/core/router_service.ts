@@ -15,7 +15,7 @@ export default class RouterService{
   private _defaultRouters = StoreService.Instance.store.getters[ROUTES_GETTERS.GET_DEFAULT_ROUTES];
   private _defaultAllRouterNames: string[] = [];
   private _router: Router;
-  private _redirectRoute = false;
+  private _isLoading = false;
   private _store = StoreService.Instance.store;
   private _appPreloadService = AppPreloadService.Instance;
   private _routerOtions: RouterOptions = {
@@ -73,16 +73,13 @@ export default class RouterService{
   }
   
   private _ititialRouterEach() {
-    this._redirectRoute = false;
+    this._isLoading = false;
     this._router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
       const arrRoutes = this._router.getRoutes();
       const isRoute = arrRoutes.find((v: any) => to.path === v.path);
-      if ( !this._redirectRoute  ) {
-        if (to.matched.length > 0 && to.path !== ROUTER_PATH.BASE_ALISAS) {
-          // если роут существует и не выбросит в редирект
-          // навешиваем обработчик на false - нужно чтобы запустить лоадер дабы показать загрузку страницы
+      if ( !this._isLoading  ) {
           this._appPreloadService.startLoader(PreloaderSettersNameCore.RouterBeforeEach, HelloPreloaderOpacitySettings.OpacityMedium);
-        }
+          this._isLoading = true;
       }
       setTimeout(() => {  // this delay is necessary for "loading.." window has time to appear
         const isAuth = this._store.getters[AUTH_GETTERS.GET_USER].auth;
@@ -90,32 +87,33 @@ export default class RouterService{
           switch ((to.path).toLowerCase()) { // route processing
             case ROUTER_PATH.LOGIN:
               if (isAuth) {
-                this._redirectRoute  = true;
                 next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
               } else {
                 if (to.path === ROUTER_PATH.BASE_ALISAS) {
                   next(ROUTER_PATH.LOGIN);
+                } else {
+                 next();
                 }
-                next();
               }
               break;
             default:
               if (to.path === ROUTER_PATH.BASE_ALISAS) {
-                return next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+                next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+              } else if  (to.path !== "" && isRoute && to.matched[0].path === ROUTER_PATH.ERROR ) {
+                next(to.path);
+              } else {
+                next();
               }
-              if (to.path !== "" && isRoute && to.matched[0].path === ROUTER_PATH.ERROR ) {
-                this._redirectRoute  = true;
-                return next(to.path);
-              }
-              return next();
           }
         } else {
-          return next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
+          next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
         }
       }, 500);
     });
     // eslint-disable-next-line
     this._router.afterEach((to: RouteLocationNormalized): void => {
+      this._appPreloadService.stopLoader(PreloaderSettersNameCore.RouterBeforeEach, HelloPreloaderOpacitySettings.OpacityMedium);
+      this._isLoading = false;
       this._store.dispatch(ROUTES_DISPATCH.SET_CURRENT_ROUTE, to); // без этого не работает пагинация !!!
     });
   }

@@ -12,15 +12,23 @@
 
 <script lang='ts'>
 
-import { defineComponent } from 'vue';
-import preloadComposition from '@/compositions/preload_composition';
+import { computed, defineComponent, onMounted } from 'vue';
+import { ROUTES_GETTERS } from '@/store/modules/routes';
+import { useStore } from 'vuex';
+import { APP_DISPATCH } from '@/store/modules/app';
 const Dashboard = defineComponent({
   data() {
     return {
     }
   },
   setup() {
-    preloadComposition();
+    const store = useStore();
+    const currentRoute = computed(() => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE]);
+    onMounted((): void => {
+        store.dispatch(APP_DISPATCH.SET_LOADING,
+          {name: currentRoute.value.fullPath + ": after mounted component", value: false}
+        ); // убираем окно после загрузки роута
+    });
   }
 });
 export default Dashboard;

@@ -22,12 +22,12 @@
         <span class="svg-container">
          <font-awesome-icon icon="unlock-alt" style="width: auto; height: 1em;" />
         </span>
-        <el-input name="password" :type="passwordType" @keyup.enter="loginIn" v-model="loginForm.password" autoComplete="on" :placeholder="$t('Login.form.passPlaceholder')" />
+        <el-input name="password" :type="passwordType" @keyup.enter="doLogin" v-model="loginForm.password" autoComplete="on" :placeholder="$t('Login.form.passPlaceholder')" />
         <span class="show-pwd" @click="showPwd">
           <font-awesome-icon :icon="(passwordType === '')? 'eye': 'eye-slash' " style="width: auto; height: 1em;" />
         </span>
       </el-form-item>
-      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="authProcessLoading" @click.prevent="loginIn" size="medium">{{$t('Login.form.authBtn')}}</el-button>
+      <el-button type="round" plain style="width:100%;margin-bottom:30px" :loading="authProcessLoading" @click.prevent="doLogin" size="medium">{{$t('Login.form.authBtn')}}</el-button>
     </el-form>
   </div>
 </template>
@@ -35,7 +35,6 @@
 <script lang="ts">
 
 import { defineComponent, reactive, ref } from 'vue';
-import preloadComposition from '@/compositions/preload_composition';
 import notificationComposition from "@/compositions/notification_composition";
 import authComposition from "@/compositions/auth_composition";
 const LoginView = defineComponent({
@@ -43,7 +42,6 @@ const LoginView = defineComponent({
     return {}
   },
   setup() {
-    preloadComposition();
     notificationComposition();
     const {
       loginIn,
@@ -52,11 +50,13 @@ const LoginView = defineComponent({
       loginForm,
       passwordType
     } = authComposition();
-  
+    const doLogin = () => {
+      loginIn(() => { /**/});
+    }
     
      return {
       showPwd,
-      loginIn,
+      doLogin,
       authProcessLoading,
       loginForm,
       passwordType

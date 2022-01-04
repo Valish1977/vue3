@@ -110,7 +110,7 @@ export enum APP_BUS_STATE {
               commit("SET_DATA", { type: "sidebar", items: newData });
           },
           setLoading({ commit }: any, data: any) {
-              // console.log(data);
+              console.log(data);
               commit("SET_LOAD", data);
           },
           setBus({ commit }: any, data: any) {

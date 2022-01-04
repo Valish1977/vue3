@@ -5,7 +5,8 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, onMounted, ref, Slots} from "vue";
 import appPreloadComposition from './composition/app_preload_composition';
-import appSseComposition from './composition/app_sse_composition';
+import windowWidthComposition from '@/compositions/window_width_composition';
+// import appSseComposition from './composition/app_sse_composition';
 import { useStore } from "vuex";
 import { APP_DISPATCH } from "@/store/modules/app";
 interface Data {
@@ -28,9 +29,10 @@ const AppView = defineComponent({
     }
   },
   setup(props: Data, context: SetupContext) {
-    const internalInstance = getCurrentInstance();
     const store = useStore();
     // appSseComposition();
+    appPreloadComposition();
+    windowWidthComposition();
     const onMountFn = (): void => {
       store.dispatch(APP_DISPATCH.SET_WINDOW_WIDTH, window.innerWidth);
     }
