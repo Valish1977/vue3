@@ -22,8 +22,11 @@ export default class AuthService {
             referrer: document.referrer
         }).then((response: any) => {
             if (response.status === 200) {
+                // вносим в сиситему данные о зарегистрированном пользователе
                 const user = this._makeUserFromResponse(response);
                 this.setUser(user);
+                // обновляем роуты для зарегистрированного пользователя
+                RouterService.Instance.resetRouter();
                 callback(response.data[0]);
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
