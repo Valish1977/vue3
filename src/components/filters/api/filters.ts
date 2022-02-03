@@ -1,13 +1,14 @@
 import AxiosService from "@/core/axios_service";
 import StoreService from "@/store";
 import { AUTH_GETTERS } from "@/store/modules/auth";
-
 export enum FILTER_API {
-  GET_REF_VERSION = "/api/ref_version"
+  REFERENCE_PATH = "api/",
+  UPDATE_PREFS = "update_prefs",
+  USER = "user"
 }
 export default class Filter {
   public static async getPrefs() {
-    const items = await AxiosService.Instance.axios.get("/api/user?select=prefs&id=eq." + StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].id).then(
+    const items = await AxiosService.Instance.axios.get(`${FILTER_API.USER}?select=prefs&id=eq.${StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].id}`).then(
       (response: any) => {
         if (response.status === 200) {
           return response.data[0].prefs;
@@ -29,7 +30,7 @@ export default class Filter {
 
   public static async updatePrefs(prefs: any) {
     const prefsChanges = await AxiosService.Instance.axios.post(
-      "/api/rpc/update_prefs",
+      FILTER_API.UPDATE_PREFS,
       { p: prefs }
     ).then(
       (response: any) => {
@@ -92,7 +93,7 @@ export default class Filter {
     return new Promise((resolve, reject) => {
       let i = 0;
       for (const reference of arrayLoadReferences) {
-        AxiosService.Instance.axios.get("/api/" + reference).then((response: any) => {
+        AxiosService.Instance.axios.get(`${FILTER_API.REFERENCE_PATH}${reference}`).then((response: any) => {
           // handle success
           if (response.status === 200) {
             i++;

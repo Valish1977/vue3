@@ -1,4 +1,5 @@
 import Filter, { FILTER_API } from "@/components/filters/api/filters";
+import { FILTER_REFERENCE } from "@/components/filters/store/filters";
 import StoreService from "@/store";
 import { AUTH_GETTERS } from "@/store/modules/auth";
 import { ROUTER_PATH, ROUTES_GETTERS } from "@/store/modules/routes";
@@ -10,7 +11,7 @@ export class CoreCallback {
     // execute on runApp in main.ts
     public static runApp () {
         const _setReferences = (): void => {
-            AxiosService.Instance.axios.get(FILTER_API.GET_REF_VERSION, {
+            AxiosService.Instance.axios.get(`${FILTER_API.REFERENCE_PATH}${FILTER_REFERENCE.REF_VERSIONS}`, {
             }).then((response: any) => {
                 Filter.testVersions( response.data );
             }, (err: any) => {

@@ -18,6 +18,7 @@ export default class MainService {
     public get app(): App<Element> {
         return this._app;
     }
+
     public runApp(): void {
         AppPreloadService.Instance.startLoader(PreloaderSettersNameCore.StartMain, HelloPreloaderOpacitySettings.OpacityMedium);
         CoreCallback.runApp(); 

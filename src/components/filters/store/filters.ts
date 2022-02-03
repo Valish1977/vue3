@@ -30,6 +30,17 @@ export const FILTER_DISPATCH = {
     SET_REFERENCE: `${FILTER_STORE_NAME}/${ACTIONS.SET_REFERENCE}`
 }
 
+export enum FILTER_REFERENCE {
+    REF_VERSIONS = "ref_version",
+    COUNTRY = "ref_country",
+    STATE = "ref_state",
+    LANG = "ref_lang",
+    BEDROOM = "ref_bedroom",
+    GUEST = "ref_guest",
+    SORT_BY = "ref_sortBy",
+    ADVANCED_ITEMS = "ref_advancedItems"
+}
+
 /*
  * Private mutations
  */
@@ -59,27 +70,17 @@ export default {
         useFilter: [],
         quickSearch: false, // переключается между true - false для отслеживания изменения в быстром поиске
         references: {
-            ref_lang: [],
-            ref_group: [],
-            ref_pm_role: [],
-            ref_role: [],
-            ref_tz: [],
-            ref_us_county: [],
-            ref_state: [],
-            ref_property_type: [],
-            ref_client_status: [],
-            ref_order_type: [],
-            ref_order_status: [],
-            ref_db_err: [],
-            ref_charged_from: [],
-            ref_bedroom: [
+            [FILTER_REFERENCE.LANG]: [],
+            [FILTER_REFERENCE.STATE]: [],
+            [FILTER_REFERENCE.COUNTRY]: [],
+            [FILTER_REFERENCE.BEDROOM]: [
                 "All Bedrooms",
                 "Studio",
                 "1 Bedroom",
                 "2 Bedrooms",
                 "3 Bedrooms"
             ],
-            ref_guest: [
+            [FILTER_REFERENCE.GUEST]: [
                 "All Guests",
                 "1 Guest",
                 "2 Guests",
@@ -90,12 +91,12 @@ export default {
                 "7 Guests",
                 "8 Guests"
             ],
-            ref_sortBy: [
+            [FILTER_REFERENCE.SORT_BY]: [
                 "property",
                 "low to high",
                 "high to low"
             ],
-            ref_advancedItems: [
+            [FILTER_REFERENCE.ADVANCED_ITEMS]: [
                 {name: "In Condo Washer/Dryer", lrId: 1869}
             ]
         }

@@ -4,7 +4,7 @@ import { AppPreloadService, PreloaderSettersNameCore, HelloPreloaderOpacitySetti
 import { ROUTER_PATH, ROUTES_DISPATCH, ROUTES_GETTERS } from '@/store/modules/routes';
 import { AUTH_GETTERS } from '@/store/modules/auth';
 
-export default class RouterService{
+export default class RouterService {
   private static _instance: RouterService;
   public static get Instance(): RouterService {
     if (!this._instance) {
@@ -22,7 +22,7 @@ export default class RouterService{
     history: createWebHistory(),
     routes: []
   }
-  private constructor () {
+  private constructor() {
     this._router = createRouter(this._routerOtions);
     this._getDefaultAllRouterNames();
     this._addRouteFn(this._defaultRouters);
@@ -31,17 +31,17 @@ export default class RouterService{
   }
   public get router(): Router { return this._router; }
   // tslint:disable:max-line-length
-  private  _lazyLoadComponent(component: string) {
+  private _lazyLoadComponent(component: string) {
     return () => import(`@/views/${component}`);
   }
   private _getDefaultAllRouterNames() {
-    for( const v of this._defaultRouters ) {
+    for (const v of this._defaultRouters) {
       this._defaultAllRouterNames.push(v.name);
     }
   }
   public resetRouter(): void {
     const arrRoutes = this._router.getRoutes();
-    for ( const v of arrRoutes) {
+    for (const v of arrRoutes) {
       const name = v.name as string;
       if (this._defaultAllRouterNames.indexOf(name) === -1) {
         this._router.removeRoute(name)
@@ -70,6 +70,7 @@ export default class RouterService{
         }
       }
     }
+    const arrRoutes = this._router.getRoutes();
   }
   
   private _ititialRouterEach() {
@@ -77,9 +78,9 @@ export default class RouterService{
     this._router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
       const arrRoutes = this._router.getRoutes();
       const isRoute = arrRoutes.find((v: any) => to.path === v.path);
-      if ( !this._isLoading  ) {
-          this._appPreloadService.startLoader(PreloaderSettersNameCore.RouterBeforeEach, HelloPreloaderOpacitySettings.OpacityMedium);
-          this._isLoading = true;
+      if (!this._isLoading) {
+        this._appPreloadService.startLoader(PreloaderSettersNameCore.RouterBeforeEach, HelloPreloaderOpacitySettings.OpacityMedium);
+        this._isLoading = true;
       }
       setTimeout(() => {  // this delay is necessary for "loading.." window has time to appear
         const isAuth = this._store.getters[AUTH_GETTERS.GET_USER].auth;
@@ -92,15 +93,15 @@ export default class RouterService{
                 if (to.path === ROUTER_PATH.BASE_ALISAS) {
                   next(ROUTER_PATH.LOGIN);
                 } else {
-                 next();
+                  next();
                 }
               }
               break;
             default:
               if (to.path === ROUTER_PATH.BASE_ALISAS) {
                 next(this._store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](this._store.getters[AUTH_GETTERS.GET_USER].RoleCode));
-              } else if  (to.path !== "" && isRoute && to.matched[0].path === ROUTER_PATH.ERROR ) {
-                next(to.path);
+              } else if (to.path !== "" && isRoute && to.matched[0].path === ROUTER_PATH.ERROR) {
+                next(to.fullPath);
               } else {
                 next();
               }
