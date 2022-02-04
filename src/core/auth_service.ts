@@ -24,7 +24,7 @@ export default class AuthService {
                 const user = this._makeUserFromResponse(response, this._parseToken(response));
                 // вносим в сиситему данные о зарегистрированном пользователе
                 this.setUser(user);
-                callback(response.data);
+                callback(response.data[0]);
                 return { type: "success", status: response.status, text: "Login.notify.success" } as AuthDataResponse;
             } else {
                 return { type: "error", status: response.status, text: `Login.notify.${response.status}` } as AuthDataResponse;
@@ -38,7 +38,7 @@ export default class AuthService {
         .then((refreshResponse: any) => {
             const user: Data = this._makeTokenFromResponse(this._parseToken(refreshResponse));
             this._setDataInStore(user);
-            callback(refreshResponse.data);
+            callback(refreshResponse.data[0]);
             return user.auth_token
         })
         .catch((err: any) => {
@@ -65,8 +65,9 @@ export default class AuthService {
         }
     }
     private _parseToken(response: Data): TokenData {
-        const authToken = response.data.at?? response.data.token.at;
-        const refreshToken = response.data.rt?? response.data.token.rt;
+        console.log(response.data);
+        const authToken = response.data[0].auth_token?? response.data[0].auth_token;
+        const refreshToken = response.data[0].refresh_token?? response.data[0].refresh_token;
         const atArr = authToken.split(".");
         const atPayload = atob(atArr[1]);
         const atJson = JSON.parse(atPayload);
@@ -97,8 +98,8 @@ export default class AuthService {
     }
 
     private _makeUserFromResponse(response: Data, tokenData: TokenData): any {
-        const user: any = response.data.user_data;
-        user.prefs_changed = response.data.prefs_changed;
+        const user: any = response.data[0].user_data;
+        user.prefs_changed = response.data[0].prefs_changed;
         user.auth = true;
         user.id = tokenData.atJson.user_id;
         user.org_id = tokenData.atJson.org_id;

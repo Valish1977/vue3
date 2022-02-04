@@ -1,8 +1,8 @@
 import { Database } from "@vuex-orm/core";
-//import clientModel from "@/store/models/Client";
-//import clientModule from "@/store/modules/client";;
+import clientModel from "@/store/models/ClientDb";
+import clientModule from "@/store/modules/clientDb";
 
 const database = new Database();
 
-// database.register(clientModel, clientModule);
+database.register(clientModel, clientModule);
 export default database;

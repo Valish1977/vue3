@@ -2,16 +2,25 @@
 import StoreService from "@/store/index";
 import AxiosService from "@/core/axios_service";
 import { APP_DISPATCH } from "@/store/modules/app";
+import { USER_FORM_GETTERS } from "@/store/modules/userForm";
 
+const CLIENT_FORM_API = {
+  USER: "api/user",
+  LOGIN: "api/rpc/login",
+  REFRESH: "api/rpc/refresh",
+  REGMAIL: "api/services/regmail",
+  UPLOAD: "uploader/upload",
+  DELETE: "uploader/delete",
+}
 export default class UserApi {
     private _store = StoreService.Instance.store;
     private _axios =  AxiosService.Instance.axios;
     public refreshToken(token: string) {
       return new Promise((resolve, reject) => {
-        this._axios!({
+        this._axios({
           headers: { Authorization: "none" },
           method: "post",
-          url: "/rpc/refresh",
+          url: CLIENT_FORM_API.REFRESH,
           data: {
             rt: token
           }
@@ -23,7 +32,7 @@ export default class UserApi {
     }
     public loginIn(login: string, pass: string) {
       return new Promise((resolve, reject) => {
-          this._axios.post("/login", {
+          this._axios.post(CLIENT_FORM_API.LOGIN, {
               ulogin: login,
               upass: pass,
               udata: {
@@ -44,7 +53,7 @@ export default class UserApi {
       });
   }
   public async getItems(query: any) {
-    const items = await this._axios.get("/user" + query.filters, { headers: { Prefer: "count=exact" } }).then(
+    const items = await this._axios.get(CLIENT_FORM_API.USER + query.filters, { headers: { Prefer: "count=exact" } }).then(
       (response: any) => {
         if (response.status === 200 || response.status === 206) {
           if (query.pagination !== undefined && query.pagination) {
@@ -71,7 +80,7 @@ export default class UserApi {
   }
 
   public async getUsers(query: any) {
-    const items = await this._axios.get("/user" + query, { headers: { Prefer: "count=exact" } }).then(
+    const items = await this._axios.get(CLIENT_FORM_API.USER + query, { headers: { Prefer: "count=exact" } }).then(
       (response: any) => {
         if (response.status === 200 || response.status === 206) {
           return response.data;
@@ -90,10 +99,10 @@ export default class UserApi {
     return items;
   }
 
-  public  insertItem() {
+  public insertItem() {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      const obj = this._store.getters["userForm/ITEMS"];
+      const obj = this._store.getters[USER_FORM_GETTERS.ITEMS];
       const json: any = {};
       for (const key in obj) {
         if (key !== "hash2" && key !== "id" && key !== "hour_rate_float") {
@@ -102,7 +111,7 @@ export default class UserApi {
       }
   
       json.fts = this._store.state.userForm.fts;
-      this._axios.post("/user",
+      this._axios.post(CLIENT_FORM_API.USER,
         json,
         { headers: { Prefer: "return=representation" } }
       ).then(
@@ -129,7 +138,7 @@ export default class UserApi {
       if (!send) {
         resolve(true);
       }
-      this._axios.post("/services/regmail",
+      this._axios.post(CLIENT_FORM_API.REGMAIL,
         {
           to: email,
           subject: "Registration FunQuest",
@@ -156,7 +165,7 @@ export default class UserApi {
   public active(val: any, id: any) {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      this._axios.patch("/user?id=eq." + id,
+      this._axios.patch(CLIENT_FORM_API.USER + "?id=eq." + id,
         {
           active: val
         },
@@ -183,7 +192,7 @@ export default class UserApi {
   public verified(val: any, id: any) {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      this._axios.patch("/user?id=eq." + id,
+      this._axios.patch(CLIENT_FORM_API.USER + "?id=eq." + id,
         {
           verified: val
         },
@@ -209,7 +218,7 @@ export default class UserApi {
   public updateItem() {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      const obj: any = this._store.getters["userForm/ITEMS"];
+      const obj: any = this._store.getters[USER_FORM_GETTERS.ITEMS];
       const json: any = {};
       for (const key in obj) {
         if (key !== "hash" && key !== "hash2"  && key !== "prefs"  && key !== "del_reason"  && key !== "del" && key !== "hour_rate_float") {
@@ -218,7 +227,7 @@ export default class UserApi {
       }
       json.id = this._store.state.userForm.id;
       json.fts = this._store.state.userForm.fts;
-      this._axios.patch("/user?id=eq." + this._store.state.userForm.id,
+      this._axios.patch(CLIENT_FORM_API.USER + "?id=eq." + this._store.state.userForm.id,
         json,
         { headers: { Prefer: "return=representation" } }
       )
@@ -242,7 +251,7 @@ export default class UserApi {
   public updatePass() {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      const data = this._store.getters["userForm/ITEMS"];
+      const data = this._store.getters[USER_FORM_GETTERS.ITEMS];
       const result: any = {};
       for (const i in data) {
         if (i === "hash") {
@@ -250,7 +259,7 @@ export default class UserApi {
         }
       }
       result.fts = this._store.state.userForm.fts;
-      this._axios.patch("/user?id=eq." + this._store.state.userForm.id,
+      this._axios.patch(CLIENT_FORM_API.USER + "?id=eq." + this._store.state.userForm.id,
         result,
         { headers: { Prefer: "return=representation" } }
       )
@@ -274,7 +283,7 @@ export default class UserApi {
   public deleteItem(data: any) {
     // eslint-disable-next-line no-unused-vars
     return new Promise((resolve, reject) => {
-      this._axios.patch("/user?id=eq." + data.id,
+      this._axios.patch(CLIENT_FORM_API.USER + "?id=eq." + data.id,
         data,
         { headers: { Prefer: "return=representation" } }
       ).then(
@@ -302,7 +311,7 @@ export default class UserApi {
         resolve([]);
         return;
       }
-      this._axios.get("/user?" + field + "=eq." + changes[field]).then((response: any) => {
+      this._axios.get(CLIENT_FORM_API.USER + "?" + field + "=eq." + changes[field]).then((response: any) => {
         if (response.status === 200) {
           resolve(response.data);
         } else {
@@ -326,7 +335,7 @@ export default class UserApi {
           formData.append(p.response[0], p.raw);
         }
         this._axios.post(
-          "/uploader/upload",
+          CLIENT_FORM_API.UPLOAD,
           formData,
           { headers: { "content-type": "multipart/form-data" } }
         ).then((response: any) => {
@@ -352,7 +361,7 @@ export default class UserApi {
         resolve(false);
       } else {
         this._axios.post(
-          "/uploader/delete",
+          CLIENT_FORM_API.DELETE,
           fileList
         ).then((response: any) => {
           if (response.status === 200) {

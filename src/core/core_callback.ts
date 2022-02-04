@@ -38,6 +38,7 @@ export class CoreCallback {
     // execute on authorization
     public static loginIn (data: any): void {
         Filter.testVersions(data.ref_version);
+        RouterService.Instance.router.push({ path: StoreService.Instance.store.getters[ROUTES_GETTERS.GET_FIRST_ROUTE](StoreService.Instance.store.getters[AUTH_GETTERS.GET_USER].RoleCode) });
     }
     // execute on logout
     public static logOut (): void {

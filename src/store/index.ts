@@ -1,4 +1,4 @@
-import { Store, createStore, useStore } from "vuex";
+import { Store, createStore } from "vuex";
 import VuexORM from "@vuex-orm/core";
 import database from "./database";
 import routes from "./modules/routes";
@@ -6,6 +6,7 @@ import auth from "./modules/auth";
 import lang from "./modules/lang";
 import app from "./modules/app";
 import filters from "@/components/filters/store/filters";
+import clientForm from "./modules/clientForm";
 export default class StoreService {
   private static _instance: StoreService;
   private _store: Store<any>;
@@ -17,7 +18,8 @@ export default class StoreService {
         auth,
         app,
         lang,
-        filters
+        filters,
+        clientForm,
       },
       plugins: [VuexORM.install(database)]
     });

@@ -1,7 +1,7 @@
 import { Model } from "@vuex-orm/core";
 // models list clients
-export default class Client extends Model {
-  public static entity = "client";
+export default class ClientDb extends Model {
+  public static entity = "clientDb";
   public static fields() {
     return {
       id: this.uid(),
