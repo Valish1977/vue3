@@ -7,6 +7,9 @@ import lang from "./modules/lang";
 import app from "./modules/app";
 import filters from "@/components/filters/store/filters";
 import clientForm from "./modules/clientForm";
+import propertyForm from "./modules/propertyForm";
+import orderForm from "./modules/orderForm";
+import thirdCompanyForm from "./modules/thirdCompanyForm";
 export default class StoreService {
   private static _instance: StoreService;
   private _store: Store<any>;
@@ -20,6 +23,9 @@ export default class StoreService {
         lang,
         filters,
         clientForm,
+        propertyForm,
+        orderForm,
+        thirdCompanyForm
       },
       plugins: [VuexORM.install(database)]
     });
