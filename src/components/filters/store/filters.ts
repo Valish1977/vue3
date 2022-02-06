@@ -1,15 +1,15 @@
+import { AUTH_GETTERS } from "@/store/modules/auth";
 import { ROUTES_GETTERS } from "@/store/modules/routes";
 import Vue from "vue";
 import Filter from "../api/filters";
 
 const FILTER_STORE_NAME = "filters"; 
 const GETTERS = {
-    STR_QUERY: "STR_QUERY", // возвращает строку фильтра для формирования запроса
-    // возвращает строку фильтра для формирования запроса для вставки в блок and || or
-    STR_QUERY_INSERT: "STR_QUERY_INSERT",
-    // возвращает строку фильтра для отображения в компоненте (для показа пользователю в читабельном виде)
+    REFERENCE: "REFERENCE",
+    
     ARR_VIEW: "ARR_VIEW",
-    REFERENCE: "REFERENCE"
+    STR_QUERY: "STR_QUERY",
+    STR_QUERY_INSERT: "STR_QUERY_INSERT"
 };
 const ACTIONS = {
     SET_MODEL: "SET_MODEL",
@@ -19,30 +19,42 @@ const ACTIONS = {
     SELECT_TEMPLATE: "SELECT_TEMPLATE",
     SET_REQUEST_FILTER: "SET_REQUEST_FILTER",
     SET_USE_FILTER: "SET_USE_FILTER",
-    SET_QUICK_SEARCH: "SET_QUICK_SEARCH", // ставим отметку что прошли изменения в быстром поиске
+    SET_QUICK_SEARCH: "SET_QUICK_SEARCH",
     SET_REFERENCE: "SET_REFERENCE",
     SET_ITEMS: "SET_ITEMS"
 };
 export const FILTER_GETTERS = {
     REFERENCE: `${FILTER_STORE_NAME}/${GETTERS.REFERENCE}`,
+    // возвращает строку фильтра для отображения в компоненте (для показа пользователю в читабельном виде)
     ARR_VIEW: `${FILTER_STORE_NAME}/${GETTERS.ARR_VIEW}`,
+     // возвращает строку фильтра для формирования запроса
+    STR_QUERY: `${FILTER_STORE_NAME}/${GETTERS.STR_QUERY}`,
+    // возвращает строку фильтра для формирования запроса для вставки в блок and || or
+    STR_QUERY_INSERT: `${FILTER_STORE_NAME}/${GETTERS.STR_QUERY_INSERT}`,
 }
 export const FILTER_DISPATCH = {
+    SET_MODEL: `${FILTER_STORE_NAME}/${ACTIONS.SET_MODEL}`,
+    SET_CONDITIONS: `${FILTER_STORE_NAME}/${ACTIONS.SET_CONDITIONS}`,
+    SET_TEMPLATE: `${FILTER_STORE_NAME}/${ACTIONS.SET_TEMPLATE}`,
+    DEL_TEMPLATE: `${FILTER_STORE_NAME}/${ACTIONS.DEL_TEMPLATE}`,
+    SELECT_TEMPLATE: `${FILTER_STORE_NAME}/${ACTIONS.SELECT_TEMPLATE}`,
+    SET_REQUEST_FILTER: `${FILTER_STORE_NAME}/${ACTIONS.SET_REQUEST_FILTER}`,
+    SET_USE_FILTER: `${FILTER_STORE_NAME}/${ACTIONS.SET_USE_FILTER}`,
+    // ставим отметку что прошли изменения в быстром поиске
+    SET_QUICK_SEARCH: `${FILTER_STORE_NAME}/${ACTIONS.SET_QUICK_SEARCH}`,
     SET_REFERENCE: `${FILTER_STORE_NAME}/${ACTIONS.SET_REFERENCE}`,
     SET_ITEMS: `${FILTER_STORE_NAME}/${ACTIONS.SET_ITEMS}`,
-    SET_QUICK_SEARCH: `${FILTER_STORE_NAME}/${ACTIONS.SET_QUICK_SEARCH}`,
-    SET_MODEL: `${FILTER_STORE_NAME}/${ACTIONS.SET_MODEL}`,
 }
 
-export enum FILTER_REFERENCE {
-    REF_VERSIONS = "ref_version",
-    COUNTRY = "ref_country",
-    STATE = "ref_state",
-    LANG = "ref_lang",
-    BEDROOM = "ref_bedroom",
-    GUEST = "ref_guest",
-    SORT_BY = "ref_sortBy",
-    ADVANCED_ITEMS = "ref_advancedItems"
+export const FILTER_REFERENCE = {
+    REF_VERSIONS: "ref_version",
+    COUNTRY: "ref_country",
+    STATE: "ref_state",
+    LANG: "ref_lang",
+    BEDROOM: "ref_bedroom",
+    GUEST: "ref_guest",
+    SORT_BY: "ref_sortBy",
+    ORDER_STATUS: "ref_order_status"
 }
 
 /*
@@ -77,6 +89,7 @@ export default {
             [FILTER_REFERENCE.LANG]: [],
             [FILTER_REFERENCE.STATE]: [],
             [FILTER_REFERENCE.COUNTRY]: [],
+            [FILTER_REFERENCE.ORDER_STATUS]: [],
             [FILTER_REFERENCE.BEDROOM]: [
                 "All Bedrooms",
                 "Studio",
@@ -99,9 +112,6 @@ export default {
                 "property",
                 "low to high",
                 "high to low"
-            ],
-            [FILTER_REFERENCE.ADVANCED_ITEMS]: [
-                {name: "In Condo Washer/Dryer", lrId: 1869}
             ]
         }
     },
@@ -110,7 +120,7 @@ export default {
             return parseState(state);
         },
         [GETTERS.REFERENCE]: (state: any) => (name: string) => state.references[name]?? [],
-        [GETTERS.STR_QUERY_INSERT](state: any, getters: any, rootState: any, rootGetters: any) {
+        [GETTERS.STR_QUERY_INSERT](state: any) {
             return parseState(state, "insert");
         },
         [GETTERS.ARR_VIEW]: (state: any, getters: any, rootState: any) => {
@@ -267,7 +277,7 @@ export default {
         [ACTIONS.SET_REQUEST_FILTER]({ commit }: any, arr: any) {
             commit(SET_REQUEST_FILTER, arr);
         },
-        async [ACTIONS.SET_MODEL]({ state, dispatch, commit, rootState, rootGetters }: any, model: any) {
+        async [ACTIONS.SET_MODEL]({ state, dispatch, commit,  rootGetters }: any, model: any) {
             if (typeof model !== "object") {
                 return false;
             }
@@ -287,14 +297,14 @@ export default {
             if (
                 prefs === null
                 || prefs.prefs_changed === undefined
-                || typeСast(rootGetters.getUser.prefs_changed) !== typeСast(prefs.prefs_changed)
+                || typeСast(rootGetters[AUTH_GETTERS.GET_USER].prefs_changed) !== typeСast(prefs.prefs_changed)
             ) {
                 prefs = await Filter.getPrefs();
                 if (!prefs || prefs === null || prefs === "") {
                     prefs = {};
                 }
                 localStorage.setItem("prefs", JSON.stringify(
-                    { prefs_changed: rootGetters.getUser.prefs_changed, prefs }
+                    { prefs_changed: rootGetters[AUTH_GETTERS.GET_USER].prefs_changed, prefs }
                 )
                 );
             }
@@ -302,7 +312,7 @@ export default {
                 prefs = prefs.prefs;
             }
             commit(SET_PREFS, prefs);
-            const name: string = rootGetters[ROUTES_GETTERS.GET_CURRENT_ROUTE].name + "_" + rootGetters.getUser.RoleCode;
+            const name: string = rootGetters[ROUTES_GETTERS.GET_CURRENT_ROUTE].name + "_" + rootGetters[AUTH_GETTERS.GET_USER].RoleCode;
             commit(SET_PAGE_NAME, name);
             if (prefs.filters !== undefined && prefs.filters[name] !== undefined) {
                 commit(SET_FILTERS, prefs.filters[name]);

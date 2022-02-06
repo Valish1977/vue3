@@ -1,4 +1,4 @@
-import { FILTER_DISPATCH } from "@/components/filters/store/filters";
+import { FILTER_DISPATCH, FILTER_GETTERS, FILTER_REFERENCE } from "@/components/filters/store/filters";
 import PropertyApi from "@/domain/api/property";
 import UserApi from "@/domain/api/user";
 import ThirdCompanyApi from "@/domain/api/thirdCompany";
@@ -6,6 +6,7 @@ import { Data } from "@/enums/enum_other";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 import { DateTime } from "luxon";
+import { computed, onMounted } from "vue";
 
 
 
@@ -14,6 +15,7 @@ const filtersModel = () => {
   const store = useStore();
   const setFilterModel = (data: Data) => store.dispatch(FILTER_DISPATCH.SET_MODEL, data);
   const setReference = (data: Data | string) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
+  const filterStrQuery = computed(() => store.getters[FILTER_GETTERS.STR_QUERY] );
   const userApi = new UserApi();
   const listOfFiltersParams = {
     showUserTemplates: true,
@@ -251,6 +253,9 @@ const filtersModel = () => {
   };
   setFilterModel(filterModel);
 
+  onMounted(() => {
+    setReference({ name: FILTER_REFERENCE.ORDER_STATUS });
+  });
 
   const propertySearch = async(v: any) => {
     if (v === "") {
@@ -258,10 +263,10 @@ const filtersModel = () => {
     }
     let query = "";
     if (Number.isInteger(v)) {
-      query = "?and=(del.is.false,id.eq." + v + "))&limit=500";
+      query = `?and=(del.is.false,id.eq.${v}))&limit=500`;
     } else {
       query =
-        "?del=is.false&name=ilike.*" + v + "*&limit=100";
+        `?del=is.false&name=ilike.*${v}*&limit=100`;
     }
     query += "&select=*";
     const data = await PropertyApi.getItems({filters: query});
@@ -269,14 +274,11 @@ const filtersModel = () => {
     if (data) {
       for (const i in data) {
         if (data[i] !== undefined) {
-          propertyIdItemsList.push({id: data[i].id, name: data[i].name + " ( " + data[i].full_address + " )"});
+          propertyIdItemsList.push({id: data[i].id, name: `${data[i].name} ( ${data[i].full_address} )`});
         }
       }
     }
-    setReference({
-      name: "property_id",
-      items: propertyIdItemsList
-    });
+    setReference({ name: "property_id", items: propertyIdItemsList });
   }
   const workerSearch = async (v: any) => {
     if (v === "") {
@@ -284,16 +286,10 @@ const filtersModel = () => {
     }
     let query = "";
     if (Number.isInteger(v)) {
-      query = "?role_code=eq.stf_w&and=(del.is.false,id.eq." + v + "))&limit=500";
+      query = `?role_code=eq.stf_w&and=(del.is.false,id.eq.${v}))&limit=500`
     } else {
       query =
-        "?role_code=eq.stf_w&del=is.false&or=(first_name.ilike.*" +
-        v +
-        "*,last_name.ilike.*" +
-        v +
-        "*,email.ilike.*" +
-        v +
-        "*)&limit=100";
+        `?role_code=eq.stf_w&del=is.false&or=(first_name.ilike.*${v}*,last_name.ilike.*${v}*,email.ilike.*${v}*)&limit=100`;
     }
     const data = await userApi.getItems({filters: query});
     const workerIdItemsList: any = [];
@@ -341,6 +337,10 @@ const filtersModel = () => {
       name: "third_company_id",
       items: thirdCompanyIdItemsList
     });
+  }
+  return {
+    filterStrQuery,
+    setReference
   }
 }
 

@@ -2,7 +2,7 @@
   <div
     class="components-container"
     :style="
-      $store.getters['app/windowWidth'] < 768
+      windowWidth < 768
         ? 'margin-right: 15px; margin-left: 15px'
         : ''
     "
@@ -18,7 +18,7 @@
         text-align: right;
       "
     >
-      <el-col :span="$store.getters['app/windowWidth'] < 768 ? 16 : 12">
+      <el-col :span="windowWidth < 768 ? 16 : 12">
         <quick-search></quick-search>
       </el-col>
     </el-row>
@@ -29,12 +29,12 @@
       <el-col :span="24" style="padding: 15px 10px; font-size: 14px">
         <list-of-filters-template>
           <template #prefix>
-            <span>{{ $t("filters.prefix") }}</span>
+            <span>{{ t("filters.prefix") }}</span>
           </template>
           <template #postfix>
             <comp-filter>
               <span style="color: #409eff; padding: 0 15px; cursor: pointer">{{
-                $t("filters.advancedFilter")
+                t("filters.advancedFilter")
               }}</span>
             </comp-filter>
           </template>
@@ -48,7 +48,7 @@
       type="flex"
       justify="space-between">
       <el-col
-        v-for="t in this.references.ref_order_status.filter((f) => f.id !== 5 && f.id !== 7)"
+        v-for="t in orderStatusRef.filter((f) => f.id !== 5 && f.id !== 7)"
         :key="t.id"
       >
         <el-card style="margin-bottom: 15px;" class="box-card">
@@ -66,7 +66,7 @@
                 <span style="font-size: 12px; color: grey">{{getDateTime(v.saved)}}</span>
                 <el-row>
                   <el-col :span="24" align="right">
-                    <el-button @click="setDrawerInfo(v)" type="text">{{$t('Access.infoCard')}}</el-button>
+                    <el-button @click="setInfoToDrawer(v)" type="text">{{t('Access.infoCard')}}</el-button>
                   </el-col>
                 </el-row>
           </div>
@@ -75,7 +75,7 @@
     </el-row>
     </el-scrollbar>
     <el-row :gutter="20" justify="space-around">
-      <el-col :span="$store.getters['app/windowWidth'] < 768 ? 24 : 19">
+      <el-col :span="windowWidth < 768 ? 24 : 19">
       <el-scrollbar>
         <el-pagination
           background
@@ -114,22 +114,16 @@
       </el-scrollbar>
       </el-col>
       <el-col
-        :span="$store.getters['app/windowWidth'] < 768 ? 24 : 5"
-        :style="$store.getters['app/windowWidth'] < 768 ? 'margin: 15px 0 30px 0' : ''"
+        :span="windowWidth < 768 ? 24 : 5"
+        :style="windowWidth < 768 ? 'margin: 15px 0 30px 0' : ''"
         align="right"
       >
         <el-button
           size="mini"
           style="width: 140px"
           plain
-          @click="
-            $store.dispatch('excel/SET_EXCEL_DATA', {
-              name: 'data',
-              data: paramsExcel,
-              params: { settings: true, group: 'allData', key: 'allData' },
-            })
-          "
-          >{{ $t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
+          @click="createExel()"
+          >{{ t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
         ></el-button>
       </el-col>
     </el-row>
@@ -137,19 +131,19 @@
     <div class="bar__index">
       <div
         class="bar__side-bar-bg"
-        :class="{ 'is-mobile': $store.getters['app/windowWidth'] < 768 }"
+        :class="{ 'is-mobile': windowWidth < 768 }"
       ></div>
       <div class="bar__btn-list">
         <div
           class="bar__btn"
-          @mouseover="btnText = $t('Order.addOrder')"
+          @mouseover="btnText = t('Order.addOrder')"
           @mouseout="btnText = ''"
         >
           <el-button
             @click="setDrawer({ open: 'AddOrder', close: drawerComponent })"
             type="primary"
             size="mini"
-            >{{ btnText }}<span v-if="btnText === ''">{{$t('Order.addOrder')}}</span></el-button
+            >{{ btnText }}<span v-if="btnText === ''">{{t('Order.addOrder')}}</span></el-button
           >
         </div>
       </div>
@@ -158,14 +152,11 @@
     <el-drawer
       v-model="drawer"
       :show-close="false"
-      :wrapperClosable="!showBack"
+      :close-on-click-modal="!showBack"
+      :close-on-press-escape="!showBack"
       :modal="false"
-      :visible="visibleDrawer"
       :before-close="handleClose"
-      :size="
-        ($store.getters['app/windowWidth'] < 768
-          ? $store.getters['app/windowWidth']
-          : 768) + 'px'
+      :size="`${windowWidth < 768 ? windowWidth : 768}px`
       "
       direction="rtl"
       destroy-on-close
@@ -174,10 +165,10 @@
         <div>
           <span
             style="cursor: pointer; padding-right: 15px"
-            v-if="showBack && dialogInfo"
+            v-if="showBack && isDialog"
             @click="setDrawer({ open: 'InfoOrder', close: drawerComponent })"
           >
-            <i class="el-icon-back"></i>
+            <el-icon><back /></el-icon>
           </span>
           {{ drawerTitle }}
           <button
@@ -187,7 +178,7 @@
             type="button"
             class="el-drawer__close-btn"
           >
-            <i class="el-dialog__close el-icon el-icon-close"></i>
+            <el-icon :size="24" color="#000000"><close /></el-icon>
           </button>
         </div>
       </template>
@@ -207,22 +198,19 @@
 </template>
 
 <script lang='ts'>
-import { DateTime, Interval } from "luxon";
-import AddOrder from "@/views/order/AddOrder.vue";
-import EditOrder from "@/views/order/EditOrder.vue";
-import InfoOrder from "@/views/order/InfoOrder.vue";
-import DelOrder from "@/views/order/DelOrder.vue";
-import CompFilter from "@/components/filters/CompFilter.vue";
-import QuickSearch from "@/components/filters/QuickSearch.vue";
-import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
-import ListChips from "@/components/filters/ListChips.vue";
-import ExportExel from "@/components/excel/ExportExel.vue";
 import filtersModel from './composition/filters_model';
+import dateConvert from './composition/date_convert';
+import excelModel from './composition/excel_model';
 /* import { verified } from "@/api/order"; */
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import { ROUTES_GETTERS } from '@/store/modules/routes';
 import { useStore } from 'vuex';
-import { APP_DISPATCH } from '@/store/modules/app';
+import { APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
+import { Data } from "@/enums/enum_other";
+import OrderDb from '@/store/models/OrderDb';
+import { ORDER_DB_DISPATCH } from '@/store/modules/orderDb';
+import { useI18n } from "vue-i18n";
+import { FILTER_GETTERS, FILTER_REFERENCE } from '@/components/filters/store/filters';
 
 const Dashboard = defineComponent({
   data() {
@@ -231,16 +219,132 @@ const Dashboard = defineComponent({
   },
   setup() {
     const store = useStore();
+    const {t} = useI18n();
     const drawer = ref(false);
-    const currentRoute = computed(() => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE]);
+    const showBack = computed(() =>  ["DelOrder", "EditOrder"].indexOf(drawerComponent.value) !== -1);
+    const showVModal = computed(() =>  ["DelOrder", "EditOrder", "AddOrder"].indexOf(drawerComponent.value) !== -1);
+    const drawerComponent = ref("");
+    const dialogInfo = reactive<Data>({});
+    const drawerTitle = ref("");
+    const isDialog = computed(() => Object.keys(dialogInfo).length > 0);
+    const tableItems = computed(() => OrderDb.query().orderBy("last_Item_flag", "desc").orderBy("name", "asc").get().map((item: OrderDb) => item.$toJson));
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+    const orderStatusRef = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
+    const {getDateTime, getDate} = dateConvert();
+    
+    const { 
+      filterStrQuery,
+     } = filtersModel();
 
+    const {createExcel} = excelModel(getDate, getDateTime);
     
 
-    onMounted((): void => {
-        store.dispatch(APP_DISPATCH.SET_LOADING,
-          {name: currentRoute.value.fullPath + ": after mounted component", value: false}
-        ); // убираем окно после загрузки роута
+    watch(filterStrQuery, () => {
+      store.dispatch(APP_DISPATCH.SET_PAGINATION_DATA, {
+        paginationName: "currentRoute",
+        name: "page",
+        data: 1
+      });
+      setQuery();
     });
+
+    onMounted(() => {
+      setQuery();
+      store.dispatch(APP_DISPATCH.SET_LOADING, {
+        name:
+          store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].fullPath +
+          ": after mounted component",
+        value: false
+      }); // убираем окно после загрузки роута
+    });
+    /* TODO: snippet DateTime правильный вывод даты с учетом
+    горячей подмены через внесение изменений через стор*/
+    const handleClose = (done: any) => {
+      if (!showBack.value && isDialog.value) {
+        setDrawer();
+      }
+    }
+    const setDataToObject = (object: Data, newData: Data) => {
+      Object.keys(object).forEach((key: string) => delete object[key]);
+      Object.keys(newData).forEach((key: string) => object[key] = newData[key]);
+    }
+    const setDrawer = (v: Data | null = null) => {
+      if (v === null) {
+        setDataToObject(dialogInfo, {});
+        drawer.value = false;
+      }
+      if (v) {
+        if (v.data && v.data.id) {
+          const items = OrderDb.query().find(v.data.id);
+          setDataToObject(dialogInfo, Object.assign({tabNum: "1"}, items?.$toJson));
+        }
+        switch (v.open) {
+          case "InfoOrder": 
+            drawer.value = true;
+            drawerTitle.value = t("Order.orderInfo") as string;
+            drawerComponent.value = "InfoOrder";
+            break;
+          case "AddOrder": 
+            drawer.value = true;
+            drawerTitle.value = t("Order.addOrder") as string;
+            drawerComponent.value = "AddOrder";
+            break;
+          case "EditOrder": 
+            drawer.value = true;
+            drawerTitle.value = t("Order.editOrder") as string;
+            drawerComponent.value = "EditOrder";
+            break;
+          case "DelOrder": 
+            drawer.value = true;
+            drawerTitle.value = t("Order.del.title") as string;
+            drawerComponent.value = "DelOrder";
+            break;
+          default:
+        }
+        return;
+      }
+      drawerComponent.value = "";
+      drawer.value = false;
+    }
+    const setInfoToDrawer = (row: Data) => {
+      setDataToObject(dialogInfo, Object.assign({}, row));
+      setDrawer({ open: "InfoOrder" });
+    }
+    const setQuery = (): void => {
+      store.dispatch(ORDER_DB_DISPATCH.CREATE_ORDER, {
+        filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}
+          limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}
+          &offset=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").offset}
+          &order=title.asc
+          &select=*,
+          charged_from:charged_from_id(name),
+          order_type:order_type_id(name),
+          order_status:order_status_id(name),
+          property:property_id(name,full_address),
+          third_company_obj:third_company_id(fname, sname),
+          worker:worker_id(first_name, last_name),client:client_id(last_name,first_name)`,
+        paginationName: "currentRoute",
+        pagination: true
+      });
+    }
+    return {
+      t,
+      drawer,
+      drawerTitle,
+      setDrawer,
+      setInfoToDrawer,
+      getDateTime,
+      createExcel,
+      drawerComponent,
+      dialogInfo,
+      windowWidth,
+      showBack,
+      isDialog,
+      orderStatusRef,
+      tableItems,
+      showVModal
+    }
+
   }
 });
 export default Dashboard;

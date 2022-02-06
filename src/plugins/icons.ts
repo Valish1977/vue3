@@ -39,7 +39,22 @@ import {
     faUsers,
     faHome,
     faHouseUser,
-    faArrowLeft
+    faArrowLeft,
+    faHammer,
+    faBold,
+    faItalic,
+    faHeading,
+    faListUl,
+    faListOl,
+    faUndo,
+    faRedo,
+    faPlayCircle,
+    faPlay,
+    faPause,
+    faStop,
+    faWrench,
+    faClock,
+    faUsersCog
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faInfoCircle);
@@ -81,5 +96,20 @@ library.add(faUsers);
 library.add(faHome);
 library.add(faHouseUser);
 library.add(faArrowLeft);
+library.add(faHammer);
+library.add(faBold);
+library.add(faItalic);
+library.add(faHeading);
+library.add(faListUl);
+library.add(faListOl);
+library.add(faUndo);
+library.add(faRedo);
+library.add(faPlayCircle);
+library.add(faWrench);
+library.add(faPlay);
+library.add(faPause);
+library.add(faStop);
+library.add(faClock);
+library.add(faUsersCog);
 
 export default FontAwesomeIcon;
