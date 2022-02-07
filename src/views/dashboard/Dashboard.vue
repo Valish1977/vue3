@@ -216,7 +216,7 @@ import CompFilter from "@/components/filters/CompFilter.vue";
 import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
 import ListChips from "@/components/filters/ListChips.vue";
-/* import ExportExel from "@/components/excel/ExportExel.vue"; */
+import ExportExel from "@/components/excel/ExportExel.vue";
 
 const Dashboard = defineComponent({
   data() {
@@ -232,7 +232,7 @@ const Dashboard = defineComponent({
     DelOrder, */
     CompFilter,
     QuickSearch,
-    /* ExportExel, */
+    ExportExel,
     ListOfFiltersTemplate,
     ListChips
   },
@@ -333,17 +333,13 @@ const Dashboard = defineComponent({
     const setQuery = (): void => {
       console.table(filterStrQuery.value)
       store.dispatch(ORDER_DB_DISPATCH.CREATE_ORDER, {
-        filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}
-          limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}
-          &offset=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").offset}
-          &order=title.asc
-          &select=*,
-          charged_from:charged_from_id(name),
-          order_type:order_type_id(name),
-          order_status:order_status_id(name),
-          property:property_id(name,full_address),
-          third_company_obj:third_company_id(fname, sname),
-          worker:worker_id(first_name, last_name),client:client_id(last_name,first_name)`,
+        filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}` +
+        `limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}` +
+        `&offset=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").offset}` +
+        `&select=*,charged_from:charged_from_id(name),order_type:order_type_id(name),` +
+        `order_status:order_status_id(name),property:property_id(name,full_address),` +
+        `third_company_obj:third_company_id(fname, sname),worker:worker_id(first_name, last_name),` +
+        `client:client_id(last_name,first_name)`,
         paginationName: "currentRoute",
         pagination: true
       });

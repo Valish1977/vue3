@@ -73,7 +73,7 @@ const QuickSearch = defineComponent({
     };
 
     onMounted(() => {
-      for (const v in model) {
+      for (const v in model.value) {
         if (model.value[v].quickSearch && model.value[v].quickSearch.params) {
           params = model.value[v].quickSearch.params;
           break;

@@ -22,7 +22,7 @@ export default class UserApi {
           method: "post",
           url: CLIENT_FORM_API.REFRESH,
           data: {
-            rt: token
+            refresh_token: token
           }
         })
           .then((response: any) => resolve(response))

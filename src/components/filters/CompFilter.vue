@@ -375,16 +375,18 @@
         </el-col>
       </el-row>
     </div>
-    <template #reference>
+    <el-icon :size="24"><compass /></el-icon>
+    <template v-slot:reference>
       <el-button
         v-if="arrView.length == 0"
-        icon="el-icon-search"
         circle
         type="primary"
         size="small"
         plain
         style="margin-top:-4px"
-      ></el-button>
+      >
+        <font-awesome-icon icon="search" />
+      </el-button>
       <el-button
         v-else
         circle
@@ -403,7 +405,7 @@
 <script lang='ts'>
 
 import { Data } from "@/enums/enum_other";
-import { APP_BUS_STATE, APP_DISPATCH } from "@/store/modules/app";
+import { APP_BUS_STATE, APP_DISPATCH, APP_GETTERS } from "@/store/modules/app";
 import { defineComponent } from "@vue/runtime-core";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -411,8 +413,16 @@ import { useStore } from "vuex";
 import constantsComposition from "./composition/constantsComposition"
 import convertComposition from "./composition/convertComposition"
 import { FILTER_DISPATCH, FILTER_GETTERS } from "./store/filters";
+import { EditPen, Back, Compass, Close } from '@element-plus/icons-vue';
 
 const CompFilter = defineComponent({
+  data() {
+    return {
+    }
+  },
+  components: {
+    EditPen
+  },
   setup() {
     const store = useStore();
     const { t } = useI18n();
@@ -426,12 +436,17 @@ const CompFilter = defineComponent({
     const delTemplate = (v: any) => store.dispatch(FILTER_DISPATCH.DEL_TEMPLATE, v); // удаляет шаблон
     const selectTemplate = (v: any) => store.dispatch(FILTER_DISPATCH.SELECT_TEMPLATE, v); // выбирает шаблон
     const setConditions = (v: any) => store.dispatch(FILTER_DISPATCH.SET_CONDITIONS, v); // перезаписывает условия набираемого фильтра в stor
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+    const arrView = computed(() => store.getters[FILTER_GETTERS.ARR_VIEW]);
+    const isLoading = computed<boolean>(() => store.state.filters.isLoading);
     const visibleDrawer = ref(false);
     let filterIndex: number | null = null;
     const selfConditions = reactive<Data[]>([]);
     const filterGroupList = reactive<Data[]>([]);
     const filterList: Data[] = [];
     const radioTemplate = ref<any>(false);
+    const openTemplateList = ref(false);
+    const addTempTextField = ref("");
     const conditionLoaded: Data[] = [];
     
     const {
@@ -515,7 +530,7 @@ const CompFilter = defineComponent({
     const conditionListFn = (item: any): any => {
       // формируем список conditions для селекта
       const arr: any = [];
-      let i: number = 0;
+      let i = 0;
       for (const v of componentConditions[item.component]) {
         const obj = Object.assign({}, conditionList[v]);
         obj.selected = false;
@@ -690,7 +705,7 @@ const CompFilter = defineComponent({
           componentConditions[model.value[value].component][0]
         ].name;
       }
-      if (visibleDrawer) {
+      if (visibleDrawer.value) {
         modifyConditions();
       }
     }
@@ -763,6 +778,7 @@ const CompFilter = defineComponent({
       conditionListFn,
       visibleDrawer,
       clearConditions,
+      addCondition,
       removeCondition,
       selectTemplateFn,
       search,
@@ -771,7 +787,16 @@ const CompFilter = defineComponent({
       setConditionValue,
       setTemplate,
       delTemplate,
-      selectTemplate
+      selectTemplate,
+      openTemplateList,
+      addTempTextField,
+      changeField,
+      selfConditions,
+      isLoading,
+      setTemplateFn,
+      windowWidth,
+      arrView
+      
     }
   }
 });

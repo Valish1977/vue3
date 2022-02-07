@@ -54,18 +54,18 @@
                         <el-button v-for="(type, k) in params.types"  :key="k"
                           size="mini"
                           plain
-                          :loading="( created && computedKey == fieldKey && typeResponse === type )"
+                          :loading="( isProcessCreate && computedKey == fieldKey && typeResponse === type )"
                           @click="setExcelData({name: 'data', data: params, params:{created: true, group, fieldKey, typeResponse: type  }});"
-                        >{{ ( created && computedKey == fieldKey && typeResponse === type ) ? $t("Access.loading") : params.types.length > 1 ? $t(`excel.${type}`) : $t(`excel.export`) }}</el-button>
+                        >{{ ( isProcessCreate && computedKey == fieldKey && typeResponse === type ) ? $t("Access.loading") : params.types.length > 1 ? $t(`excel.${type}`) : $t(`excel.export`) }}</el-button>
                       </el-col>
                       <el-col v-if="params.types === undefined" :span="24" align="right">
                         <el-button
                           size="mini"
                           style="width:140px"
                           plain
-                          :loading="( created && computedKey == fieldKey)"
+                          :loading="( isProcessCreate && computedKey == fieldKey)"
                           @click="setExcelData({name: 'data', data: params, params:{created: true, group, fieldKey, typeResponse: $store.getters['excel/GET_EXCEL_DATA'].typeResponse }});"
-                        >{{ ( created && computedKey == fieldKey ) ? $t("Access.loading") : $t("excel.export") }}</el-button>
+                        >{{ ( isProcessCreate && computedKey == fieldKey ) ? $t("Access.loading") : $t("excel.export") }}</el-button>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -100,12 +100,14 @@ const ExportExelM = defineComponent({
   setup() {
     const store = useStore();
     const excelApi = new ExcelApi();
-    const created = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].created);
-    const group = computed<string>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].group);
-    const sett = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].visibleDriver);
-    const computedKey = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].key);
-    const params = computed<Data>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].data);
-    const typeResponse = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].typeResponse);
+    const excelStoreState = computed<Data>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA]);
+    console.log(excelStoreState.value);
+    const isProcessCreate = computed<boolean>(() => excelStoreState.value.created);
+    const group = computed<string>(() => excelStoreState.value.group);
+    const sett = computed<boolean>(() => excelStoreState.value.visibleDriver);
+    const computedKey = computed<boolean>(() => excelStoreState.value.key);
+    const params = computed<Data>(() => excelStoreState.value.data);
+    const typeResponse = computed<boolean>(() => excelStoreState.value.typeResponse);
     const setExcelData = (data: Data) => store.dispatch(EXCEL_DISPATCH.SET_EXCEL_DATA, data);
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     const alphabet = [
@@ -116,8 +118,8 @@ const ExportExelM = defineComponent({
   
     let selfGroup = "";
 
-    watch( created, () => {
-      if (created.value) {
+    watch( isProcessCreate, () => {
+      if (isProcessCreate.value) {
         setTimeout(() => {
           tabExel();
         }, 500);
@@ -244,7 +246,7 @@ const ExportExelM = defineComponent({
         }
       }
       const rows: any = [];
-      let rowNum: number = 1;
+      let rowNum = 1;
       for (const t of v.rows) {
         mergeCells = []; // обнуляем для нового row
         for (let i = 0; i < t.maxCountLine; i++) {
@@ -351,7 +353,7 @@ const ExportExelM = defineComponent({
       checkedItems,
       params,
       setExcelData,
-      created,
+      isProcessCreate,
       computedKey,
       windowWidth,
       typeResponse

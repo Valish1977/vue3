@@ -54,7 +54,8 @@ import {
     faStop,
     faWrench,
     faClock,
-    faUsersCog
+    faUsersCog,
+    faSearch
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faInfoCircle);
@@ -111,5 +112,6 @@ library.add(faPause);
 library.add(faStop);
 library.add(faClock);
 library.add(faUsersCog);
+library.add(faSearch);
 
 export default FontAwesomeIcon;

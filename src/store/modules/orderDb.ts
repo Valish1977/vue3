@@ -19,7 +19,7 @@ export default {
     actions: {
       CREATE_ORDER: async (store: any, data: any) => {
         store.dispatch(APP_DISPATCH.SET_LOADING, {name: `order.ts/${ACTIONS._CREATE_ORDER}`, value: true, opacity: 0.5} , { root: true });
-        const items = await OrderApi.getItems(data.filters);
+        const items = await OrderApi.getItems(data);
         store.dispatch("create", { entity: ACTIONS._CREATE_ORDER,  data: items });
         store.dispatch(APP_DISPATCH.SET_LOADING, {name: `order.ts/${ACTIONS._CREATE_ORDER}`, value: false} , { root: true });
       }

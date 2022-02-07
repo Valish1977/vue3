@@ -8,7 +8,7 @@ const GETTERS = {
 const ACTIONS = {
     SET_EXCEL_DATA: "SET_EXCEL_DATA"
 };
-const EXCEL_STORE_NAME = "filters"; 
+const EXCEL_STORE_NAME = "excel"; 
 
 export const EXCEL_GETTERS = {
     GET_EXCEL_DATA: `${EXCEL_STORE_NAME}/${GETTERS.GET_EXCEL_DATA}`,
@@ -59,6 +59,6 @@ export default {
         }
     },
     getters: {
-        [GETTERS.GET_EXCEL_DATA]: (state: any, getters: any, rootState: any, rootGetters: any) => state
+        [GETTERS.GET_EXCEL_DATA]: (state: any,) => state
     }
 };

@@ -6,6 +6,7 @@ import auth from "./modules/auth";
 import lang from "./modules/lang";
 import app from "./modules/app";
 import filters from "@/components/filters/store/filters";
+import excel from "@/components/excel/store/excel";
 import clientForm from "./modules/clientForm";
 import propertyForm from "./modules/propertyForm";
 import orderForm from "./modules/orderForm";
@@ -22,6 +23,7 @@ export default class StoreService {
         app,
         lang,
         filters,
+        excel,
         clientForm,
         propertyForm,
         orderForm,
