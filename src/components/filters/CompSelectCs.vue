@@ -29,17 +29,17 @@
 import { Data } from "@/enums/enum_other";
 import { computed, defineComponent, onMounted, onUpdated, reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { FILTER_DISPATCH, FILTER_GETTERS, FILTER_REFERENCE } from "./store/filters";
+import { FILTER_DISPATCH, FILTER_GETTERS } from "./store/filters";
 
 const CompSelectCs = defineComponent({
   props: {
      setName: {
       type: String,
-      default: 0
+      default: ""
     },
     setValue: {
-      type: Object,
-      default: 0
+      type: String,
+      default: ""
     },
     setIndex: {
       type: Number,
@@ -50,7 +50,7 @@ const CompSelectCs = defineComponent({
       default: null
     }
   },
-  setup(props, {emit}){
+  setup(props, {emit}) {
     const store = useStore();
     const referencesArr = reactive<Data[]>([]);
     const fieldText = ref(props.setValue);
@@ -58,12 +58,14 @@ const CompSelectCs = defineComponent({
     const setReference = (data: any) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
     const setReferenceItems = (data: any) => store.dispatch(FILTER_DISPATCH.SET_ITEMS, data);
     const reference = reactive<Data[]>([]);
-    const param = <Data>{
+    
+    const param: Data = {
       placeholder: "",
       reference: "",
       key: "id",
-      label: "name"
+      label: "name",
     };
+
 
     watch(() => props.setParam?.reference,  () => {
       if (props.setParam?.reference && props.setParam.reference !== "") {
@@ -88,7 +90,7 @@ const CompSelectCs = defineComponent({
       if (Array.isArray(ref)) {
         reference.push(...ref);
       } else {
-        if ( referenceFromStore === undefined ) {
+        if ( referenceFromStore.value === undefined ) {
           // обязательная проверка на создание справочника в store (без нее влетаем в цикл)
           setReference({ name: ref });
         }
