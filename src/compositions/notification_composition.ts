@@ -5,13 +5,14 @@ import { useStore } from 'vuex';
 
 export default function notificationComposition() {
     const store = useStore();
-    const showNotification = ({title = "", type = undefined, message = "", setTimeOut = 0, duration = 0 } = {}) => {
+    const showNotification = ({title = "", type = undefined, message = "", setTimeOut = 0, duration = 0, dangerouslyUseHTMLString = false } = {}) => {
         const notification = () => {
             ElNotification({
               title,
               message,
               type,
               duration,
+              dangerouslyUseHTMLString
             });
         }
         if (setTimeOut) {
@@ -24,7 +25,9 @@ export default function notificationComposition() {
     }
     const notifyBus = computed(() => store.getters[APP_GETTERS.GET_BUS_STATE](APP_BUS_STATE.NOTIFY_BUS))
     watch(notifyBus, (): void => showNotification(store.getters[APP_GETTERS.GET_BUS](APP_BUS_STATE.NOTIFY_BUS)));
-    const setNotify = ({
+
+    // example notify fn
+    /* const setNotify = ({
       title = "",
       type = "",
       text = "",
@@ -35,8 +38,8 @@ export default function notificationComposition() {
         name: APP_BUS_STATE.NOTIFY_BUS,
         data: { title, type, text, setTimeOut, duration },
       });
-    };
+    }; */
     return {
-      setNotify
+      //
     }
 }

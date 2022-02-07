@@ -1,18 +1,18 @@
 <template>
   <el-drawer
-      ref="filterDrawer"
       :show-close="false"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
       :modal="false"
-      :wrapperClosable="false"
-      :visible.sync="settings"
-      :size="($store.getters['app/windowWidth'] < 768 ? $store.getters['app/windowWidth'] : 768) + 'px'"
+      v-model="visibleDriver"
+      :size="(windowWidth < 768 ? windowWidth : 768) + 'px'"
       direction="rtl"
       destroy-on-close
       >
         <template v-slot:title>
           <div>
             {{$t('excel.title')}}
-            <button @click="setDrawer()" style="position: absolute; right: 15px; top: 15px" aria-label="close drawer" type="button" class="el-drawer__close-btn"><i class="el-dialog__close el-icon el-icon-close"></i></button>
+            <button @click="visibleDriver = false" style="position: absolute; right: 15px; top: 15px" aria-label="close drawer" type="button" class="el-drawer__close-btn"><i class="el-dialog__close el-icon el-icon-close"></i></button>
           </div>
         </template>
         <div class="selfForm drawer-content">
@@ -29,10 +29,10 @@
                           <el-checkbox-group v-model="checkedItems[k]">
                             <el-row :gutter="20">
                               <el-col
-                                :span="$store.getters['app/windowWidth'] < 600 ? 24 : 12"
+                                :span="windowWidth < 600 ? 24 : 12"
                                 style="margin-bottom:15px;"
-                                v-for="(item, key) in i.fields"
-                                :key="key"
+                                v-for="(item, fieldKey) in i.fields"
+                                :key="fieldKey"
                               >
                                 <el-checkbox :label="item.field">{{item.name}}</el-checkbox>
                               </el-col>
@@ -54,18 +54,18 @@
                         <el-button v-for="(type, k) in params.types"  :key="k"
                           size="mini"
                           plain
-                          :loading="( $store.getters['excel/GET_EXCEL_DATA'].created && $store.getters['excel/GET_EXCEL_DATA'].key == key && typeResponse === type )"
-                          @click="$store.dispatch('excel/SET_EXCEL_DATA', {name: 'data', data: params, params:{created: true, group, key, typeResponse: type  }});"
-                        >{{ ( $store.getters['excel/GET_EXCEL_DATA'].created && $store.getters['excel/GET_EXCEL_DATA'].key == key && typeResponse === type ) ? $t("Access.loading") : params.types.length > 1 ? $t(`excel.${type}`) : $t(`excel.export`) }}</el-button>
+                          :loading="( created && computedKey == fieldKey && typeResponse === type )"
+                          @click="setExcelData({name: 'data', data: params, params:{created: true, group, fieldKey, typeResponse: type  }});"
+                        >{{ ( created && computedKey == fieldKey && typeResponse === type ) ? $t("Access.loading") : params.types.length > 1 ? $t(`excel.${type}`) : $t(`excel.export`) }}</el-button>
                       </el-col>
                       <el-col v-if="params.types === undefined" :span="24" align="right">
                         <el-button
                           size="mini"
                           style="width:140px"
                           plain
-                          :loading="( $store.getters['excel/GET_EXCEL_DATA'].created && $store.getters['excel/GET_EXCEL_DATA'].key == key)"
-                          @click="$store.dispatch('excel/SET_EXCEL_DATA', {name: 'data', data: params, params:{created: true, group, key, typeResponse: $store.getters['excel/GET_EXCEL_DATA'].typeResponse }});"
-                        >{{ ( $store.getters['excel/GET_EXCEL_DATA'].created && $store.getters['excel/GET_EXCEL_DATA'].key == key ) ? $t("Access.loading") : $t("excel.export") }}</el-button>
+                          :loading="( created && computedKey == fieldKey)"
+                          @click="setExcelData({name: 'data', data: params, params:{created: true, group, fieldKey, typeResponse: $store.getters['excel/GET_EXCEL_DATA'].typeResponse }});"
+                        >{{ ( created && computedKey == fieldKey ) ? $t("Access.loading") : $t("excel.export") }}</el-button>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -80,106 +80,93 @@
 </template>
 
 <script lang="ts">
-import * as exceljs from "exceljs/dist/exceljs.min.js";
+import * as exceljs from "exceljs";
 import ExcelApi from "@/components/excel/api/excel";
-import { Component, Prop, Watch, Vue } from "vue-property-decorator";
-export type VDrawer = Vue & { closeDrawer: () => boolean };
-@Component({
-  computed: {
-    selfDrawer(): VDrawer {
-      return this.$refs.filterDrawer as VDrawer;
+import { defineComponent } from "@vue/runtime-core";
+import { computed, reactive, ref, watch } from "vue";
+import { EXCEL_DISPATCH, EXCEL_GETTERS } from "./store/excel";
+import { useStore } from "vuex";
+import { LANG_GETTERS } from "@/store/modules/lang";
+import { Data } from "@/enums/enum_other";
+import { APP_GETTERS } from "@/store/modules/app";
+
+const ExportExelM = defineComponent({
+  props: {
+    parametrs: {
+      type: Object,
+      default: null
     }
-  }
-})
-export default class ExportExelM extends Vue {
-  @Prop({ default: null })
-  public parametrs: any;
-  private selfDrawer: any;
-  private selfGroup: any = "";
-  private settings: any = false;
-  private checkedItems: any = [];
-  private excelApi = new ExcelApi();
-  private alphabet: any = [
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-  ];
-  @Watch("createdd")
-  private watchCreatedd() {
-    if (this.createdd) {
-      setTimeout(() => {
-        this.tabExel();
-      }, 500);
-    }
-  }
-  @Watch("params")
-  private watchParams() {
-    if (this.selfGroup !== this.group) {
-      this.selfGroup = this.group;
-      this.setList();
-    }
-  }
-  @Watch("sett")
-  private watchSett() {
-    this.settings = this.sett;
-  }
-  @Watch("settings")
-  private watchSettings() {
-    if (!this.settings && this.settings !== this.sett) {
-      this.$store.dispatch("excel/SET_EXCEL_DATA", {
-        name: "settings",
-        data: false
-      });
-    }
-  }
-  get language(): any {
-    return this.$store.getters.language;
-  }
-  get createdd(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].created;
-  }
-  get sett(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].settings;
-  }
-  get group(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].group;
-  }
-  get key(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].key;
-  }
-  get params(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].data;
-  }
-  get typeResponse(): any {
-    return this.$store.getters["excel/GET_EXCEL_DATA"].typeResponse;
-  }
-  private setList() {
-    this.checkedItems = [];
-    for (const v of this.params.tabs) {
-      const arr: any = [];
-      for (const t of v.fields) {
-        if (t.enabled) {
-          arr.push(t.field);
-        }
+  },
+  setup() {
+    const store = useStore();
+    const excelApi = new ExcelApi();
+    const created = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].created);
+    const group = computed<string>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].group);
+    const sett = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].visibleDriver);
+    const computedKey = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].key);
+    const params = computed<Data>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].data);
+    const typeResponse = computed<boolean>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA].typeResponse);
+    const setExcelData = (data: Data) => store.dispatch(EXCEL_DISPATCH.SET_EXCEL_DATA, data);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+    const alphabet = [
+      "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    ];
+    const checkedItems = reactive<Data[]>([]);
+    const visibleDriver = ref(false);
+  
+    let selfGroup = "";
+
+    watch( created, () => {
+      if (created.value) {
+        setTimeout(() => {
+          tabExel();
+        }, 500);
       }
-      this.checkedItems.push(arr);
+    });
+    watch(params, () => {
+      if (selfGroup !== group.value) {
+        selfGroup = group.value;
+        setList();
+      }
+    });
+    watch(sett, () => {
+      visibleDriver.value = sett.value;
+    });
+    watch(visibleDriver, () => {
+      if (!visibleDriver.value && visibleDriver.value !== sett.value) {
+        setExcelData({ name: "settings", data: false });
+      }
+    });
+
+    const setList = () => {
+      checkedItems.splice(0, checkedItems.length);
+      for (const v of params.value.tabs) {
+        const arr: any = [];
+        for (const t of v.fields) {
+          if (t.enabled) {
+            arr.push(t.field);
+          }
+        }
+        checkedItems.push(arr);
+      }
     }
-  }
-  private async tabExel() {
+
+    const tabExel = async() => {
     const data: any = [];
-    for (const i in this.params.tabs) {
-      if (this.params.tabs[i] !== undefined) {
+    for (const i in params.value.tabs) {
         let items: any = [];
-        if ( typeof this.params.tabs[i].query === "function" ) {
-          items = await this.params.tabs[i].query(this.typeResponse);
+        if ( typeof params.value.tabs[i].query === "function" ) {
+          items = await params.value.tabs[i].query(typeResponse.value);
         } else {
-          items = await this.excelApi.getItems(this.params.tabs[i].query);
+          items = await excelApi.getItems(params.value.tabs[i].query);
         }
         if (items.length === 0) {
           continue;
         }
         // -> создаем массив в порядке заданном в описании
         const arrFields: any = [];
-        for (const v of this.params.tabs[i].fields) {
-           if (this.checkedItems[i].indexOf(v.field) !== -1 ) {
+        for (const v of params.value.tabs[i].fields) {
+           if (checkedItems[parseInt(i, 10)].indexOf(v.field) !== -1 ) {
              arrFields.push(v.field);
            }
         }
@@ -187,7 +174,7 @@ export default class ExportExelM extends Vue {
         const columns: any = [];
         for (const v in arrFields) {
           if (arrFields[v] !== undefined) {
-            const item: any = this.params.tabs[i].fields.find(
+            const item: any = params.value.tabs[i].fields.find(
               (t: any) => t.field === arrFields[v]
             );
             columns.push({ header: item.name, key: "cell" + v, width: 20 });
@@ -199,12 +186,12 @@ export default class ExportExelM extends Vue {
           let key = 0;
           let maxCountLine = 1;
           for (const n of arrFields) {
-            const item = this.params.tabs[i].fields.find(
+            const item = params.value.tabs[i].fields.find(
               (t: any) => t.field === n
             );
             let itemValue: any;
             if (item.field.indexOf(".") !== -1) {
-              itemValue = this.getField(v, item);
+              itemValue = getField(v, item);
             } else {
               if (item.fn !== undefined) {
                 itemValue = item.fn(v[item.field], v);
@@ -212,7 +199,7 @@ export default class ExportExelM extends Vue {
                 itemValue = v[item.field];
               }
             }
-            arr[key] = this.getData(itemValue);
+            arr[key] = getData(itemValue);
             if (arr[key].length > maxCountLine) {
               maxCountLine = arr[key].length;
             }
@@ -226,55 +213,13 @@ export default class ExportExelM extends Vue {
         data.push({
           columns,
           rows,
-          name: this.params.tabs[i].name
+          name: params.value.tabs[i].name
         });
-      }
     }
-    this.viewExel(data);
+    viewExel(data);
   }
-  private getData(itemValue: any) {
-    let arr: any = [];
-    if (Array.isArray(itemValue)) {
-      if (itemValue.length === 0) {
-        arr.push("");
-      } else {
-        arr = itemValue;
-      }
-    } else {
-      arr.push(itemValue);
-    }
-    return arr;
-  }
-  private getField(v: any, item: any): any {
-    const a = item.field.split(".");
-    switch (a.length) {
-      case 2:
-        return (v[a[0]] !== null) ? v[a[0]][a[1]] : "";
-      case 3:
-        if (v[a[0]] !== null) {
-          return (v[a[0]][a[1]] !== null) ? v[a[0]][a[1]][a[2]] : "";
-        } else {
-          return "";
-        }
-      case 4:
-        if (v[a[0]] !== null) {
-          if (v[a[0]][a[1]] !== null) {
-            return (v[a[0]][a[1]][a[2]] !== null) ? v[a[0]][a[1]][a[2]][a[3]] : "";
-          } else {
-            return "";
-          }
-        } else {
-          return "";
-        }
-      default:
-        return "";
-    }
-  }
-  private setDrawer() {
-    this.selfDrawer.closeDrawer();
-  }
-  private viewExel(data: any): any {
-    const name = this.params.name;
+  const viewExel = (data: any): any => {
+    const name = params.value.name;
     const wb: any = new exceljs.Workbook();
     let columnNames: any = [];
     let mergeCells: any = [];  // колличество слияемых ячеек в колонках
@@ -282,20 +227,20 @@ export default class ExportExelM extends Vue {
       const ws = wb.addWorksheet(v.name);
       ws.columns = v.columns;
       columnNames = [];
-      if ( v.columns.length <= this.alphabet.length) {
+      if ( v.columns.length <= alphabet.length) {
         for (let i = 0; i < v.columns.length; i++) {
-          columnNames.push(this.alphabet[i]);
+          columnNames.push(alphabet[i]);
         }
       } else {
-        const remainder = v.columns.length % this.alphabet.length;
-        const len = (v.columns.length - remainder) / this.alphabet.length;
+        const remainder = v.columns.length % alphabet.length;
+        const len = (v.columns.length - remainder) / alphabet.length;
         for (let i = 0; i < len; i++) {
-          for (const s of this.alphabet) {
-            columnNames.push(`${this.alphabet[i]}${s}`);
+          for (const s of alphabet) {
+            columnNames.push(`${alphabet[i]}${s}`);
           }
         }
         for (let i = 0; i < remainder; i++) {
-          columnNames.push(`${this.alphabet[len]}${this.alphabet[i]}`);
+          columnNames.push(`${alphabet[len]}${alphabet[i]}`);
         }
       }
       const rows: any = [];
@@ -358,13 +303,64 @@ export default class ExportExelM extends Vue {
       }, 0);
     });
     setTimeout(() => {
-      this.$store.dispatch("excel/SET_EXCEL_DATA", {
-        data: false,
-        name: "created"
-      });
+      setExcelData({ data: false, name: "created"});
     }, 500);
   }
-}
+  const getData = (itemValue: any) => {
+    let arr: any = [];
+    if (Array.isArray(itemValue)) {
+      if (itemValue.length === 0) {
+        arr.push("");
+      } else {
+        arr = itemValue;
+      }
+    } else {
+      arr.push(itemValue);
+    }
+    return arr;
+  }
+
+  const  getField = (v: any, item: any): any => {
+    const a = item.field.split(".");
+    switch (a.length) {
+      case 2:
+        return (v[a[0]] !== null) ? v[a[0]][a[1]] : "";
+      case 3:
+        if (v[a[0]] !== null) {
+          return (v[a[0]][a[1]] !== null) ? v[a[0]][a[1]][a[2]] : "";
+        } else {
+          return "";
+        }
+      case 4:
+        if (v[a[0]] !== null) {
+          if (v[a[0]][a[1]] !== null) {
+            return (v[a[0]][a[1]][a[2]] !== null) ? v[a[0]][a[1]][a[2]][a[3]] : "";
+          } else {
+            return "";
+          }
+        } else {
+          return "";
+        }
+      default:
+        return "";
+    }
+  }
+
+    return {
+      visibleDriver,
+      checkedItems,
+      params,
+      setExcelData,
+      created,
+      computedKey,
+      windowWidth,
+      typeResponse
+    }
+  }
+  
+});
+export default ExportExelM;
+
 </script>
 
 <style scoped>

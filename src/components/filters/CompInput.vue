@@ -66,4 +66,5 @@ const CompInput = defineComponent({
     }
   }
 });
+export default CompInput;
 </script>

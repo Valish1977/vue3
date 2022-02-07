@@ -178,7 +178,7 @@
             type="button"
             class="el-drawer__close-btn"
           >
-            <el-icon :size="24" color="#000000"><close /></el-icon>
+            <el-icon :size="24"><close /></el-icon>
           </button>
         </div>
       </template>
@@ -211,11 +211,30 @@ import OrderDb from '@/store/models/OrderDb';
 import { ORDER_DB_DISPATCH } from '@/store/modules/orderDb';
 import { useI18n } from "vue-i18n";
 import { FILTER_GETTERS, FILTER_REFERENCE } from '@/components/filters/store/filters';
+import { Back, Close } from '@element-plus/icons-vue';
+import CompFilter from "@/components/filters/CompFilter.vue";
+import QuickSearch from "@/components/filters/QuickSearch.vue";
+import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
+import ListChips from "@/components/filters/ListChips.vue";
+/* import ExportExel from "@/components/excel/ExportExel.vue"; */
 
 const Dashboard = defineComponent({
   data() {
     return {
     }
+  },
+  components: {
+    Back,
+    Close,
+/*     AddOrder,
+    EditOrder,
+    InfoOrder,
+    DelOrder, */
+    CompFilter,
+    QuickSearch,
+    /* ExportExel, */
+    ListOfFiltersTemplate,
+    ListChips
   },
   setup() {
     const store = useStore();
@@ -231,6 +250,7 @@ const Dashboard = defineComponent({
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     const orderStatusRef = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
     const {getDateTime, getDate} = dateConvert();
+    const btnText = ref("");
     
     const { 
       filterStrQuery,
@@ -311,6 +331,7 @@ const Dashboard = defineComponent({
       setDrawer({ open: "InfoOrder" });
     }
     const setQuery = (): void => {
+      console.table(filterStrQuery.value)
       store.dispatch(ORDER_DB_DISPATCH.CREATE_ORDER, {
         filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}
           limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}
@@ -342,7 +363,8 @@ const Dashboard = defineComponent({
       isDialog,
       orderStatusRef,
       tableItems,
-      showVModal
+      showVModal,
+      btnText
     }
 
   }

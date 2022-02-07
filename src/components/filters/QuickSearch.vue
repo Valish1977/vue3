@@ -62,7 +62,7 @@ const QuickSearch = defineComponent({
         callback();
         return true;
       }
-      const regex = /^[А-Яа-яA-Za-z0-9sS_\.\-]*$/i;
+      const regex = /^[А-Яа-яA-Za-z0-9sS_.-]*$/i;
       value = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
       if (!regex.test(value)) {
         callback(

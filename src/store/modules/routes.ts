@@ -63,10 +63,10 @@ export class RouterConfig {
     ],
     adm: [
         {
-          path: ROUTER_PATH.LAYOUT, name: ROUTER_NAME.LAYOUT, component: ROUTER_COMPONENT.LAYOUT, meta: { pageName: "routes.index" },
+          path: ROUTER_PATH.LAYOUT, name: ROUTER_NAME.LAYOUT, component: ROUTER_COMPONENT.LAYOUT, meta: { pageName: "routes.dashboard" },
           children: [
-            { path: ROUTER_PATH.DASHBOARD, name: ROUTER_NAME.DASHBOARD, component: ROUTER_COMPONENT.DASHBOARD, meta: { pageName: "routes.index", search: true, breadcrumbs: false, header: true, footer: "large" } },
-            { path: ROUTER_PATH.DASHBOARD2, name: ROUTER_NAME.DASHBOARD2, component: ROUTER_COMPONENT.DASHBOARD2, meta: { pageName: "routes.dashboard2", search: true, breadcrumbs: false, header: true, footer: "large" } },
+            { path: ROUTER_PATH.DASHBOARD, name: ROUTER_NAME.DASHBOARD, component: ROUTER_COMPONENT.DASHBOARD, meta: { pageName: "routes.dashboard", icon: "chart-bar", search: true, breadcrumbs: false, header: true, footer: "large" } },
+            { path: ROUTER_PATH.DASHBOARD2, name: ROUTER_NAME.DASHBOARD2, component: ROUTER_COMPONENT.DASHBOARD2, meta: { pageName: "routes.dashboard2", icon: "house-user", search: true, breadcrumbs: false, header: true, footer: "large" } },
           ]
         }
     ],

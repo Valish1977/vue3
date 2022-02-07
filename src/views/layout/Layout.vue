@@ -78,13 +78,13 @@
           <span style="font-size: 24px">{{ t(pageName) }}</span>
         </el-menu-item>
         <el-menu-item disabled>
-          <el-tooltip effect="dark" :content="t('app.info')" placement="bottom">
+          <el-tooltip effect="light" :content="t('app.info')" placement="bottom">
             <span @click="infoDialog = true">
               <font-awesome-icon icon="info" class="action-icon" />
             </span>
           </el-tooltip>
           <el-tooltip
-            effect="dark"
+            effect="light"
             :content="t('app.fullScreen')"
             placement="bottom"
           >
@@ -92,7 +92,7 @@
               <font-awesome-icon icon="expand-arrows-alt" class="action-icon" />
             </span>
           </el-tooltip>
-          <el-tooltip effect="dark" :content="t('app.exit')" placement="bottom">
+          <el-tooltip effect="light" :content="t('app.exit')" placement="bottom">
             <span @click="logOut">
               <font-awesome-icon
                 icon="sign-out-alt"
@@ -123,7 +123,7 @@
   </el-dialog>
 </template>
 <script lang="ts">
-import { mapGetters, useStore } from "vuex";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import screenfullComposition from "./composition/screenfull_composition";
 import scrollComposition from "./composition/scroll_composition";
