@@ -426,31 +426,35 @@ const CompFilter = defineComponent({
   setup() {
     const store = useStore();
     const { t } = useI18n();
+
     const quickSearch = computed<boolean>(() => store.state.filters.quickSearch);
     const conditions = computed<Data[]>(() => store.state.filters.conditions);
     const model = computed<Data>(() => store.state.filters.model);
     const filters = computed<Data[]>(() => store.state.filters.filters);
     const useFilter = computed<Data[]>(() => store.state.filters.useFilter);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+    const arrView = computed(() => store.getters[FILTER_GETTERS.ARR_VIEW]);
+    const isLoading = computed<boolean>(() => store.state.filters.isLoading);
+
+    const visibleDrawer = ref(false);
+    const radioTemplate = ref<any>(false);
+    const openTemplateList = ref(false);
+    const addTempTextField = ref("");
+
+    const selfConditions = reactive<Data[]>([]);
+    const filterGroupList = reactive<Data[]>([]);
+
     const search = () => store.dispatch(FILTER_DISPATCH.SET_USE_FILTER); // запрос на поиск
     const setTemplate = (v: any) => store.dispatch(FILTER_DISPATCH.SET_TEMPLATE, v); // созраняет набранные условия как шаблон
     const delTemplate = (v: any) => store.dispatch(FILTER_DISPATCH.DEL_TEMPLATE, v); // удаляет шаблон
     const selectTemplate = (v: any) => store.dispatch(FILTER_DISPATCH.SELECT_TEMPLATE, v); // выбирает шаблон
     const setConditions = (v: any) => store.dispatch(FILTER_DISPATCH.SET_CONDITIONS, v); // перезаписывает условия набираемого фильтра в stor
-    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
-    const arrView = computed(() => store.getters[FILTER_GETTERS.ARR_VIEW]);
-    const isLoading = computed<boolean>(() => store.state.filters.isLoading);
-    const visibleDrawer = ref(false);
-    let filterIndex: number | null = null;
-    const selfConditions = reactive<Data[]>([]);
-    const filterGroupList = reactive<Data[]>([]);
-    const filterList: Data[] = [];
-    const radioTemplate = ref<any>(false);
-    const openTemplateList = ref(false);
-    const addTempTextField = ref("");
-    const conditionLoaded: Data[] = [];
     
+    const filterList: Data[] = [];
+    const conditionLoaded: Data[] = [];
+
+    let filterIndex: number | null = null;
     const {
-        components,
         componentConditions,
         defaultCondition,
         conditionList
@@ -481,7 +485,7 @@ const CompFilter = defineComponent({
         }
       }
   
-      for (const v in model) {
+      for (const v in model.value) {
         if (model.value[v] !== undefined) {
           if (model.value[v].header !== undefined) {
             // создаем массив групп фильтров

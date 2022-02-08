@@ -34,16 +34,16 @@ import { FILTER_DISPATCH, FILTER_GETTERS } from "./store/filters";
 const CompSelectCs = defineComponent({
   props: {
      setName: {
-      type: String,
-      default: ""
+      type: Object,
+      default: null
     },
     setValue: {
-      type: String,
-      default: ""
+      type: Object,
+      default: null
     },
     setIndex: {
       type: Number,
-      default: null
+      default: 0
     },
     setParam: {
       type: Object,
@@ -52,12 +52,16 @@ const CompSelectCs = defineComponent({
   },
   setup(props, {emit}) {
     const store = useStore();
-    const referencesArr = reactive<Data[]>([]);
-    const fieldText = ref(props.setValue);
+    
     const referenceFromStore = computed(() => store.getters[FILTER_GETTERS.REFERENCE](props.setParam.reference));
+
+    const fieldText = ref(props.setValue);
+
+    const reference = reactive<Data[]>([]);
+    
     const setReference = (data: any) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
     const setReferenceItems = (data: any) => store.dispatch(FILTER_DISPATCH.SET_ITEMS, data);
-    const reference = reactive<Data[]>([]);
+    
     
     const param: Data = {
       placeholder: "",

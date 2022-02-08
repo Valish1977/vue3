@@ -100,22 +100,25 @@ const ExportExelM = defineComponent({
   setup() {
     const store = useStore();
     const excelApi = new ExcelApi();
+
     const excelStoreState = computed<Data>(() => store.getters[EXCEL_GETTERS.GET_EXCEL_DATA]);
-    console.log(excelStoreState.value);
     const isProcessCreate = computed<boolean>(() => excelStoreState.value.created);
     const group = computed<string>(() => excelStoreState.value.group);
     const sett = computed<boolean>(() => excelStoreState.value.visibleDriver);
     const computedKey = computed<boolean>(() => excelStoreState.value.key);
     const params = computed<Data>(() => excelStoreState.value.data);
     const typeResponse = computed<boolean>(() => excelStoreState.value.typeResponse);
-    const setExcelData = (data: Data) => store.dispatch(EXCEL_DISPATCH.SET_EXCEL_DATA, data);
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+
+    const visibleDriver = ref(false);
+
+    const checkedItems = reactive<Data[]>([]);
+
+    const setExcelData = (data: Data) => store.dispatch(EXCEL_DISPATCH.SET_EXCEL_DATA, data);
+
     const alphabet = [
       "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
     ];
-    const checkedItems = reactive<Data[]>([]);
-    const visibleDriver = ref(false);
-  
     let selfGroup = "";
 
     watch( isProcessCreate, () => {
@@ -154,71 +157,71 @@ const ExportExelM = defineComponent({
     }
 
     const tabExel = async() => {
-    const data: any = [];
-    for (const i in params.value.tabs) {
-        let items: any = [];
-        if ( typeof params.value.tabs[i].query === "function" ) {
-          items = await params.value.tabs[i].query(typeResponse.value);
-        } else {
-          items = await excelApi.getItems(params.value.tabs[i].query);
-        }
-        if (items.length === 0) {
-          continue;
-        }
-        // -> создаем массив в порядке заданном в описании
-        const arrFields: any = [];
-        for (const v of params.value.tabs[i].fields) {
-           if (checkedItems[parseInt(i, 10)].indexOf(v.field) !== -1 ) {
-             arrFields.push(v.field);
-           }
-        }
-        // <-
-        const columns: any = [];
-        for (const v in arrFields) {
-          if (arrFields[v] !== undefined) {
-            const item: any = params.value.tabs[i].fields.find(
-              (t: any) => t.field === arrFields[v]
-            );
-            columns.push({ header: item.name, key: "cell" + v, width: 20 });
+      const data: any = [];
+      for (const i in params.value.tabs) {
+          let items: any = [];
+          if ( typeof params.value.tabs[i].query === "function" ) {
+            items = await params.value.tabs[i].query(typeResponse.value);
+          } else {
+            items = await excelApi.getItems(params.value.tabs[i].query);
           }
-        }
-        const rows: any = [];
-        for (const v of items) {
-          const arr: any = [];
-          let key = 0;
-          let maxCountLine = 1;
-          for (const n of arrFields) {
-            const item = params.value.tabs[i].fields.find(
-              (t: any) => t.field === n
-            );
-            let itemValue: any;
-            if (item.field.indexOf(".") !== -1) {
-              itemValue = getField(v, item);
-            } else {
-              if (item.fn !== undefined) {
-                itemValue = item.fn(v[item.field], v);
+          if (items.length === 0) {
+            continue;
+          }
+          // -> создаем массив в порядке заданном в описании
+          const arrFields: any = [];
+          for (const v of params.value.tabs[i].fields) {
+             if (checkedItems[parseInt(i, 10)].indexOf(v.field) !== -1 ) {
+               arrFields.push(v.field);
+             }
+          }
+          // <-
+          const columns: any = [];
+          for (const v in arrFields) {
+            if (arrFields[v] !== undefined) {
+              const item: any = params.value.tabs[i].fields.find(
+                (t: any) => t.field === arrFields[v]
+              );
+              columns.push({ header: item.name, key: "cell" + v, width: 20 });
+            }
+          }
+          const rows: any = [];
+          for (const v of items) {
+            const arr: any = [];
+            let key = 0;
+            let maxCountLine = 1;
+            for (const n of arrFields) {
+              const item = params.value.tabs[i].fields.find(
+                (t: any) => t.field === n
+              );
+              let itemValue: any;
+              if (item.field.indexOf(".") !== -1) {
+                itemValue = getField(v, item);
               } else {
-                itemValue = v[item.field];
+                if (item.fn !== undefined) {
+                  itemValue = item.fn(v[item.field], v);
+                } else {
+                  itemValue = v[item.field];
+                }
               }
+              arr[key] = getData(itemValue);
+              if (arr[key].length > maxCountLine) {
+                maxCountLine = arr[key].length;
+              }
+              key++;
             }
-            arr[key] = getData(itemValue);
-            if (arr[key].length > maxCountLine) {
-              maxCountLine = arr[key].length;
-            }
-            key++;
+            rows.push({
+              line: arr,
+              maxCountLine
+            });
           }
-          rows.push({
-            line: arr,
-            maxCountLine
+          data.push({
+            columns,
+            rows,
+            name: params.value.tabs[i].name
           });
-        }
-        data.push({
-          columns,
-          rows,
-          name: params.value.tabs[i].name
-        });
-    }
-    viewExel(data);
+      }
+      viewExel(data);
   }
   const viewExel = (data: any): any => {
     const name = params.value.name;

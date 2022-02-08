@@ -26,9 +26,12 @@ import { FILTER_DISPATCH } from "./store/filters";
 const ListOfFiltersTemplate  = defineComponent({
   setup() {
     const store = useStore();
-    const selfFilters = reactive<Data[]>([]);
+    
     const filters = computed(() => store.state.filters.filters);
     const model = computed(() => store.state.filters.model);
+
+    const selfFilters = reactive<Data[]>([]);
+
     const setQuickSearch = (data: any) => store.dispatch(FILTER_DISPATCH.SET_QUICK_SEARCH, data);
 
     onMounted(() => {

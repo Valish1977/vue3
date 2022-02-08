@@ -7,7 +7,6 @@ import { Data } from "@/enums/enum_other";
 
 export default class OrderApi {
 public static async getItems(query: any) {
-  console.log(query);
   const items = await AxiosService.Instance.axios.get("/api/order" + query.filters, { headers: { Prefer: "count=exact" } }).then(
     (response: any) => {
       if (response.status === 200 || response.status === 206) {

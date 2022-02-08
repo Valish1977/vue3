@@ -34,16 +34,16 @@ import { FILTER_DISPATCH, FILTER_GETTERS, FILTER_REFERENCE } from "./store/filte
 const CompSelect = defineComponent({
   props: {
      setName: {
-      type: String,
-      default: 0
+      type: Object,
+      default: null
     },
     setValue: {
       type: Object,
-      default: 0
+      default: null
     },
     setIndex: {
       type: Number,
-      default: null
+      default: 0
     },
     setParam: {
       type: Object,
@@ -52,13 +52,20 @@ const CompSelect = defineComponent({
   },
   setup(props, {emit}){
     const store = useStore();
-    const referencesArr = reactive<Data[]>([]);
-    const fieldText = ref(props.setValue);
+    
     const referenceFromStore = computed(() => store.getters[FILTER_GETTERS.REFERENCE](props.setParam.reference));
+
+    const fieldText = ref(props.setValue);
+
+    const reference = reactive<Data[]>([]);
+
+
     const setReference = (data: any) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
     const setReferenceItems = (data: any) => store.dispatch(FILTER_DISPATCH.SET_ITEMS, data);
-    const reference = reactive<Data[]>([]);
-    const param = <Data>{
+
+
+    
+    const param: Data = {
       placeholder: "",
       reference: "",
       key: "id",
@@ -88,7 +95,7 @@ const CompSelect = defineComponent({
       if (Array.isArray(ref)) {
         reference.push(...ref);
       } else {
-        if ( referenceFromStore === undefined ) {
+        if ( referenceFromStore.value === undefined ) {
           // обязательная проверка на создание справочника в store (без нее влетаем в цикл)
           setReference({ name: ref });
         }

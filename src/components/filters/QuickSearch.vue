@@ -50,10 +50,8 @@ const QuickSearch = defineComponent({
     const isLoading = computed(() => store.state.filters.isLoading);
     const model = computed(() => store.state.filters.model);
     const setQuickSearch = (data: any) => store.dispatch(FILTER_DISPATCH.SET_QUICK_SEARCH, data);
+    const myForm = reactive<Data>({ name: null });
     let params: Data = {};
-    const myForm = reactive<Data>({
-      name: null
-    });
     const param: Data = {
       placeholder: t("filters.quickSearch.form.name.placeholder")
     };

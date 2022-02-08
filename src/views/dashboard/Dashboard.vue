@@ -122,7 +122,7 @@
           size="mini"
           style="width: 140px"
           plain
-          @click="createExel()"
+          @click="createExcel()"
           >{{ t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
         ></el-button>
       </el-col>
@@ -217,6 +217,7 @@ import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
 import ListChips from "@/components/filters/ListChips.vue";
 import ExportExel from "@/components/excel/ExportExel.vue";
+import { EXCEL_DISPATCH } from '@/components/excel/store/excel';
 
 const Dashboard = defineComponent({
   data() {
@@ -249,6 +250,7 @@ const Dashboard = defineComponent({
     const tableItems = computed(() => OrderDb.query().orderBy("last_Item_flag", "desc").orderBy("name", "asc").get().map((item: OrderDb) => item.$toJson));
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     const orderStatusRef = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
+
     const {getDateTime, getDate} = dateConvert();
     const btnText = ref("");
     

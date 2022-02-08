@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <el-form v-if="selfCondition.component" ref="myForm" :model="myForm" @submit.prevent.native="search()">
+    <el-form v-if="selfCondition.component" ref="myForm" :model="myForm" @submit.prevent="search()">
       <el-form-item
         style="margin-bottom:0"
         prop="name"
@@ -20,7 +20,7 @@
           <el-select
             v-model="fieldIndex"
             @change="
-              selfCondition = Object.assign({}, filterList[fieldIndex]);
+              setDataToObject(selfCondition, Object.assign({}, filterList[fieldIndex]));
               changeValue = ''
             "
             style="width:100%"
@@ -34,7 +34,7 @@
             ></el-option>
           </el-select>
         </el-col>
-            <el-col  :span="$store.getters['app/windowWidth'] < 768 ? 15 : 10">
+            <el-col  :span="windowWidth < 768 ? 15 : 10">
               <el-form-item  style="margin-bottom: 5px">
                 <component
                   @getDataField="changeField"
@@ -44,12 +44,12 @@
                 ></component>
               </el-form-item>
             </el-col>
-            <el-col :span="$store.getters['app/windowWidth'] < 768 ? 5 : 2">
+            <el-col :span="windowWidth < 768 ? 5 : 2">
               <el-button
                   plain
                   type="info"
                   :disabled="isLoading"
-                  @click.native="searchFn()"
+                  @click="searchFn()"
               >{{$t("filters.quickSearch.form.send")}}</el-button>
             </el-col>
           </el-row>
@@ -59,57 +59,165 @@
 </template>
 
 <script lang='ts'>
-import { mapState, mapActions, mapGetters } from "vuex";
-import { ACTIONS, GETTERS } from "@/components/filters/store/filters";
-import { Component, Prop, Watch, Vue } from "vue-property-decorator";
-import CompDate from "@/components/filters/CompDate.vue";
-import CompInput from "@/components/filters/CompInput.vue";
-import CompNumber from "@/components/filters/CompNumber.vue";
-import CompSelect from "@/components/filters/CompSelect.vue";
-import CompSelectCs from "@/components/filters/CompSelectCs.vue";
-import CompBool from "@/components/filters/CompBool.vue";
-@Component({
-  components: {
-    CompDate,
-    CompInput,
-    CompNumber,
-    CompSelect,
-    CompSelectCs,
-    CompBool
+import { useStore } from "vuex";
+import { defineComponent } from "@vue/runtime-core";
+import { FILTER_DISPATCH } from "./store/filters";
+import { Data } from "@/enums/enum_other";
+import { useI18n } from "vue-i18n";
+import { computed, onMounted, reactive, ref } from "vue";
+import { APP_GETTERS } from "@/store/modules/app";
+
+const SeparatedSearch = defineComponent({
+  props: {
+    setParam: {
+      type: Object,
+      default: null
+    }
   },
-  computed: {
-    ...mapState("filters", ["model", "isLoading"])
-  },
-  methods: {
-    ...mapActions("filters", {
-      setQuickSearch: ACTIONS.SET_QUICK_SEARCH // делаем поисковый запрос
-    })
-  }
-})
-export default class SeparatedSearch extends Vue {
-  @Prop({ default: null })
-  public setParam: any;
-  private param: any;
-  private myForm: any;
-  private validateInput: any;
-  private filterList: any = [];
-  private selfCondition: any = {};
-  private fieldIndex: number = 0;
-  private setQuickSearch: any;
-  private isLoading: any;
-  private changeValue: string = "";
-  private model: any;
-  constructor() {
-    super();
-    this.myForm = {
-      name: null
+  setup(props) {
+    const store = useStore();
+    const { t } = useI18n();
+
+    const isLoading = computed(() => store.state.filters.isLoading);
+    const model = computed(() => store.state.filters.model);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+
+    const changeValue = ref("");
+    const fieldIndex = ref(0);
+
+    const filterList = reactive<Data[]>([]);
+    const selfCondition = reactive<Data>({});
+    const myForm = reactive<Data>({name: null});
+
+    const setQuickSearch = (arr: Data) => store.dispatch(FILTER_DISPATCH.SET_QUICK_SEARCH, arr);
+
+    const param: Data = {
+      placeholder: t("filters.quickSearch.form.name.placeholder")
     };
-  }
-  private created(): void {
-    this.param = {
-      placeholder: this.$t("filters.quickSearch.form.name.placeholder")
-    };
-    this.validateInput = (rule, value, callback) => {
+    
+    onMounted(() => {
+      fieldIndex.value = 0;
+      filterList.splice(0, filterList.length);
+      getQuickSearch();
+      for (const v in model.value) {
+        if ( isIssetSeparatedField(v) ) {
+          const condition: any = {};
+          if (Array.isArray(model.value[v].separateField)) {
+            for (const i in model.value[v].separateField) {
+              if (model.value[v].separateField[i] !== undefined) {
+                const item = setCondition(v, parseInt(i, 10), filterList.length);
+                filterList.push(item);
+              }
+            }
+          } else {
+            filterList.push(setCondition(v, 0, filterList.length));
+          }
+        }
+      }
+      setDataToObject(selfCondition, Object.assign({}, filterList[fieldIndex.value]));
+    });
+
+    const getQuickSearch = () => {
+      let quickSearch: any = null;
+      for (const v in model.value) {
+        if (model.value[v].quickSearch) {
+          quickSearch = {
+            quickSearch: true,
+            selected: true,
+            component: "CompInput",
+            filter: null,
+            key: 0,
+            name: "",
+            compParam: {placeholder: ""}
+          };
+          if (model.value[v].quickSearch.params) {
+            quickSearch.compParam = model.value[v].quickSearch.params;
+            if (model.value[v].quickSearch.params.name) {
+              quickSearch.name = model.value[v].quickSearch.params.name;
+            }
+          }
+        }
+      }
+      if ( quickSearch ) {
+        filterList.push(quickSearch);
+      }
+    }
+    const setCondition = (v: string, num: number, key: number) => {
+      let item: any;
+      if (Array.isArray(model.value[v].separateField)) {
+        item = model.value[v].separateField[num];
+      } else {
+        item = model.value[v].separateField;
+      }
+      const condition: any = {};
+      condition.filter = model.value[v];
+      if (model.value[v].value !== undefined) {
+        condition.value = model.value[v].value;
+      } else {
+        condition.value = undefined;
+      }
+      condition.component = model.value[v].component;
+      condition.compParam = model.value[v].params;
+      condition.field = v;
+      condition.condition = item.condition;
+      condition.name = item.name;
+      condition.key = key;
+      if (item.selected) {
+        fieldIndex.value = key;
+      }
+      return condition;
+    }
+
+    const searchFn = (): any => {
+      if (changeValue.value === ""  || changeValue.value === null) {
+        return;
+      }
+      const arr: any = [];
+      if (selfCondition.quickSearch) {
+        // если поле быстрого поиска
+        for (const v in model.value) {
+          if (model.value[v] !== undefined) {
+            let val: any = changeValue.value;
+            if (model.value[v].component === "CompNumber") {
+              val = Number(changeValue.value);
+              if (!Number.isFinite(val)) {
+                continue;
+              }
+            }
+            if (model.value[v].quickSearch) {
+              arr.push({
+                operation: "or",
+                condition: model.value[v].quickSearch.condition,
+                filter: model.value[v].key,
+                component: model.value[v].component,
+                value: val
+              });
+            }
+          }
+        }
+      } else {
+        let val: any = Number(changeValue.value);
+        if (!Number.isFinite(val)) {
+          val = changeValue.value;
+        }
+        arr.push({
+          operation: "and",
+          condition: selfCondition.condition,
+          filter: selfCondition.filter.key,
+          component: selfCondition.component,
+          value: val
+        });
+      }
+      if (arr.length > 0) {
+        setQuickSearch(arr);
+      }
+    }
+    const setDataToObject = (object: Data, newData: Data) => {
+      Object.keys(object).forEach((key: string) => delete object[key]);
+      Object.keys(newData).forEach((key: string) => object[key] = newData[key]);
+    }
+
+    const validateInput = (rule: any, value: any, callback: (v?: any) => any) => {
       if (value === undefined || value === null || value === "") {
         callback();
         return true;
@@ -118,160 +226,58 @@ export default class SeparatedSearch extends Vue {
       value = value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
       if (!regex.test(value)) {
         callback(
-          new Error(this.$t("filters.quickSearch.form.name.error1") as string)
+          new Error(t("filters.quickSearch.form.name.error1"))
         );
         return true;
       }
     };
-  }
-  private isIssetSeparatedField(v: string) {
-    if ( this.model[v] !== undefined &&
-    this.model[v].separateField &&
-    ((Array.isArray(this.model[v].separateField) && this.model[v].separateField.length > 0) ||
-    this.model[v].separateField.condition )) {
-      return true;
+    const isIssetSeparatedField = (v: string) => {
+      if ( model.value[v] !== undefined &&
+      model.value[v].separateField &&
+      ((Array.isArray(model.value[v].separateField) && model.value[v].separateField.length > 0) ||
+      model.value[v].separateField.condition )) {
+        return true;
+      }
+      return false;
     }
-    return false;
-  }
-  private mounted(): void {
-    this.fieldIndex = 0;
-    this.filterList = [];
-    this.getQuickSearch();
-    for (const v in this.model) {
-      if ( this.isIssetSeparatedField(v) ) {
-        const condition: any = {};
-        if (Array.isArray(this.model[v].separateField)) {
-          for (const i in this.model[v].separateField) {
-            if (this.model[v].separateField[i] !== undefined) {
-              const item = this.setCondition(v, parseInt(i, 10), this.filterList.length);
-              this.filterList.push(item);
-            }
-          }
-        } else {
-          this.filterList.push(this.setCondition(v, 0, this.filterList.length));
+    const changeField = (obj: any): void => {
+      const str = obj.value ? obj.value.toString() : "";
+      changeValue.value = str.replace(
+          /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
+          ""
+        );
+    }
+    const typeСast = (v: any) => {
+      if (typeof v === "string") {
+        if (!!(parseFloat(v) % 1) && v.toString() === parseFloat(v).toString()) {
+          return parseFloat(v);
+        }
+        if (!(parseFloat(v) % 1) && v.toString() === parseInt(v, 10).toString()) {
+          return parseInt(v, 10);
         }
       }
+      return v;
     }
-    this.selfCondition = Object.assign({}, this.filterList[this.fieldIndex]);
-  }
-  private getQuickSearch() {
-    let quickSearch: any = null;
-    for (const v in this.model) {
-      if (this.model[v].quickSearch) {
-        quickSearch = {
-          quickSearch: true,
-          selected: true,
-          component: "CompInput",
-          filter: null,
-          key: 0,
-          name: "",
-          compParam: {placeholder: ""}
-        };
-        if (this.model[v].quickSearch.params) {
-          quickSearch.compParam = this.model[v].quickSearch.params;
-          if (this.model[v].quickSearch.params.name) {
-            quickSearch.name = this.model[v].quickSearch.params.name;
-          }
-        }
+    const compParam = (name: string): any => {
+      if (props.setParam[name] === undefined) {
+        return param[name];
       }
+      return props.setParam[name];
     }
-    if ( quickSearch ) {
-      this.filterList.push(quickSearch);
-    }
-  }
-  private setCondition(v: string, num: number, key: number) {
-    let item: any;
-    if (Array.isArray(this.model[v].separateField)) {
-      item = this.model[v].separateField[num];
-    } else {
-      item = this.model[v].separateField;
-    }
-    const condition: any = {};
-    condition.filter = this.model[v];
-    if (this.model[v].value !== undefined) {
-      condition.value = this.model[v].value;
-    } else {
-      condition.value = undefined;
-    }
-    condition.component = this.model[v].component;
-    condition.compParam = this.model[v].params;
-    condition.field = v;
-    condition.condition = item.condition;
-    condition.name = item.name;
-    condition.key = key;
-    if (item.selected) {
-      this.fieldIndex = key;
-    }
-    return condition;
-  }
-
-  private searchFn(): any {
-    if (this.changeValue === ""  || this.changeValue === null) {
-      return;
-    }
-    const arr: any = [];
-    if (this.selfCondition.quickSearch) {
-      // если поле быстрого поиска
-      for (const v in this.model) {
-        if (this.model[v] !== undefined) {
-          let val: any = this.changeValue;
-          if (this.model[v].component === "CompNumber") {
-            val = Number(this.changeValue);
-            if (!Number.isFinite(val)) {
-              continue;
-            }
-          }
-          if (this.model[v].quickSearch) {
-            arr.push({
-              operation: "or",
-              condition: this.model[v].quickSearch.condition,
-              filter: this.model[v].key,
-              component: this.model[v].component,
-              value: val
-            });
-          }
-        }
-      }
-    } else {
-      let val: any = Number(this.changeValue);
-      if (!Number.isFinite(val)) {
-        val = this.changeValue;
-      }
-      arr.push({
-        operation: "and",
-        condition: this.selfCondition.condition,
-        filter: this.selfCondition.filter.key,
-        component: this.selfCondition.component,
-        value: val
-      });
-    }
-    if (arr.length > 0) {
-      this.setQuickSearch(arr);
+    return {
+      setDataToObject,
+      filterList,
+      fieldIndex,
+      selfCondition,
+      windowWidth,
+      validateInput,
+      changeValue,
+      changeField,
+      isLoading,
+      myForm,
+      searchFn
     }
   }
-  private changeField(obj: any): void {
-    const str = obj.value ? obj.value.toString() : "";
-    this.changeValue = str.replace(
-        /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,
-        ""
-      );
-  }
-  private compParam(name: string): any {
-    if (this.setParam[name] === undefined) {
-      return this.param[name];
-    }
-    return this.setParam[name];
-  }
-  private typeСast(v: any) {
-    if (typeof v === "string") {
-      if (!!(parseFloat(v) % 1) && v.toString() === parseFloat(v).toString()) {
-        return parseFloat(v);
-      }
-      if (!(parseFloat(v) % 1) && v.toString() === parseInt(v, 10).toString()) {
-        return parseInt(v, 10);
-      }
-    }
-    return v;
-  }
-}
+});
+export default SeparatedSearch;
 </script>

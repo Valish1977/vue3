@@ -34,14 +34,17 @@ const CompNumber = defineComponent({
     }
   },
   setup(props, {emit}){
-    const param = <Data>{
+
+    const fieldText = ref<number>(props.setValue);
+
+    const param: Data = {
       placeholder: "",
       min: 0,
       max: 100,
       precision: 1,
       step: 1
     };
-    const fieldText = ref(props.setValue);
+    
     onUpdated(() => {
       emit("beforeUpdate", props.setIndex);
     });

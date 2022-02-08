@@ -12,7 +12,7 @@
 </template>
 <script lang="ts">
 import { Data } from "@/enums/enum_other";
-import { defineComponent, onMounted, onUpdated, reactive, ref, watch } from "vue";
+import { defineComponent, onMounted, onUpdated, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const CompDate = defineComponent({
@@ -33,11 +33,12 @@ const CompDate = defineComponent({
   setup(props, {emit}){
 
   const { t } = useI18n();
-    const param = <Data>{
+    const param: Data = {
       placeholder: ""
     };
 
-    const fieldText = ref(props.setValue);
+    const fieldText = ref<string>(props.setValue);
+
     onUpdated(() => {
       emit("beforeUpdate", props.setIndex);
     });

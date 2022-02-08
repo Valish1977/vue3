@@ -29,11 +29,12 @@ const CompInput = defineComponent({
     }
   },
   setup(props, {emit}){
-    const param = <Data>{
+    const param: Data = {
       placeholder: ""
     };
 
-    const fieldText = ref(props.setValue);
+    const fieldText = ref<string>(props.setValue);
+    
     onUpdated(() => {
       emit("beforeUpdate", props.setIndex);
     });

@@ -32,7 +32,10 @@ const CompBool = defineComponent({
   },
   setup(props, {emit}){
     const { t } = useI18n();
-    const param = <Data>{
+
+    const fieldText = ref<number>(props.setValue ? 1 : 2);
+
+    const param: Data = {
       placeholder: "",
       reference: ""
     };
@@ -40,7 +43,7 @@ const CompBool = defineComponent({
       { id: 1, name: t("filters.components.CompBool.true") },
       { id: 2, name: t("filters.components.CompBool.false") }
     ]);
-    const fieldText = ref(props.setValue ? 1 : 2);
+    
     onUpdated(() => {
       emit("beforeUpdate", props.setIndex);
       setupReference();
