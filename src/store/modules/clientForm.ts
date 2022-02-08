@@ -231,7 +231,7 @@ export default {
       commit(SET_FTS, new Date().getTime().toString());
       commit(SET_LOADING, false);
     },
-    async [ACTIONS.LOAD]({ state, getters, commit, rootGetters }: any, data: any) {
+    async [ACTIONS.LOAD]({ state, getters, commit, rootGetters }: any, data?: any) {
       if (state.isLoading || state.origin !== null) {
         return;
       }
@@ -274,7 +274,7 @@ export default {
       );
       commit(SET_SAVING, false);
     },
-    async [ACTIONS.SAVE]({ dispatch, state, getters, commit }: any, data: Data | null = null ) {
+    async [ACTIONS.SAVE]({ dispatch, state, getters, commit }: any, data?: Data ) {
       // в data передается либо объект, либо id, либо ничего
       // в случае передачи обекта, в ОРМ запишутся данные слияния результата формы и переданного объекта,
       // при этом данные объекта перекроют данные формы (т.е. данные переданного объекта будут иметь приоритет)
@@ -283,7 +283,7 @@ export default {
       }
       commit(SET_SAVING, true);
       let result = {};
-      if (data === null) {
+      if (!data) {
         result = getData(getters[GETTERS.ITEMS]);
       } else if (typeof data !== "object") {
         result = Object.assign(getData(getters[GETTERS.ITEMS]), { [state.primary_key]: getData(data) });

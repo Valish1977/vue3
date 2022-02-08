@@ -9,7 +9,8 @@ export enum APP_BUS_STATE {
     MODIFY_SEARCH_FORM_FIELD = "modifySearchFormFields",
     MORE_OFFERS = "moreOffers",
     SET_DATA_FORM = "setDataForm",
-    INSTANT_QUOTE = "instantQuote"
+    INSTANT_QUOTE = "instantQuote",
+    CLEAR_MARKDOWN = "clearMarkDown"
   }
   export enum APP_DISPATCH {
       SET_LOADING = 'app/setLoading',

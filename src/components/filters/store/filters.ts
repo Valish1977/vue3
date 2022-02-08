@@ -54,7 +54,9 @@ export const FILTER_REFERENCE = {
     BEDROOM: "ref_bedroom",
     GUEST: "ref_guest",
     SORT_BY: "ref_sortBy",
-    ORDER_STATUS: "ref_order_status"
+    ORDER_TYPE: "ref_order_type",
+    ORDER_STATUS: "ref_order_status",
+    CHANGED_FORM: "ref_charged_from"
 }
 
 /*
@@ -90,6 +92,8 @@ export default {
             [FILTER_REFERENCE.STATE]: [],
             [FILTER_REFERENCE.COUNTRY]: [],
             [FILTER_REFERENCE.ORDER_STATUS]: [],
+            [FILTER_REFERENCE.ORDER_TYPE]: [],
+            [FILTER_REFERENCE.CHANGED_FORM]: [],
             [FILTER_REFERENCE.BEDROOM]: [
                 "All Bedrooms",
                 "Studio",
