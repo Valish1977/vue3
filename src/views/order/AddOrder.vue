@@ -1165,6 +1165,7 @@ const AddOrder = defineComponent({
       modifyFn,
       isChanged,
       isLoading,
+      componentIsLoading,
       isSaving,
       isVisible,
 
