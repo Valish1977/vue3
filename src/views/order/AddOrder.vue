@@ -28,7 +28,7 @@
                       >
                         <el-rate
                           :max="3"
-                          :value="myForm.priority_lvl"
+                          :model-value="myForm.priority_lvl"
                           :colors="colorsRate"
                           @change="
                             (value) =>
@@ -46,7 +46,7 @@
                     <el-form-item prop="touch_up" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :value="myForm.touch_up"
+                        :model-value="myForm.touch_up"
                         @change="
                           (value) =>
                             modifyFn({
@@ -69,13 +69,14 @@
                         :content="$t('Order.form.next_arrival_dt.placeholder')"
                         placement="top-end"
                         effect="light"
-                        :show-after="500"
                       >
+                      <div style="width: 100%">
                         <el-date-picker
                           type="datetime"
-                          :picker-options="pickerOptionsNextArrival"
+                          :shortcuts="shortcuts"
+                          :disabledDate="disabledDate"
                           style="width: 100%"
-                          :value="myForm.next_arrival_dt"
+                          :model-value="myForm.next_arrival_dt"
                           :placeholder="
                             $t('Order.form.next_arrival_dt.placeholder')
                           "
@@ -96,6 +97,7 @@
                               })
                           "
                         ></el-date-picker>
+                      </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -106,7 +108,7 @@
                     <el-form-item prop="owner_arrival" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :value="myForm.owner_arrival"
+                        :model-value="myForm.owner_arrival"
                         @change="
                           (value) =>
                             modifyFn({
@@ -135,7 +137,7 @@
                         <el-select
                           filterable
                           style="width: 100%"
-                          :value="myForm.order_type_id"
+                          :model-value="myForm.order_type_id?? ''"
                           :placeholder="
                             $t('Order.form.order_type_id.placeholder')
                           "
@@ -170,7 +172,7 @@
                         <el-select
                           filterable
                           style="width: 100%"
-                          :value="myForm.charged_from_id"
+                          :model-value="myForm.charged_from_id?? ''"
                           :placeholder="
                             $t('Order.form.charged_from_id.placeholder')
                           "
@@ -205,11 +207,12 @@
                         effect="light"
                         :show-after="500"
                       >
+                      <div style="width: 100%">
                         <el-date-picker
                           type="datetime"
-                          :picker-options="pickerOptionsSheduled"
+                          :shortcuts="shortcuts"
                           style="width: 100%"
-                          :value="myForm.scheduled_dt"
+                          :model-value="myForm.scheduled_dt"
                           :placeholder="
                             $t('Order.form.scheduled_dt.placeholder')
                           "
@@ -230,6 +233,7 @@
                               })
                           "
                         ></el-date-picker>
+                      </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -244,9 +248,10 @@
                         effect="light"
                         :show-after="500"
                       >
+                      <div style="width: 100%">
                         <el-date-picker
                           style="width: 100%"
-                          :value="myForm.due_date"
+                          :model-value="myForm.due_date"
                           :placeholder="$t('Order.form.due_date.placeholder')"
                           :format="
                             $t('filters.components.CompDate.formatTemplate')
@@ -262,6 +267,7 @@
                               })
                           "
                         ></el-date-picker>
+                      </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -274,7 +280,7 @@
                     <el-form-item prop="third_company" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :value="myForm.third_company"
+                        :model-value="myForm.third_company"
                         @change="
                           (value) =>
                             modifyFn({
@@ -311,7 +317,7 @@
                           reserve-keyword
                           :remote-method="workerSearch"
                           style="width: 100%"
-                          :value="myForm.worker_id"
+                          :model-value="myForm.worker_id"
                           :placeholder="$t('Order.form.worker_id.placeholder')"
                           :loading="workerIdLoading"
                           @change="(value) => modifyWorker(value)"
@@ -354,7 +360,7 @@
                           reserve-keyword
                           :remote-method="thirdCompanySearch"
                           style="width: 100%"
-                          :value="myForm.third_company_id"
+                          :model-value="myForm.third_company_id"
                           :placeholder="
                             $t('Order.form.third_company_id.placeholder')
                           "
@@ -399,7 +405,7 @@
                           reserve-keyword
                           :remote-method="propertySearch"
                           style="width: 100%"
-                          :value="myForm.property_id"
+                          :model-value="myForm.property_id"
                           :placeholder="$t('Order.form.property_id.placeholder')"
                           :loading="propertyIdLoading"
                           @change="
@@ -439,7 +445,7 @@
                           style="width: 100%"
                           clearable
                           :placeholder="$t('Order.form.entry_code.placeholder')"
-                          :value="myForm.entry_code"
+                          :modelValue="myForm.entry_code"
                           @input="
                             (value) =>
                               modifyFn({
@@ -588,7 +594,7 @@
                     <el-form-item prop="canceled" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :value="myForm.canceled"
+                        :model-value="myForm.canceled"
                         @change="
                           (value) =>
                             modifyFn({
@@ -607,7 +613,7 @@
                     <el-form-item prop="completed" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :value="myForm.completed"
+                        :model-value="myForm.completed"
                         @change="
                           (value) =>
                             modifyFn({
@@ -640,12 +646,12 @@
                         effect="light"
                         :show-after="500"
                       >
-                        <!-- TODO: snippet DateTime правильное использование -->
+                        <div style="width: 100%">
                         <el-date-picker
                           type="datetime"
-                          :picker-options="pickerOptionsDone"
+                          :shortcuts="shortcuts"
                           style="width: 100%"
-                          :value="myForm.done_dt"
+                          :model-value="myForm.done_dt"
                           :placeholder="
                             myForm.canceled
                               ? $t('Order.form.done_dt.placeholder')
@@ -668,6 +674,7 @@
                               })
                           "
                         ></el-date-picker>
+                        </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -696,7 +703,7 @@
                   style="width: 100%"
                   clearable
                   :placeholder="$t('Access.form.manager.placeholder')"
-                  :value="myForm.manager"
+                  :modelValue="myForm.manager"
                   @input="
                     (value) =>
                       modifyFn(
@@ -728,7 +735,7 @@
                 <el-input
                   clearable
                   :placeholder="$t('Access.form.change_comment.placeholder')"
-                  :value="myForm.change_comment"
+                  :modelValue="myForm.change_comment"
                   @input="
                     (value) =>
                       modifyFn({
@@ -916,22 +923,11 @@ const AddOrder = defineComponent({
       },
     ];
 
-    const pickerOptionsNextArrival = {
-      disabledDate(time: any) {
-        const date = new Date();
-        date.setTime(date.getTime() - 3600 * 1000 * 24);
-        return time.getTime() < date.getTime();
-      },
-      shortcuts,
-    };
-    const pickerOptionsSheduled = {
-      shortcuts,
-    };
-    const pickerOptionsDone = {
-      shortcuts,
-    };
-
-    // настройка для календаря
+    const disabledDate = (time: any) => {
+      const date = new Date();
+      date.setTime(date.getTime() - 3600 * 1000 * 24);
+      return time.getTime() < date.getTime();
+    }
 
     params.countDays =
       (windowWidth.value -
@@ -1168,14 +1164,13 @@ const AddOrder = defineComponent({
       isSaving,
       isVisible,
       defaultTime,
+      shortcuts,
+      disabledDate,
 
       refChargedFrom,
       refOrderType,
       
       colorsRate,
-      pickerOptionsNextArrival,
-      pickerOptionsSheduled,
-      pickerOptionsDone,
     
       property,
       propertyIdItemsList,
