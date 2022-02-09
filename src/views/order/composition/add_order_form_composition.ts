@@ -57,7 +57,7 @@ const addOrderFormComposition = (
             });
             return false;
           }
-          let setOrderStatus: number = 1;
+          let setOrderStatus = 1;
           myForm.value.order_status_id = 1;
           if (
             myForm.value.third_company === null ||

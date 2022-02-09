@@ -29,7 +29,10 @@ const ACTIONS = {
 public const
 */
 export const ORDER_FORM_STATE = {
-  TYPE: `${ORDER_FORM_STORE_NAME}/type`
+  TYPE: `${ORDER_FORM_STORE_NAME}/type`,
+  IS_LOADING: `${ORDER_FORM_STORE_NAME}/isLoading`,
+  IS_SAVING: `${ORDER_FORM_STORE_NAME}/isSaving`,
+  IS_VISIBLE: `${ORDER_FORM_STORE_NAME}/isVisible`
 }
 export const ORDER_FORM_DISPATCH = {
   CLOSE: `${ORDER_FORM_STORE_NAME}/${ACTIONS.CLOSE}`,

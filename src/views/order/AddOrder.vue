@@ -6,7 +6,7 @@
     :rules="rules"
     label-position="top"
     status-icon
-    v-loading="isLoading || isSaving || selfLoading"
+    v-loading="isLoading || isSaving || componentIsLoading"
   >
     <div v-if="isVisible" class="drawer-body">
       <el-row>
@@ -31,7 +31,10 @@
                           :colors="colorsRate"
                           @change="
                             (event) =>
-                              modifyFn({ name: 'priority_lvl', data: event.target.value })
+                              modifyFn({
+                                name: 'priority_lvl',
+                                data: event.target.value,
+                              })
                           "
                         >
                         </el-rate>
@@ -44,12 +47,13 @@
                         style="width: 100%"
                         :value="myForm.touch_up"
                         @change="
-                            (event) =>
-                              modifyFn({ name: 'touch_up', data: event.target.value })
-                          "
-                        >{{
-                          t("Order.form.touch_up.placeholder")
-                        }}</el-checkbox
+                          (event) =>
+                            modifyFn({
+                              name: 'touch_up',
+                              data: event.target.value,
+                            })
+                        "
+                        >{{ t("Order.form.touch_up.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -85,7 +89,10 @@
                           default-time="12:00:00"
                           @input="
                             (event) =>
-                              modifyFn({ name: 'next_arrival_dt', data: event.target.value })
+                              modifyFn({
+                                name: 'next_arrival_dt',
+                                data: event.target.value,
+                              })
                           "
                         ></el-date-picker>
                       </el-tooltip>
@@ -99,8 +106,12 @@
                       <el-checkbox
                         style="width: 100%"
                         :value="myForm.owner_arrival"
-                        @change="(event) =>
-                              modifyFn({ name: 'owner_arrival', data: event.target.value })
+                        @change="
+                          (event) =>
+                            modifyFn({
+                              name: 'owner_arrival',
+                              data: event.target.value,
+                            })
                         "
                         >{{
                           t("Order.form.owner_arrival.placeholder")
@@ -127,8 +138,12 @@
                           :placeholder="
                             t('Order.form.order_type_id.placeholder')
                           "
-                          @change="(event) =>
-                              modifyFn({ name: 'order_type_id', data: event.target.value })
+                          @change="
+                            (event) =>
+                              modifyFn({
+                                name: 'order_type_id',
+                                data: event.target.value,
+                              })
                           "
                         >
                           <el-option
@@ -158,8 +173,12 @@
                           :placeholder="
                             t('Order.form.charged_from_id.placeholder')
                           "
-                          @change="(event) =>
-                              modifyFn({ name: 'charged_from_id', data: event.target.value })
+                          @change="
+                            (event) =>
+                              modifyFn({
+                                name: 'charged_from_id',
+                                data: event.target.value,
+                              })
                           "
                         >
                           <el-option
@@ -202,8 +221,12 @@
                             )
                           "
                           default-time="12:00:00"
-                          @input="(event) =>
-                              modifyFn({ name: 'scheduled_dt', data: event.target.value })
+                          @input="
+                            (event) =>
+                              modifyFn({
+                                name: 'scheduled_dt',
+                                data: event.target.value,
+                              })
                           "
                         ></el-date-picker>
                       </el-tooltip>
@@ -228,12 +251,14 @@
                             t('filters.components.CompDate.formatTemplate')
                           "
                           :value-format="
-                            t(
-                              'filters.components.CompDate.formatTemplateValue'
-                            )
+                            t('filters.components.CompDate.formatTemplateValue')
                           "
-                          @input="(event) =>
-                              modifyFn({ name: 'due_date', data: event.target.value })
+                          @input="
+                            (event) =>
+                              modifyFn({
+                                name: 'due_date',
+                                data: event.target.value,
+                              })
                           "
                         ></el-date-picker>
                       </el-tooltip>
@@ -249,8 +274,12 @@
                       <el-checkbox
                         style="width: 100%"
                         :value="myForm.third_company"
-                        @change="(event) =>
-                              modifyFn({ name: 'third_company', data: event.target.value })
+                        @change="
+                          (event) =>
+                            modifyFn({
+                              name: 'third_company',
+                              data: event.target.value,
+                            })
                         "
                         >{{
                           t("Order.form.third_company.placeholder")
@@ -313,9 +342,7 @@
                       prop="third_company_id"
                     >
                       <el-tooltip
-                        :content="
-                          t('Order.form.third_company_id.placeholder')
-                        "
+                        :content="t('Order.form.third_company_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -327,9 +354,13 @@
                           :remote-method="thirdCompanySearch"
                           style="width: 100%"
                           :value="myForm.third_company_id"
-                          :placeholder="t('Order.form.third_company_id.placeholder')"
+                          :placeholder="
+                            t('Order.form.third_company_id.placeholder')
+                          "
                           :loading="thirdCompanyIdLoading"
-                          @change="(event) => modifyThirdCompany(event.target.value)"
+                          @change="
+                            (event) => modifyThirdCompany(event.target.value)
+                          "
                         >
                           <el-option
                             v-for="item in thirdCompanyIdItemsList"
@@ -339,9 +370,8 @@
                           >
                             <span style="float: left; padding-top: 7px"
                               ><span
-                                :data-letters="
-                                  item.sname[0].toUpperCase()
-                                ">{{ item.sname }}</span
+                                :data-letters="item.sname[0].toUpperCase()"
+                                >{{ item.sname }}</span
                               ></span
                             >
                           </el-option>
@@ -369,11 +399,11 @@
                           :remote-method="propertySearch"
                           style="width: 100%"
                           :value="myForm.property_id"
-                          :placeholder="
-                            t('Order.form.property_id.placeholder')
-                          "
+                          :placeholder="t('Order.form.property_id.placeholder')"
                           :loading="propertyIdLoading"
-                          @change="(event) => modifyProperty(event.target.value)"
+                          @change="
+                            (event) => modifyProperty(event.target.value)
+                          "
                         >
                           <el-option
                             v-for="item in propertyIdItemsList"
@@ -409,8 +439,12 @@
                           clearable
                           :placeholder="t('Order.form.entry_code.placeholder')"
                           :value="myForm.entry_code"
-                          @input="(event) =>
-                              modifyFn({ name: 'entry_code', data: event.target.value })
+                          @input="
+                            (event) =>
+                              modifyFn({
+                                name: 'entry_code',
+                                data: event.target.value,
+                              })
                           "
                           @change="
                             modifyFn(
@@ -554,12 +588,14 @@
                       <el-checkbox
                         style="width: 100%"
                         :value="myForm.canceled"
-                        @change="(event) =>
-                              modifyFn({ name: 'canceled', data: event.target.value })
+                        @change="
+                          (event) =>
+                            modifyFn({
+                              name: 'canceled',
+                              data: event.target.value,
+                            })
                         "
-                        >{{
-                          t("Order.form.canceled.placeholder")
-                        }}</el-checkbox
+                        >{{ t("Order.form.canceled.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -571,8 +607,12 @@
                       <el-checkbox
                         style="width: 100%"
                         :value="myForm.completed"
-                        @change="(event) =>
-                              modifyFn({ name: 'completed', data: event.target.value })
+                        @change="
+                          (event) =>
+                            modifyFn({
+                              name: 'completed',
+                              data: event.target.value,
+                            })
                         "
                         >{{
                           t("Order.form.completed.placeholder")
@@ -619,8 +659,12 @@
                             )
                           "
                           default-time="12:00:00"
-                          @input="(event) =>
-                              modifyFn({ name: 'done_dt', data: event.target.value })
+                          @input="
+                            (event) =>
+                              modifyFn({
+                                name: 'done_dt',
+                                data: event.target.value,
+                              })
                           "
                         ></el-date-picker>
                       </el-tooltip>
@@ -652,10 +696,19 @@
                   clearable
                   :placeholder="t('Access.form.manager.placeholder')"
                   v-model="myForm.manager"
-                  @input="(event) =>
-                              modifyFn({ name: 'manager', data: event.target.value }, 'trim')"
-                  @change="(event) =>
-                              modifyFn({ name: 'manager', data: event.target.value }, 'trim')
+                  @input="
+                    (event) =>
+                      modifyFn(
+                        { name: 'manager', data: event.target.value },
+                        'trim'
+                      )
+                  "
+                  @change="
+                    (event) =>
+                      modifyFn(
+                        { name: 'manager', data: event.target.value },
+                        'trim'
+                      )
                   "
                 ></el-input>
               </el-tooltip>
@@ -675,11 +728,19 @@
                   clearable
                   :placeholder="t('Access.form.change_comment.placeholder')"
                   v-model="myForm.change_comment"
-                  @input="(event) =>
-                              modifyFn({ name: 'change_comment', data: event.target.value })
+                  @input="
+                    (event) =>
+                      modifyFn({
+                        name: 'change_comment',
+                        data: event.target.value,
+                      })
                   "
-                  @change="(event) =>
-                              modifyFn({ name: 'change_comment', data: event.target.value })
+                  @change="
+                    (event) =>
+                      modifyFn({
+                        name: 'change_comment',
+                        data: event.target.value,
+                      })
                   "
                 ></el-input>
               </el-tooltip>
@@ -701,12 +762,7 @@
           size="mini"
           plain
           @click="submitForm(refMyForm)"
-          :disabled="
-            !isChanged ||
-            isLoading ||
-            isSaving ||
-            selfLoading
-          "
+          :disabled="!isChanged || isLoading || isSaving || componentIsLoading"
           >{{ t("Access.saved") }}</el-button
         >
       </div>
@@ -716,491 +772,473 @@
 
 <script lang='ts'>
 import { DateTime, Interval } from "luxon";
-import { mapState, mapActions, mapGetters, mapMutations, useStore } from "vuex";
+import { useStore } from "vuex";
 import { FILTER_DISPATCH } from "@/components/filters/store/filters";
-import MarkdownEditor from "@/components/MarkdownEditor.vue";
-import orderFormComposition from "./composition/order_form_composition"
-import addOrderFormComposition from "./composition/add_order_form_composition"
-
+import orderFormComposition from "./composition/order_form_composition";
+import addOrderFormComposition from "./composition/add_order_form_composition";
 
 import { defineComponent } from "@vue/runtime-core";
-import { computed, onBeforeUpdate, onMounted, onUnmounted, onUpdated, reactive, ref, watch } from "vue";
+import {
+  computed,
+  onBeforeUpdate,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { Data } from "@/enums/enum_other";
 import { APP_GETTERS } from "@/store/modules/app";
+import PropertyApi from "@/domain/api/property";
 
 const AddOrder = defineComponent({
-  components: {
-    MarkdownEditor
-  },
-    setup(props, {emit}) {
-      const store = useStore();
-      const { t } = useI18n();
-      
-      const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
-      const propertyStringLength = computed(() => {
-        if (windowWidth.value >= 2560) {
-          return 3;
-        }
-        if (windowWidth.value >= 1440) {
-          return 4;
-        }
-        if (windowWidth.value >= 1280) {
-          return 5;
-        }
-        if (windowWidth.value >= 768) {
-          return 6;
-        }
-        return 24;
-      });
-      
-      const client = reactive<Data>({});
-      
+  setup(props, { emit }) {
+    const store = useStore();
+    const { t } = useI18n();
 
-      const setReference = (data: any) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
+    const propertyStringLength = computed(() => {
+      if (windowWidth.value >= 2560) {
+        return 3;
+      }
+      if (windowWidth.value >= 1440) {
+        return 4;
+      }
+      if (windowWidth.value >= 1280) {
+        return 5;
+      }
+      if (windowWidth.value >= 768) {
+        return 6;
+      }
+      return 24;
+    });
+    // свойства для календаря
+    const calendarLoading = ref(false);
 
-      const colorsRate: any = ["#99A9BF", "#F7BA2A", "#FF9900"];
-      let lrID: null | string = null;
-      let dtIn: any = null;
-      const params: Data = {
-        countDays: 10,
-        nextStep: 10
-      };
+    const client = reactive<Data>({});
+    const calendarList = reactive<Data[]>([]);
+    const dates = reactive<Data[]>([]);
+    const months = reactive<Data[]>([]);
 
-      const {
-        resetForm,
-        loadForm,
-        closeForm,
-        myForm,
-        refMyForm,
-        rules,
-        componentIsLoading,
-        setProcessloadingForm,
-        setNotify,
-        modify,
-        fts,
-        propertyIdLoading,
-        thirdCompanyIdLoading,
-        workerIdLoading,
-        property,
-        worker,
-        thirdCompany,
-        propertyIdItemsList,
-        workerIdItemsList,
-        thirdCompanyIdItemsList,
-      } = orderFormComposition();
+    const setReference = (data: any) =>
+      store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
 
-      const {
-        submitForm,
-        setData,
-        refChargedFrom,
-        refOrderStatus,
-        refOrderType
-      } = addOrderFormComposition(
-        emit,
-        setNotify,
-        () => clearData,
-        property,
-        client,
-        worker,
-        thirdCompany
-      );
+    const colorsRate: any = ["#99A9BF", "#F7BA2A", "#FF9900"];
+    let lrID: null | string = null;
+    let dtIn: any = null;
+    const params: Data = {
+      countDays: 10,
+      nextStep: 10,
+    };
 
+    const {
+      resetForm,
+      loadForm,
+      closeForm,
+      myForm,
+      refMyForm,
+      rules,
+      componentIsLoading,
+      setProcessloadingForm,
+      setNotify,
+      modify,
+      modifyFn,
+      fts,
+      propertyIdLoading,
+      thirdCompanyIdLoading,
+      workerIdLoading,
+      property,
+      worker,
+      thirdCompany,
+      propertyIdItemsList,
+      workerIdItemsList,
+      thirdCompanyIdItemsList,
+      isChanged,
+      isLoading,
+      isSaving,
+      isVisible,
+      workerSearch,
+      propertySearch,
+      thirdCompanySearch
+    } = orderFormComposition();
+
+    const {
+      submitForm,
+      setData,
+      refChargedFrom,
+      refOrderStatus,
+      refOrderType,
+    } = addOrderFormComposition(
+      emit,
+      setNotify,
+      () => clearData,
+      property,
+      client,
+      worker,
+      thirdCompany
+    );
 
     // execute at startup ========== >>>>>>>>>>
-        onMounted(() => {
-          setReference({ name: "ref_property_type" });
-          setReference({ name: "ref_order_type" });
-          setReference({ name: "ref_order_status" });
-          setReference({ name: "ref_charged_from" });
-          loadForm();
-        });
-        watch(fts, () => {
-            setData();
-            setTimeout(() => {
-              componentIsLoading.value = false;
-            }, 500);
-        });
-        onBeforeUpdate((): void => {
-            setProcessloadingForm.value = false;
-        });
-          // life hook vue
-        onUpdated((): void => {
-            setProcessloadingForm.value = true;
-        });
-        onUnmounted(() => {
-          closeForm();
-        });
+    onMounted(() => {
+      setReference({ name: "ref_property_type" });
+      setReference({ name: "ref_order_type" });
+      setReference({ name: "ref_order_status" });
+      setReference({ name: "ref_charged_from" });
+      loadForm();
+    });
+    watch(fts, () => {
+      setData();
+      setTimeout(() => {
+        componentIsLoading.value = false;
+      }, 500);
+    });
+    onBeforeUpdate((): void => {
+      setProcessloadingForm.value = false;
+    });
+    // life hook vue
+    onUpdated((): void => {
+      setProcessloadingForm.value = true;
+    });
+    onUnmounted(() => {
+      closeForm();
+    });
 
-        const shortcuts = [
-            {
-              text: "Today",
-              onClick(picker: any) {
-                picker.$emit("pick", new Date());
-              }
-            },
-            {
-              text: "Yesterday",
-              onClick(picker: any) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24);
-                picker.$emit("pick", date);
-              }
-            },
-            {
-              text: "A week ago",
-              onClick(picker: any) {
-                const date = new Date();
-                date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", date);
-              }
-            }
-        ];
+    const shortcuts = [
+      {
+        text: "Today",
+        onClick(picker: any) {
+          picker.$emit("pick", new Date());
+        },
+      },
+      {
+        text: "Yesterday",
+        onClick(picker: any) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24);
+          picker.$emit("pick", date);
+        },
+      },
+      {
+        text: "A week ago",
+        onClick(picker: any) {
+          const date = new Date();
+          date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+          picker.$emit("pick", date);
+        },
+      },
+    ];
 
-        const pickerOptionsNextArrival = {
-          disabledDate(time: any) {
-            const date = new Date();
-            date.setTime(date.getTime() - 3600 * 1000 * 24);
-            return time.getTime() < date.getTime();
-          },
-          shortcuts
-        };
-        const pickerOptionsSheduled = {
-          shortcuts
-        };
-        const pickerOptionsDone = {
-          shortcuts
-        };
+    const pickerOptionsNextArrival = {
+      disabledDate(time: any) {
+        const date = new Date();
+        date.setTime(date.getTime() - 3600 * 1000 * 24);
+        return time.getTime() < date.getTime();
+      },
+      shortcuts,
+    };
+    const pickerOptionsSheduled = {
+      shortcuts,
+    };
+    const pickerOptionsDone = {
+      shortcuts,
+    };
 
-        // настройка для календаря
+    // настройка для календаря
 
-        params.countDays =
-          (windowWidth.value - (windowWidth.value < 768 ? 0 : 300) - (windowWidth.value % 60)) / 60;
-        const step = (params.countDays - (params.countDays % 4)) / 4;
-        params.nextStep = step < 2 ? 1 : step;
+    params.countDays =
+      (windowWidth.value -
+        (windowWidth.value < 768 ? 0 : 300) -
+        (windowWidth.value % 60)) /
+      60;
+    const step = (params.countDays - (params.countDays % 4)) / 4;
+    params.nextStep = step < 2 ? 1 : step;
 
-        
-        const selfDate = DateTime.local().toFormat(
-          t("filters.components.CompDate.formatTemplateValue") as string
-        );
-        () => calculateDate();
-        () => getCalendarList();
-      // execute at startup <<<<<<<< ==========
-
-
-      const modifyProperty = (id: number): void => {
-          modify({ name: "property_id", data: id });
-          for (const v of propertyIdItemsList) {
-            if (id === v.id) {
-              setDataToObject(property, v);
-              setDataToObject(client, v.client);
-              modify({ name: "client_id", data: v.client_id });
-              modify({ name: "entry_code", data: v.entry_code });
-              lrID = v.lr_id;
-              getCalendarList();
-              break;
-            }
-          }
-        }
-        const modifyWorker = (id: number): void => {
-          modify({ name: "worker_id", data: id });
-          for (const v of workerIdItemsList) {
-            if (id === v.id) {
-              setDataToObject(worker, v);
-              break;
-            }
-          }
-        }
-        const modifyThirdCompany = (id: number): void => {
-          modify({ name: "third_company_id", data: id });
-          for (const v of thirdCompanyIdItemsList) {
-            if (id === v.id) {
-              setDataToObject(thirdCompany, v);
-              break;
-            }
-          }
-        }
-
-        // методы для календаря
-        const calculateDate = () => {
-          if (dtIn === null) {
-            dtIn = DateTime.local().startOf("day");
-          }
-        }
-        const nextDate = (): any => {
-          dtIn = dtIn.plus({ days: params.nextStep });
-          getCalendarList();
-        }
-        const prevDate = (): any => {
-          dtIn = dtIn.minus({ days: params.nextStep });
-          getCalendarList();
-        }
-        const nowDate = (): any => {
-          dtIn = DateTime.local();
-          getCalendarList();
-        }
-
-  const getCalendarList = async() => {
-    this.calendarLoading = true;
-    const startDate = this.dtIn.minus({ days: 30 });
-    const endDate = this.dtIn.plus({ days: this.params.countDays });
-    const startDateString = startDate.toFormat(
+    const selfDate = DateTime.local().toFormat(
       t("filters.components.CompDate.formatTemplateValue") as string
     );
-    const endDateString = endDate.toFormat(
-      t("filters.components.CompDate.formatTemplateValue") as string
-    );
-    let days: number = 0;
-    const interval = Interval.fromDateTimes(startDate, endDate)
-      .toDuration("days")
-      .toObject();
-    days = Math.ceil(interval.days);
-    this.getHeaderDates(this.dtIn.minus({ days: 2 }), days - 28);
-    if (this.lrID !== null) {
-      const list = await getCalendarList(
-        `?property=${this.lrID}&startDate=${startDateString}&endDate=${endDateString}`
-      );
-      this.calendarList = [];
-      let reservation: any;
-      for (let i = 0; i < days; i++) {
-        let prevDateObject: any;
-        let selfDateObject: any;
-        const selfDate = startDate.plus({ days: i });
-        const selfDateStr = selfDate.toFormat(
-          t("filters.components.CompDate.formatTemplateValue") as string
-        );
-        // смотрим еслть ли резервация на предыдущее число
-        if (reservation !== undefined) {
-          prevDateObject = Object.assign({}, reservation);
-          if (reservation.checkOut === selfDateStr) {
-            reservation = undefined;
-          }
+    () => calculateDate();
+    () => getCalendarList();
+    // execute at startup <<<<<<<< ==========
+
+    const modifyProperty = (id: number): void => {
+      modify({ name: "property_id", data: id });
+      for (const v of propertyIdItemsList) {
+        if (id === v.id) {
+          setDataToObject(property, v);
+          setDataToObject(client, v.client);
+          modify({ name: "client_id", data: v.client_id });
+          modify({ name: "entry_code", data: v.entry_code });
+          lrID = v.lr_id;
+          getCalendarList();
+          break;
         }
-        // получаем резервацию на сегодняшнее число
-        if (list.data.length > 0 && reservation === undefined) {
-          reservation = list.data.find((k: any) => k.checkIn === selfDateStr);
-        }
-        // уже получена резервация на сегодняшнее число
-        if (reservation !== undefined) {
-          selfDateObject = Object.assign({}, reservation);
-        }
-        const prevDateStr = selfDate
-          .minus({ days: 1 })
-          .toFormat(t("filters.components.CompDate.formatTemplateValue") as string);
-        const nextDateStr = selfDate
-          .plus({ days: 1 })
-          .toFormat(t("filters.components.CompDate.formatTemplateValue") as string);
-        const colors = this.getColorClass(prevDateObject, selfDateObject);
-        const split =
-          prevDateObject !== undefined &&
-          selfDateObject !== undefined &&
-          prevDateObject.reservationId !== selfDateObject.reservationId;
-        this.calendarList.push({
-          date: selfDate.toFormat(
-            t("filters.components.CompDate.formatTemplateValue") as string
-          ),
-          bgColor: colors.colorClass,
-          weekday: selfDate.weekday,
-          split
-        });
       }
-    } else {
-      this.calendarList = [];
-      let date = startDate;
-      for (let i = 0; i < days; i++) {
-        date = startDate.plus({ days: i });
-        this.calendarList.push({
+    };
+    const modifyWorker = (id: number): void => {
+      modify({ name: "worker_id", data: id });
+      for (const v of workerIdItemsList) {
+        if (id === v.id) {
+          setDataToObject(worker, v);
+          break;
+        }
+      }
+    };
+    const modifyThirdCompany = (id: number): void => {
+      modify({ name: "third_company_id", data: id });
+      for (const v of thirdCompanyIdItemsList) {
+        if (id === v.id) {
+          setDataToObject(thirdCompany, v);
+          break;
+        }
+      }
+    };
+
+    // методы для календаря
+    const calculateDate = () => {
+      if (dtIn === null) {
+        dtIn = DateTime.local().startOf("day");
+      }
+    };
+    const nextDate = (): any => {
+      dtIn = dtIn.plus({ days: params.nextStep });
+      getCalendarList();
+    };
+    const prevDate = (): any => {
+      dtIn = dtIn.minus({ days: params.nextStep });
+      getCalendarList();
+    };
+    const nowDate = (): any => {
+      dtIn = DateTime.local();
+      getCalendarList();
+    };
+
+    const getCalendarList = async () => {
+      calendarLoading.value = true;
+      const startDate = dtIn.minus({ days: 30 });
+      const endDate = dtIn.plus({ days: params.countDays });
+      const startDateString = startDate.toFormat(
+        t("filters.components.CompDate.formatTemplateValue") as string
+      );
+      const endDateString = endDate.toFormat(
+        t("filters.components.CompDate.formatTemplateValue") as string
+      );
+      let days = 0;
+      const interval = Interval.fromDateTimes(startDate, endDate)
+        .toDuration("days")
+        .toObject();
+      if (interval.days) {
+        days = Math.ceil(interval.days);
+      }
+      getHeaderDates(dtIn.minus({ days: 2 }), days - 28);
+      if (lrID !== null) {
+        const list = await PropertyApi.getCalendarList(
+          `?property=${lrID}&startDate=${startDateString}&endDate=${endDateString}`
+        );
+        calendarList.splice(0, calendarList.length);
+        let reservation: any;
+        for (let i = 0; i < days; i++) {
+          let prevDateObject: any;
+          let selfDateObject: any;
+          const selfDate = startDate.plus({ days: i });
+          const selfDateStr = selfDate.toFormat(
+            t("filters.components.CompDate.formatTemplateValue") as string
+          );
+          // смотрим еслть ли резервация на предыдущее число
+          if (reservation !== undefined) {
+            prevDateObject = Object.assign({}, reservation);
+            if (reservation.checkOut === selfDateStr) {
+              reservation = undefined;
+            }
+          }
+          // получаем резервацию на сегодняшнее число
+          if (list.data.length > 0 && reservation === undefined) {
+            reservation = list.data.find((k: any) => k.checkIn === selfDateStr);
+          }
+          // уже получена резервация на сегодняшнее число
+          if (reservation !== undefined) {
+            selfDateObject = Object.assign({}, reservation);
+          }
+          const prevDateStr = selfDate
+            .minus({ days: 1 })
+            .toFormat(
+              t("filters.components.CompDate.formatTemplateValue") as string
+            );
+          const nextDateStr = selfDate
+            .plus({ days: 1 })
+            .toFormat(
+              t("filters.components.CompDate.formatTemplateValue") as string
+            );
+          const colors = getColorClass(prevDateObject, selfDateObject);
+          const split =
+            prevDateObject !== undefined &&
+            selfDateObject !== undefined &&
+            prevDateObject.reservationId !== selfDateObject.reservationId;
+          calendarList.push({
+            date: selfDate.toFormat(
+              t("filters.components.CompDate.formatTemplateValue") as string
+            ),
+            bgColor: colors.colorClass,
+            weekday: selfDate.weekday,
+            split,
+          });
+        }
+      } else {
+        calendarList.splice(0, calendarList.length);
+        let date = startDate;
+        for (let i = 0; i < days; i++) {
+          date = startDate.plus({ days: i });
+          calendarList.push({
+            date: date.toFormat(
+              t("filters.components.CompDate.formatTemplateValue") as string
+            ),
+            weekday: date.weekday,
+            split: false,
+            bgColor: "free",
+          });
+        }
+      }
+      calendarList.splice(0, 29); // удаляем первые 29 элементов
+      calendarLoading.value = false;
+    };
+    const getColorClass = (prevItem: any, selfItem: any): any => {
+      let prev = "free";
+      let self = "free";
+      if (prevItem) {
+        // если предыдущая дата не свободна
+        prev = getColor(prevItem);
+      }
+      self = getColor(selfItem);
+      if (prev !== self) {
+        self = prev + "-" + self;
+      }
+      if (prevItem && selfItem) {
+        if (prevItem.reservationId !== selfItem.reservationId) {
+          self += " split";
+        }
+      } else if ((prevItem && !selfItem) || (!prevItem && selfItem)) {
+        self += " split";
+      }
+      return { colorClass: self };
+    };
+    const getColor = (item: any): string => {
+      if (!item) {
+        return "free";
+      }
+      if (item.reservationType === "AdministrationBlock") {
+        return "blocked";
+      }
+      if (item.reservationType === "Guest") {
+        return "booked-int";
+      }
+      if (item.reservationType === "Owner") {
+        return "booked-own";
+      }
+      if (item.reservationType === "Comp") {
+        return "booked-exist-cl";
+      }
+      return "free";
+    };
+
+    const getHeaderDates = (startDate: any, daysAmount: number) => {
+      dates.splice(0, dates.length);
+      months.splice(0, months.length);
+      let date = startDate.setLocale(store.getters.language);
+      for (let i = 0; i < daysAmount; i++) {
+        if (i === 0) {
+          continue;
+        }
+        date = startDate.plus({ days: i }).setLocale(store.getters.language);
+        if (
+          months.length === 0 ||
+          months[months.length - 1].month !== date.monthLong
+        ) {
+          months.push({ month: date.monthLong, year: date.year, days: 0 });
+        }
+        months[months.length - 1].days = months[months.length - 1].days + 1;
+        dates.push({
           date: date.toFormat(
             t("filters.components.CompDate.formatTemplateValue") as string
           ),
           weekday: date.weekday,
-          split: false,
-          bgColor: "free"
+          weekdayShort: date.weekdayShort,
+          day: date.day,
+          monthLong: date.monthLong,
         });
       }
-      console.log(Math.ceil(interval.days));
-    }
-    this.calendarList.splice(0, 29); // удаляем первые 29 элементов
-    this.calendarLoading = false;
-  }
-  const getColorClass = (prevItem: any, selfItem: any): any => {
-    let prev = "free";
-    let self = "free";
-    if (prevItem) {
-      // если предыдущая дата не свободна
-      prev = this.getColor(prevItem);
-    }
-    self = this.getColor(selfItem);
-    if (prev !== self) {
-      self = prev + "-" + self;
-    }
-    if (prevItem && selfItem) {
-      if (prevItem.reservationId !== selfItem.reservationId) {
-        self += " split";
-      }
-    } else if ((prevItem && !selfItem) || (!prevItem && selfItem)) {
-      self += " split";
-    }
-    return { colorClass: self };
-  }
-  const getColor = (item: any): string => {
-    if (!item) {
-      return "free";
-    }
-    if (item.reservationType === "AdministrationBlock") {
-      return "blocked";
-    }
-    if (item.reservationType === "Guest") {
-      return "booked-int";
-    }
-    if (item.reservationType === "Owner") {
-      return "booked-own";
-    }
-    if (item.reservationType === "Comp") {
-      return "booked-exist-cl";
-    }
-    return "free";
-  }
+    };
+    const clearData = (): void => {
+      // сброс формы
+      setDataToObject(property, {});
+      setDataToObject(worker, {});
+      setDataToObject(thirdCompany, {});
+      setDataToObject(client, {});
+    };
 
-  const getHeaderDates = (startDate: any, daysAmount: number) => {
-    this.dates = [];
-    this.months = [];
-    let date = startDate.setLocale(store.getters.language);
-    for (let i = 0; i < daysAmount; i++) {
-      if (i === 0) {
-        continue;
-      }
-      date = startDate
-        .plus({ days: i })
-        .setLocale(store.getters.language);
-      if (
-        this.months.length === 0 ||
-        this.months[this.months.length - 1].month !== date.monthLong
-      ) {
-        this.months.push({ month: date.monthLong, year: date.year, days: 0 });
-      }
-      this.months[this.months.length - 1].days =
-        this.months[this.months.length - 1].days + 1;
-      this.dates.push({
-        date: date.toFormat(
-          t("filters.components.CompDate.formatTemplateValue") as string
-        ),
-        weekday: date.weekday,
-        weekdayShort: date.weekdayShort,
-        day: date.day,
-        monthLong: date.monthLong
-      });
-    }
-  }
-        const clearData = (): void => {
-          // сброс формы
-          setDataToObject(property, {});
-          setDataToObject(worker, {});
-          setDataToObject(thirdCompany, {});
-          setDataToObject(client, {});
-        }
+    const setDataToObject = (object: Data, newData: Data) => {
+      Object.keys(object).forEach((key: string) => delete object[key]);
+      Object.keys(newData).forEach(
+        (key: string) => (object[key] = newData[key])
+      );
+    };
 
-        const setDataToObject = (object: Data, newData: Data) => {
-          Object.keys(object).forEach((key: string) => delete object[key]);
-          Object.keys(newData).forEach((key: string) => object[key] = newData[key]);
-        }
+    return {
+      t,
+      submitForm,
+      resetForm,
+      myForm,
+      refMyForm,
+      rules,
+      modifyFn,
+      isChanged,
+      isLoading,
+      isSaving,
+      isVisible,
 
-        return {
-          submitForm,
-          resetForm,
-          myForm,
-          refMyForm,
-          rules,
-          refChargedFrom,
-          refOrderType,
-          propertyIdLoading,
-          thirdCompanyIdLoading,
-          workerIdLoading,
-          property,
-          worker,
-          thirdCompany,
-          propertyIdItemsList,
-          workerIdItemsList,
-          thirdCompanyIdItemsList,
-        }
-    }
+      refChargedFrom,
+      refOrderType,
+      
+      colorsRate,
+      pickerOptionsNextArrival,
+      pickerOptionsSheduled,
+      pickerOptionsDone,
+    
+      property,
+      propertyIdItemsList,
+      propertySearch,
+      propertyIdLoading,
+      modifyProperty,
+
+      worker,
+      workerIdItemsList,
+      workerSearch,
+      workerIdLoading,
+      modifyWorker,
+
+      thirdCompany,
+      thirdCompanyIdItemsList,
+      thirdCompanySearch,
+      thirdCompanyIdLoading,
+      modifyThirdCompany,
+      
+      calendarLoading,
+      calendarList,
+      dates,
+      months,
+      nowDate,
+      prevDate,
+      nextDate,
+      
+    };
+  },
 });
 export default AddOrder;
-@Component({
-
-  computed: {
-    ...mapState("orderForm", ["isVisible", "isLoading", "isSaving", "type"]),
-    ...mapGetters("orderForm", {
-      myForm: GETTERS.ITEMS,
-      isChanged: GETTERS.IS_CHANGED
-    }),
-
-  },
-  methods: {
-    ...mapActions("filters", {
-      setReference: FILTERS_ACTIONS.SET_REFERENCE
-    }),
-    ...mapActions("orderForm", {
-      close: ACTIONS.CLOSE,
-      save: ACTIONS.SAVE
-    }),
-    ...mapMutations("orderForm", {
-      modify: MUTATIONS.MODIFY,
-      remove: MUTATIONS.REMOVE,
-      reset: MUTATIONS.RESET_CHANGES,
-      resetFts: MUTATIONS.RESET_FTS
-    })
-  }
-})
-class AddOdrder {
-  private selfForm: any;
-  // ...mapState reference
-  private references!: any;
-  // ...mapState userForm
-  private isVisible!: boolean;
-  private isLoading!: boolean;
-  private isSaving!: boolean;
-  private type!: string;
-  private fts!: number | null;
-  // ...mapGetters userForm
-  private myForm!: any;
-  private isChanged!: any;
-  // ...mapActions userForm
-  private close!: any;
-  private save!: any;
-  // ...mapMutations userForm
-  private modify!: any;
-  private remove!: any;
-  private reset!: any;
-  private resetFts!: any;
-  private pickerOptionsNextArrival: any = {};
-  private pickerOptionsSheduled: any = {};
-  private pickerOptionsDone: any = {};
-  private setReference: any;
-  // validators
-  private validateDate: any;
-  // позволяет блокировать дублирующие изменения, в т.ч. при загрузке формы (критично!)
-  private loadForm: boolean = false;
-  // загружены данные в форму или нет
-  private dataLoaded: boolean = false;
-  //  загрузка в true чтобы скрыть сброс полей и загрузку полей (исключить дергание)
-  private selfLoading: boolean = true;
- 
-  // свойства для календаря
-  private calendarLoading: boolean = false;
-  
-  
-  private dtOut: any = null;
-  private dates: any = [];
-  private months: any = [];
-  private selfDate: any;
-  private calendarList: any = [];
-  
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.work-search li, .third-company-search li {
+.work-search li,
+.third-company-search li {
   height: 50px;
   [data-letters]:before {
     content: attr(data-letters);

@@ -21,8 +21,13 @@ const orderFormComposition = () => {
     const userApi = new UserApi();
 
     const myForm = computed(() => store.getters[ORDER_FORM_GETTERS.ITEMS]);
+    const isChanged = computed(() => store.getters[ORDER_FORM_GETTERS.IS_CHANGED]);
+
     const fts = computed(() => store.getters[ORDER_FORM_GETTERS.FTS]);
     const type = computed(() => store.state[ORDER_FORM_STATE.TYPE]);
+    const isLoading = computed(() => store.state[ORDER_FORM_STATE.IS_LOADING]);
+    const isSaving = computed(() => store.state[ORDER_FORM_STATE.IS_SAVING]);
+    const isVisible = computed(() => store.state[ORDER_FORM_STATE.IS_VISIBLE]);
 
     
     const refMyForm = ref<FormInstance>();
@@ -270,6 +275,7 @@ const orderFormComposition = () => {
         setNotify,
         closeForm,
         modify,
+        modifyFn,
         fts,
         propertyIdLoading,
         thirdCompanyIdLoading,
@@ -280,6 +286,13 @@ const orderFormComposition = () => {
         propertyIdItemsList,
         workerIdItemsList,
         thirdCompanyIdItemsList,
+        isChanged,
+        isLoading,
+        isSaving,
+        isVisible,
+        workerSearch,
+        propertySearch,
+        thirdCompanySearch
     }
     
 }

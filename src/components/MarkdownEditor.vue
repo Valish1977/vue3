@@ -39,7 +39,7 @@ import { Marked } from "@ts-stack/markdown";
 import { defineComponent } from "@vue/runtime-core";
 import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
-const TurndownService = require('turndown');
+import TurndownService from "turndown";
 
 const  MarkdownEditor = defineComponent({
   props: {
