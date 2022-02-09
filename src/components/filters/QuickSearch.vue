@@ -39,6 +39,7 @@
 </template>
 
 <script lang='ts'>
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Data } from "@/enums/enum_other";
 import { computed, defineComponent, onMounted, reactive, watch } from "vue";
 import { useI18n } from "vue-i18n";

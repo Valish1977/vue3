@@ -217,7 +217,6 @@ import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
 import ListChips from "@/components/filters/ListChips.vue";
 import ExportExel from "@/components/excel/ExportExel.vue";
-import { EXCEL_DISPATCH } from '@/components/excel/store/excel';
 import AddOrder from "@/views/order/AddOrder.vue";
 
 const Dashboard = defineComponent({
@@ -282,6 +281,7 @@ const Dashboard = defineComponent({
     });
     /* TODO: snippet DateTime правильный вывод даты с учетом
     горячей подмены через внесение изменений через стор*/
+    /* eslint-disable-next-line no-unused-vars */
     const handleClose = (done: any) => {
       if (!showBack.value && isDialog.value) {
         setDrawer();

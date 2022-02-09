@@ -1,7 +1,8 @@
+import { Data } from "@/enums/enum_other";
 import { ComputedRef } from "vue";
 import { useRouter } from "vue-router";
 
-export default function routerComposition(sidebar: ComputedRef<boolean>, sideBarToggle: () => void) {
+const routerComposition = (sidebar: ComputedRef<boolean>, sideBarToggle: () => void): Data => {
     const router = useRouter();
     const pushRoute = (path: string): void => {
       if (sidebar.value) {
@@ -13,3 +14,5 @@ export default function routerComposition(sidebar: ComputedRef<boolean>, sideBar
       pushRoute
     };
 }
+
+export default routerComposition; 

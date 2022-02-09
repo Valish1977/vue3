@@ -1,10 +1,11 @@
+import { Data } from '@/enums/enum_other';
 import { AppPreloadService } from '@/services/app_preload_service';
 import SseService from '@/services/sse_services';
 import { onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex';
 
 
-export default function appSseComposition() {
+const appSseComposition = (): Data => {
     const appPreloadService = AppPreloadService.Instance;
     const store = useStore();
     let connect: SseService;
@@ -20,3 +21,4 @@ export default function appSseComposition() {
     return {
     }
 }
+export default appSseComposition;

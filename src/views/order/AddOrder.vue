@@ -772,6 +772,7 @@
 </template>
 
 <script lang='ts'>
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { DateTime, Interval } from "luxon";
 import { useStore } from "vuex";
 import { FILTER_DISPATCH } from "@/components/filters/store/filters";
@@ -800,21 +801,6 @@ const AddOrder = defineComponent({
     const { t } = useI18n();
 
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
-    const propertyStringLength = computed(() => {
-      if (windowWidth.value >= 2560) {
-        return 3;
-      }
-      if (windowWidth.value >= 1440) {
-        return 4;
-      }
-      if (windowWidth.value >= 1280) {
-        return 5;
-      }
-      if (windowWidth.value >= 768) {
-        return 6;
-      }
-      return 24;
-    });
     // свойства для календаря
     const calendarLoading = ref(false);
 
@@ -869,7 +855,6 @@ const AddOrder = defineComponent({
       submitForm,
       setData,
       refChargedFrom,
-      refOrderStatus,
       refOrderType,
     } = addOrderFormComposition(
       emit,
@@ -887,7 +872,6 @@ const AddOrder = defineComponent({
       getCalendarList();
       setReference({ name: "ref_property_type" });
       setReference({ name: "ref_order_type" });
-      setReference({ name: "ref_order_status" });
       setReference({ name: "ref_charged_from" });
       loadForm();
     });
@@ -957,10 +941,6 @@ const AddOrder = defineComponent({
       60;
     const step = (params.countDays - (params.countDays % 4)) / 4;
     params.nextStep = step < 2 ? 1 : step;
-
-    const selfDate = DateTime.local().toFormat(
-      t("filters.components.CompDate.formatTemplateValue") as string
-    );
     
     // execute at startup <<<<<<<< ==========
     const calculateDate = () => {
@@ -1062,16 +1042,7 @@ const AddOrder = defineComponent({
           if (reservation !== undefined) {
             selfDateObject = Object.assign({}, reservation);
           }
-          const prevDateStr = selfDate
-            .minus({ days: 1 })
-            .toFormat(
-              t("filters.components.CompDate.formatTemplateValue") as string
-            );
-          const nextDateStr = selfDate
-            .plus({ days: 1 })
-            .toFormat(
-              t("filters.components.CompDate.formatTemplateValue") as string
-            );
+
           const colors = getColorClass(prevDateObject, selfDateObject);
           const split =
             prevDateObject !== undefined &&
@@ -1230,7 +1201,7 @@ const AddOrder = defineComponent({
       nowDate,
       prevDate,
       nextDate,
-      
+      selfDate: DateTime.local().toFormat(  t("filters.components.CompDate.formatTemplateValue") as string),
     };
   },
 });

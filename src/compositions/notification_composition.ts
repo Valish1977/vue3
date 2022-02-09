@@ -1,9 +1,10 @@
-import { APP_BUS_STATE, APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
+import { Data } from '@/enums/enum_other';
+import { APP_BUS_STATE, APP_GETTERS } from '@/store/modules/app';
 import { ElNotification } from 'element-plus'
 import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
 
-export default function notificationComposition() {
+const notificationComposition = (): Data => {
     const store = useStore();
     const showNotification = ({title = "", type = undefined, message = "", setTimeOut = 0, duration = 0, dangerouslyUseHTMLString = false } = {}) => {
         const notification = () => {
@@ -43,3 +44,4 @@ export default function notificationComposition() {
       //
     }
 }
+export default notificationComposition;

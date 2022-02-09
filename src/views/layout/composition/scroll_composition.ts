@@ -1,6 +1,8 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { Data } from "@/enums/enum_other";
 import { ref } from "vue";
 
-export default function scrollComposition() {
+const scrollComposition = (): Data => {
   const scrollPosition = ref(0);
   const scrollContainer = ref(null);
   const scrollWrapper = ref(null);
@@ -31,3 +33,5 @@ export default function scrollComposition() {
       handleScroll
     }
 }
+
+export default scrollComposition;

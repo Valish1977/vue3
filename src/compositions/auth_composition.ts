@@ -1,22 +1,19 @@
 import { CoreCallback } from "@/core/core_callback";
 import { AppPreloadService } from '@/services/app_preload_service';
-import StoreService  from "@/store/index";
 import AuthService from "@/core/auth_service";
 import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
-import RouterService from "@/core/router_service";
-import { useRouter } from "vue-router";
 import { APP_BUS_STATE, APP_DISPATCH } from "@/store/modules/app";
+import { Data } from "@/enums/enum_other";
 export interface LoginFormEl {
   username: string,
   password: string 
 }
-export default function authComposition() {
+const authComposition = (): Data => {
     const auth = new AuthService(); 
     const appPreloadService = AppPreloadService.Instance;
     const store = useStore();
-    const router = useRouter();
     const i18n = useI18n();
     const authProcessLoading = ref(false);
     const loginForm = reactive({ username: "", password: "" } as LoginFormEl);
@@ -59,3 +56,4 @@ export default function authComposition() {
       passwordType
     };
 }
+export default authComposition;

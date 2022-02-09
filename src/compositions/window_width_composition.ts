@@ -1,10 +1,11 @@
 
 
+import { Data } from '@/enums/enum_other';
 import { APP_DISPATCH } from '@/store/modules/app';
 import { onMounted } from 'vue';
 import { useStore } from 'vuex';
 
-export default function windowWidthComposition() {
+const windowWidthComposition = (): Data => {
     const store = useStore();
     // appSseComposition();
     const onMountFn = (): void => {
@@ -39,3 +40,4 @@ export default function windowWidthComposition() {
       //
     }
 }
+export default windowWidthComposition;

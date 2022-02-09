@@ -122,16 +122,13 @@
 </template>
 <script lang="ts">
 import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
 import screenfullComposition from "./composition/screenfull_composition";
 import scrollComposition from "./composition/scroll_composition";
 import sidebarComposition from "./composition/sidebar_composition";
 import routerComposition from "./composition/router_composition";
 import authComposition from "@/compositions/auth_composition";
 import notificationComposition from "@/compositions/notification_composition";
-/* const auth = new Auth(); */
-const delta = 15;
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import { ROUTES_GETTERS } from "@/store/modules/routes";
 import { AUTH_GETTERS } from "@/store/modules/auth";
 import { APP_GETTERS } from "@/store/modules/app";
@@ -156,10 +153,9 @@ const Layout = defineComponent({
     const pageName = computed(() => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].meta.pageName);
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
 
-    const { t, locale } = useI18n();
     const { logOut } = authComposition();
     const { scrollPosition, handleScroll } = scrollComposition();
-    const { fullScreenToggle } = screenfullComposition(t);
+    const { fullScreenToggle } = screenfullComposition();
     const { sideBarToggle } = sidebarComposition();
     notificationComposition();
     const { pushRoute } = routerComposition(sidebar, sideBarToggle);

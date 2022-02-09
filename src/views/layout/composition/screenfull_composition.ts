@@ -1,10 +1,14 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import screenfull, { Screenfull } from "screenfull";
 import { ElMessageBox, ElMessage } from 'element-plus'
+import { useI18n } from "vue-i18n";
+import { Data } from "@/enums/enum_other";
 
-export default function screenfullComposition($t: any) {
+const screenfullComposition = (): Data => {
+    const {t} = useI18n();
     const fullScreenToggle = (): any => {
       if ( !( screenfull as Screenfull ).enabled ) {
-        ElMessageBox.alert($t("notice.brouserNotWork"), 'Title', {
+        ElMessageBox.alert(t("notice.brouserNotWork"), 'Title', {
           confirmButtonText: 'OK',
           callback: (action: string) => {
             ElMessage({
@@ -19,3 +23,4 @@ export default function screenfullComposition($t: any) {
     }
     return { fullScreenToggle };
 }
+export default screenfullComposition;

@@ -1,22 +1,20 @@
-import { AppPreloadService } from '@/services/app_preload_service';
+import { Data } from '@/enums/enum_other';
 import SseService from '@/services/sse_services';
 import { onMounted, onBeforeUnmount } from 'vue'
-import { useStore } from 'vuex';
 
 
-export default function appSseComposition() {
-    const appPreloadService = AppPreloadService.Instance;
-    const store = useStore();
+const appSseComposition = (): Data => {
     let connect: SseService;
     const connectSse = (): void => { 
       connect = new SseService();
     }
     const disconnectSse = (): void => {
       console.log("sse close");
-      connect.sseConnect!.close();
+      connect.sseConnect?.close();
     }
     onBeforeUnmount(disconnectSse)
     onMounted(connectSse)
     return {
     }
 }
+export default appSseComposition;

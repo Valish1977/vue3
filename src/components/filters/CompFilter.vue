@@ -402,7 +402,7 @@
 </template>
 
 <script lang='ts'>
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { Data } from "@/enums/enum_other";
 import { APP_BUS_STATE, APP_DISPATCH, APP_GETTERS } from "@/store/modules/app";
 import { defineComponent } from "@vue/runtime-core";
@@ -412,7 +412,7 @@ import { useStore } from "vuex";
 import constantsComposition from "./composition/constantsComposition"
 import convertComposition from "./composition/convertComposition"
 import { FILTER_DISPATCH, FILTER_GETTERS } from "./store/filters";
-import { EditPen, Back, Compass, Close } from '@element-plus/icons-vue';
+import { EditPen } from '@element-plus/icons-vue';
 
 const CompFilter = defineComponent({
   data() {
