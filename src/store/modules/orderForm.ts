@@ -9,7 +9,11 @@ const GETTERS = {
   IS_CHANGED: "IS_CHANGED",
   FTS: "FTS",
   ITEMS: "ITEMS",
-  ORIGINS: "ORIGINS"
+  ORIGINS: "ORIGINS",
+  TYPE: "TYPE",
+  IS_LOADING: "IS_LOADING",
+  IS_SAVING: "IS_SAVING",
+  IS_VISIBLE: "IS_VISIBLE"
 };
 const MUTATIONS = {
   ADD: "ADD",
@@ -28,12 +32,6 @@ const ACTIONS = {
 /* 
 public const
 */
-export const ORDER_FORM_STATE = {
-  TYPE: `${ORDER_FORM_STORE_NAME}/type`,
-  IS_LOADING: `${ORDER_FORM_STORE_NAME}/isLoading`,
-  IS_SAVING: `${ORDER_FORM_STORE_NAME}/isSaving`,
-  IS_VISIBLE: `${ORDER_FORM_STORE_NAME}/isVisible`
-}
 export const ORDER_FORM_DISPATCH = {
   CLOSE: `${ORDER_FORM_STORE_NAME}/${ACTIONS.CLOSE}`,
   LOAD: `${ORDER_FORM_STORE_NAME}/${ACTIONS.LOAD}`,
@@ -53,6 +51,10 @@ export const ORDER_FORM_GETTERS = {
   FTS: `${ORDER_FORM_STORE_NAME}/${GETTERS.FTS}`,
   ITEMS: `${ORDER_FORM_STORE_NAME}/${GETTERS.ITEMS}`,
   ORIGINS: `${ORDER_FORM_STORE_NAME}/${GETTERS.ORIGINS}`,
+  TYPE: `${ORDER_FORM_STORE_NAME}/${GETTERS.TYPE}`,
+  IS_LOADING: `${ORDER_FORM_STORE_NAME}/${GETTERS.IS_LOADING}`,
+  IS_SAVING: `${ORDER_FORM_STORE_NAME}/${GETTERS.IS_SAVING}`,
+  IS_VISIBLE: `${ORDER_FORM_STORE_NAME}/${GETTERS.IS_VISIBLE}`
 }
 /*
  * Private mutations
@@ -110,6 +112,18 @@ export default {
     }
   },
   getters: {
+    [GETTERS.TYPE](state: any) {
+      return state.type;
+    },
+    [GETTERS.IS_LOADING](state: any) {
+      return state.isLoading;
+    },
+    [GETTERS.IS_SAVING](state: any) {
+      return state.isSaving;
+    },
+    [GETTERS.IS_VISIBLE](state: any) {
+      return state.isVisible;
+    },
     [GETTERS.FTS](state: any) {
       return state.fts;
     },

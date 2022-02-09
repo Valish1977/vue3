@@ -42,7 +42,7 @@
                   class="item"
                 ></el-badge>
                 <span style="margin-left: 15px">{{
-                  t(item.meta.pageName)
+                  $t(item.meta.pageName)
                 }}</span>
               </el-menu-item>
               <el-menu-item
@@ -55,7 +55,7 @@
               >
                 <font-awesome-icon icon="arrow-left" />
                 <span style="margin-left: 15px">{{
-                  t("routes.hideSedeBar")
+                  $t("routes.hideSedeBar")
                 }}</span>
               </el-menu-item>
             </div>
@@ -75,24 +75,24 @@
             icon="bars"
             class="action-icon"
           />
-          <span style="font-size: 24px">{{ t(pageName) }}</span>
+          <span style="font-size: 24px">{{ $t(pageName) }}</span>
         </el-menu-item>
         <el-menu-item disabled>
-          <el-tooltip effect="light" :content="t('app.info')" placement="bottom">
+          <el-tooltip effect="light" :content="$t('app.info')" placement="bottom">
             <span @click="infoDialog = true">
               <font-awesome-icon icon="info" class="action-icon" />
             </span>
           </el-tooltip>
           <el-tooltip
             effect="light"
-            :content="t('app.fullScreen')"
+            :content="$t('app.fullScreen')"
             placement="bottom"
           >
             <span @click="fullScreenToggle">
               <font-awesome-icon icon="expand-arrows-alt" class="action-icon" />
             </span>
           </el-tooltip>
-          <el-tooltip effect="light" :content="t('app.exit')" placement="bottom">
+          <el-tooltip effect="light" :content="$t('app.exit')" placement="bottom">
             <span @click="logOut">
               <font-awesome-icon
                 icon="sign-out-alt"
@@ -107,19 +107,17 @@
         <el-col
           :span="24"
           v-loading="loadingState"
-          :element-loading-text="t('app.loadingModules')"
+          :element-loading-text="$t('app.loadingModules')"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(0, 0, 0, 0.8)"
         ></el-col>
-        <transition name="fade" mode="out-in">
           <router-view></router-view>
-        </transition>
       </section>
     </div>
   </div>
-  <el-dialog :title="t('info.title')" v-model="infoDialog" width="500px" center>
-    <p>{{ t("info.name") }}</p>
-    <p>{{ t("info.version") }}{{ $VERSION }}</p>
+  <el-dialog :title="$t('info.title')" v-model="infoDialog" width="500px" center>
+    <p>{{ $t("info.name") }}</p>
+    <p>{{ $t("info.version") }}{{ version }}</p>
   </el-dialog>
 </template>
 <script lang="ts">
@@ -133,8 +131,7 @@ import authComposition from "@/compositions/auth_composition";
 import notificationComposition from "@/compositions/notification_composition";
 /* const auth = new Auth(); */
 const delta = 15;
-import { computed, defineComponent, getCurrentInstance, watch } from "vue";
-import { useRouter } from "vue-router";
+import { computed, defineComponent, ref } from "vue";
 import { ROUTES_GETTERS } from "@/store/modules/routes";
 import { AUTH_GETTERS } from "@/store/modules/auth";
 import { APP_GETTERS } from "@/store/modules/app";
@@ -147,8 +144,6 @@ const Layout = defineComponent({
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
-    // const internalInstance = getCurrentInstance();
     const routes = computed(() =>
       store.getters[ROUTES_GETTERS.GET_ROUTES](
         store.getters[AUTH_GETTERS.GET_USER].RoleCode
@@ -156,6 +151,10 @@ const Layout = defineComponent({
     );
     const sidebar = computed(() => store.getters[APP_GETTERS.GET_SIDE_BAR]);
     const isCollapse = computed(() => !store.getters[APP_GETTERS.GET_SIDE_BAR]);
+    const loadingState = computed(() => store.getters[APP_GETTERS.GET_LOADING] > 0 ? true : false);
+    const version = computed(() => process.env.VUE_APP_VERSION);
+    const pageName = computed(() => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].meta.pageName);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
 
     const { t, locale } = useI18n();
     const { logOut } = authComposition();
@@ -166,16 +165,11 @@ const Layout = defineComponent({
     const { pushRoute } = routerComposition(sidebar, sideBarToggle);
 
     return {
-      $VERSION: computed(() => process.env.VUE_APP_VERSION),
-      windowidth: computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]),
-      loadingState: computed(() =>
-        store.getters[APP_GETTERS.GET_LOADING] > 0 ? true : false
-      ),
-      pageName: computed(
-        () => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].meta.pageName
-      ),
+      windowWidth,
+      loadingState,
+      version,
+      pageName,
       routes,
-      t,
       pushRoute,
       fullScreenToggle,
       scrollPosition,

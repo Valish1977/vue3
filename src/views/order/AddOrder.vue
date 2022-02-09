@@ -1,4 +1,5 @@
 <template>
+
   <el-form
     class="selfForm drawer-content"
     ref="refMyForm"
@@ -17,11 +18,11 @@
                 <el-row :gutter="20">
                   <el-col :span="6">
                     <el-form-item
-                      :label="t('Order.form.priority_lvl.prefix')"
+                      :label="$t('Order.form.priority_lvl.prefix')"
                       prop="priority_lvl"
                     >
                       <el-tooltip
-                        :content="t('Order.form.priority_lvl.placeholder')"
+                        :content="$t('Order.form.priority_lvl.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -53,7 +54,7 @@
                               data: event.target.value,
                             })
                         "
-                        >{{ t("Order.form.touch_up.placeholder") }}</el-checkbox
+                        >{{ $t("Order.form.touch_up.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -61,14 +62,14 @@
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.next_arrival_dt.prefix')"
+                      :label="$t('Order.form.next_arrival_dt.prefix')"
                       prop="next_arrival_dt"
                     >
                       <el-tooltip
-                        :content="t('Order.form.next_arrival_dt.placeholder')"
+                        :content="$t('Order.form.next_arrival_dt.placeholder')"
                         placement="top-end"
                         effect="light"
-                        :open-delay="500"
+                        :show-after="500"
                       >
                         <el-date-picker
                           type="datetime"
@@ -76,13 +77,13 @@
                           style="width: 100%"
                           :value="myForm.next_arrival_dt"
                           :placeholder="
-                            t('Order.form.next_arrival_dt.placeholder')
+                            $t('Order.form.next_arrival_dt.placeholder')
                           "
                           :format="
-                            t('filters.components.CompDateTime.formatTemplate')
+                            $t('filters.components.CompDateTime.formatTemplate')
                           "
                           :value-format="
-                            t(
+                            $t(
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
@@ -114,7 +115,7 @@
                             })
                         "
                         >{{
-                          t("Order.form.owner_arrival.placeholder")
+                          $t("Order.form.owner_arrival.placeholder")
                         }}</el-checkbox
                       >
                     </el-form-item>
@@ -123,11 +124,11 @@
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.order_type_id.prefix')"
+                      :label="$t('Order.form.order_type_id.prefix')"
                       prop="order_type_id"
                     >
                       <el-tooltip
-                        :content="t('Order.form.order_type_id.placeholder')"
+                        :content="$t('Order.form.order_type_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -136,7 +137,7 @@
                           style="width: 100%"
                           :value="myForm.order_type_id"
                           :placeholder="
-                            t('Order.form.order_type_id.placeholder')
+                            $t('Order.form.order_type_id.placeholder')
                           "
                           @change="
                             (event) =>
@@ -158,11 +159,11 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.charged_from_id.prefix')"
+                      :label="$t('Order.form.charged_from_id.prefix')"
                       prop="charged_from_id"
                     >
                       <el-tooltip
-                        :content="t('Order.form.charged_from_id.placeholder')"
+                        :content="$t('Order.form.charged_from_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -171,7 +172,7 @@
                           style="width: 100%"
                           :value="myForm.charged_from_id"
                           :placeholder="
-                            t('Order.form.charged_from_id.placeholder')
+                            $t('Order.form.charged_from_id.placeholder')
                           "
                           @change="
                             (event) =>
@@ -195,14 +196,14 @@
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.scheduled_dt.prefix')"
+                      :label="$t('Order.form.scheduled_dt.prefix')"
                       prop="scheduled_dt"
                     >
                       <el-tooltip
-                        :content="t('Order.form.scheduled_dt.placeholder')"
+                        :content="$t('Order.form.scheduled_dt.placeholder')"
                         placement="top-end"
                         effect="light"
-                        :open-delay="500"
+                        :show-after="500"
                       >
                         <el-date-picker
                           type="datetime"
@@ -210,13 +211,13 @@
                           style="width: 100%"
                           :value="myForm.scheduled_dt"
                           :placeholder="
-                            t('Order.form.scheduled_dt.placeholder')
+                            $t('Order.form.scheduled_dt.placeholder')
                           "
                           :format="
-                            t('filters.components.CompDateTime.formatTemplate')
+                            $t('filters.components.CompDateTime.formatTemplate')
                           "
                           :value-format="
-                            t(
+                            $t(
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
@@ -234,24 +235,24 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.due_date.prefix')"
+                      :label="$t('Order.form.due_date.prefix')"
                       prop="due_date"
                     >
                       <el-tooltip
-                        :content="t('Order.form.due_date.placeholder')"
+                        :content="$t('Order.form.due_date.placeholder')"
                         placement="top-end"
                         effect="light"
-                        :open-delay="500"
+                        :show-after="500"
                       >
                         <el-date-picker
                           style="width: 100%"
                           :value="myForm.due_date"
-                          :placeholder="t('Order.form.due_date.placeholder')"
+                          :placeholder="$t('Order.form.due_date.placeholder')"
                           :format="
-                            t('filters.components.CompDate.formatTemplate')
+                            $t('filters.components.CompDate.formatTemplate')
                           "
                           :value-format="
-                            t('filters.components.CompDate.formatTemplateValue')
+                            $t('filters.components.CompDate.formatTemplateValue')
                           "
                           @input="
                             (event) =>
@@ -282,7 +283,7 @@
                             })
                         "
                         >{{
-                          t("Order.form.third_company.placeholder")
+                          $t("Order.form.third_company.placeholder")
                         }}</el-checkbox
                       >
                     </el-form-item>
@@ -295,11 +296,11 @@
                     :span="12"
                   >
                     <el-form-item
-                      :label="t('Order.form.worker_id.prefix')"
+                      :label="$t('Order.form.worker_id.prefix')"
                       prop="worker_id"
                     >
                       <el-tooltip
-                        :content="t('Order.form.worker_id.placeholder')"
+                        :content="$t('Order.form.worker_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -311,7 +312,7 @@
                           :remote-method="workerSearch"
                           style="width: 100%"
                           :value="myForm.worker_id"
-                          :placeholder="t('Order.form.worker_id.placeholder')"
+                          :placeholder="$t('Order.form.worker_id.placeholder')"
                           :loading="workerIdLoading"
                           @change="(event) => modifyWorker(event.target.value)"
                         >
@@ -338,11 +339,11 @@
                   </el-col>
                   <el-col v-if="myForm.third_company === true" :span="12">
                     <el-form-item
-                      :label="t('Order.form.third_company_id.prefix')"
+                      :label="$t('Order.form.third_company_id.prefix')"
                       prop="third_company_id"
                     >
                       <el-tooltip
-                        :content="t('Order.form.third_company_id.placeholder')"
+                        :content="$t('Order.form.third_company_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -355,7 +356,7 @@
                           style="width: 100%"
                           :value="myForm.third_company_id"
                           :placeholder="
-                            t('Order.form.third_company_id.placeholder')
+                            $t('Order.form.third_company_id.placeholder')
                           "
                           :loading="thirdCompanyIdLoading"
                           @change="
@@ -383,11 +384,11 @@
                 <el-row :gutter="20">
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.property_id.prefix')"
+                      :label="$t('Order.form.property_id.prefix')"
                       prop="property_id"
                     >
                       <el-tooltip
-                        :content="t('Order.form.property_id.placeholder')"
+                        :content="$t('Order.form.property_id.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
@@ -399,7 +400,7 @@
                           :remote-method="propertySearch"
                           style="width: 100%"
                           :value="myForm.property_id"
-                          :placeholder="t('Order.form.property_id.placeholder')"
+                          :placeholder="$t('Order.form.property_id.placeholder')"
                           :loading="propertyIdLoading"
                           @change="
                             (event) => modifyProperty(event.target.value)
@@ -426,18 +427,18 @@
                   </el-col>
                   <el-col :span="12">
                     <el-form-item
-                      :label="t('Order.form.entry_code.prefix')"
+                      :label="$t('Order.form.entry_code.prefix')"
                       prop="entry_code"
                     >
                       <el-tooltip
-                        :content="t('Order.form.entry_code.placeholder')"
+                        :content="$t('Order.form.entry_code.placeholder')"
                         placement="top-end"
                         effect="light"
                       >
                         <el-input
                           style="width: 100%"
                           clearable
-                          :placeholder="t('Order.form.entry_code.placeholder')"
+                          :placeholder="$t('Order.form.entry_code.placeholder')"
                           :value="myForm.entry_code"
                           @input="
                             (event) =>
@@ -595,7 +596,7 @@
                               data: event.target.value,
                             })
                         "
-                        >{{ t("Order.form.canceled.placeholder") }}</el-checkbox
+                        >{{ $t("Order.form.canceled.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -615,7 +616,7 @@
                             })
                         "
                         >{{
-                          t("Order.form.completed.placeholder")
+                          $t("Order.form.completed.placeholder")
                         }}</el-checkbox
                       >
                     </el-form-item>
@@ -624,20 +625,20 @@
                     <el-form-item
                       :label="
                         myForm.canceled
-                          ? t('Order.form.done_dt.prefix')
-                          : t('Order.form.done_dt.prefix2')
+                          ? $t('Order.form.done_dt.prefix')
+                          : $t('Order.form.done_dt.prefix2')
                       "
                       prop="done_dt"
                     >
                       <el-tooltip
                         :content="
                           myForm.canceled
-                            ? t('Order.form.done_dt.placeholder')
-                            : t('Order.form.done_dt.placeholder2')
+                            ? $t('Order.form.done_dt.placeholder')
+                            : $t('Order.form.done_dt.placeholder2')
                         "
                         placement="top-end"
                         effect="light"
-                        :open-delay="500"
+                        :show-after="500"
                       >
                         <!-- TODO: snippet DateTime правильное использование -->
                         <el-date-picker
@@ -647,14 +648,14 @@
                           :value="myForm.done_dt"
                           :placeholder="
                             myForm.canceled
-                              ? t('Order.form.done_dt.placeholder')
-                              : t('Order.form.done_dt.placeholder2')
+                              ? $t('Order.form.done_dt.placeholder')
+                              : $t('Order.form.done_dt.placeholder2')
                           "
                           :format="
-                            t('filters.components.CompDateTime.formatTemplate')
+                            $t('filters.components.CompDateTime.formatTemplate')
                           "
                           :value-format="
-                            t(
+                            $t(
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
@@ -683,18 +684,18 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item
-              :label="t('Access.form.manager.prefix')"
+              :label="$t('Access.form.manager.prefix')"
               prop="manager"
             >
               <el-tooltip
-                :content="t('Access.form.manager.placeholder')"
+                :content="$t('Access.form.manager.placeholder')"
                 placement="top-end"
                 effect="light"
               >
                 <el-input
                   style="width: 100%"
                   clearable
-                  :placeholder="t('Access.form.manager.placeholder')"
+                  :placeholder="$t('Access.form.manager.placeholder')"
                   v-model="myForm.manager"
                   @input="
                     (event) =>
@@ -716,17 +717,17 @@
           </el-col>
           <el-col :span="18">
             <el-form-item
-              :label="t('Access.form.change_comment.prefix')"
+              :label="$t('Access.form.change_comment.prefix')"
               prop="change_comment"
             >
               <el-tooltip
-                :content="t('Access.form.change_comment.placeholder')"
+                :content="$t('Access.form.change_comment.placeholder')"
                 placement="top-end"
                 effect="light"
               >
                 <el-input
                   clearable
-                  :placeholder="t('Access.form.change_comment.placeholder')"
+                  :placeholder="$t('Access.form.change_comment.placeholder')"
                   v-model="myForm.change_comment"
                   @input="
                     (event) =>
@@ -751,19 +752,19 @@
       <div class="footer-body">
         <el-button
           type="info"
-          size="mini"
+          size="small"
           plain
           @click="resetForm(refMyForm)"
           :disabled="!isChanged || isLoading || isSaving"
-          >{{ t("Access.clear") }}</el-button
+          >{{ $t("Access.clear") }}</el-button
         >
         <el-button
           type="primary"
-          size="mini"
+          size="small"
           plain
           @click="submitForm(refMyForm)"
           :disabled="!isChanged || isLoading || isSaving || componentIsLoading"
-          >{{ t("Access.saved") }}</el-button
+          >{{ $t("Access.saved") }}</el-button
         >
       </div>
     </div>
@@ -882,6 +883,8 @@ const AddOrder = defineComponent({
 
     // execute at startup ========== >>>>>>>>>>
     onMounted(() => {
+      calculateDate();
+      getCalendarList();
       setReference({ name: "ref_property_type" });
       setReference({ name: "ref_order_type" });
       setReference({ name: "ref_order_status" });
@@ -958,10 +961,13 @@ const AddOrder = defineComponent({
     const selfDate = DateTime.local().toFormat(
       t("filters.components.CompDate.formatTemplateValue") as string
     );
-    () => calculateDate();
-    () => getCalendarList();
+    
     // execute at startup <<<<<<<< ==========
-
+    const calculateDate = () => {
+      if (dtIn === null) {
+        dtIn = DateTime.local().startOf("day");
+      }
+    };
     const modifyProperty = (id: number): void => {
       modify({ name: "property_id", data: id });
       for (const v of propertyIdItemsList) {
@@ -996,11 +1002,7 @@ const AddOrder = defineComponent({
     };
 
     // методы для календаря
-    const calculateDate = () => {
-      if (dtIn === null) {
-        dtIn = DateTime.local().startOf("day");
-      }
-    };
+    
     const nextDate = (): any => {
       dtIn = dtIn.plus({ days: params.nextStep });
       getCalendarList();
@@ -1184,7 +1186,6 @@ const AddOrder = defineComponent({
     };
 
     return {
-      t,
       submitForm,
       resetForm,
       myForm,

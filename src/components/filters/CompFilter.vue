@@ -146,7 +146,7 @@
                         <el-button
                           icon="el-icon-search"
                           type="primary"
-                          size="mini"
+                          size="small"
                           plain
                           @click="search(); visibleDrawer = false"
                         >{{$t('filters.search')}}</el-button>
@@ -375,7 +375,6 @@
         </el-col>
       </el-row>
     </div>
-    <el-icon :size="24"><compass /></el-icon>
     <template v-slot:reference>
       <el-button
         v-if="arrView.length == 0"
@@ -777,6 +776,7 @@ const CompFilter = defineComponent({
       });
     };
     return {
+      filters,
       filterGroupList,
       filterListFn,
       conditionListFn,
@@ -800,7 +800,6 @@ const CompFilter = defineComponent({
       setTemplateFn,
       windowWidth,
       arrView
-      
     }
   }
 });

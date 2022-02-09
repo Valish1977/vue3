@@ -6,7 +6,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
-const excelModel = (getDate: (v: string) => string, getDateTime: (v: string) => string) => {
+const excelModel = (getDate: (v: string) => string, getDateTime: (v: string) => string): Data => {
     const store = useStore();
     const {t} = useI18n();
     const filterStrQuery = computed(() => store.getters[FILTER_GETTERS.STR_QUERY] );

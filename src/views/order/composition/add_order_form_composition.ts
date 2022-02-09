@@ -3,7 +3,7 @@ import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
 
-import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS, ORDER_FORM_STATE } from "@/store/modules/orderForm";
+import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS } from "@/store/modules/orderForm";
 import type { ElForm } from 'element-plus'
 type FormInstance = InstanceType<typeof ElForm>;
 import { SingletonCompositionClass } from '@/interfaces/composition_singleton';
@@ -20,13 +20,13 @@ const addOrderFormComposition = (
   client: Data,
   worker: Data,
   thirdCompany: Data
-) => {
+): Data => {
     const store = useStore();
     const { t } = useI18n();
 
     const myForm = computed(() => store.getters[ORDER_FORM_GETTERS.ITEMS]);
     const fts = computed(() => store.getters[ORDER_FORM_GETTERS.FTS]);
-    const type = computed(() => store.state[ORDER_FORM_STATE.TYPE]);
+    const type = computed(() => store.getters[ORDER_FORM_GETTERS.TYPE]);
 
     const loadForm = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.LOAD, data);
     const save = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.SAVE, data);

@@ -2,7 +2,7 @@
   <div
     class="components-container"
     :style="
-      $store.getters['app/windowWidth'] < 768
+       windowWidth < 768
         ? 'margin-right: 15px; margin-left: 15px'
         : ''
     "
@@ -15,20 +15,21 @@
 import { computed, defineComponent, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { ROUTES_GETTERS } from '@/store/modules/routes';
-import { APP_DISPATCH } from '@/store/modules/app';
+import { APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
 const Dashboardtwo = defineComponent({
-  data() {
-    return {
-    }
-  },
   setup() {
     const store = useStore();
     const currentRoute = computed(() => store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE]);
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     onMounted((): void => {
         store.dispatch(APP_DISPATCH.SET_LOADING,
           {name: currentRoute.value.fullPath + ": after mounted component", value: false}
         ); // убираем окно после загрузки роута
     });
+
+    return {
+      windowWidth
+    }
   }
 });
 export default Dashboardtwo;

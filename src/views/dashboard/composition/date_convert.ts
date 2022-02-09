@@ -1,6 +1,7 @@
+import { Data } from "@/enums/enum_other";
 import { DateTime } from "luxon";
 
-const dateConvert = () => {
+const dateConvert = (): Data => {
     const getDateTime = (date: string): string => {
         if (DateTime.fromISO(date).isValid) {
           return DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_SHORT);

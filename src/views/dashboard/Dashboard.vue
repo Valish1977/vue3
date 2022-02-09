@@ -29,12 +29,12 @@
       <el-col :span="24" style="padding: 15px 10px; font-size: 14px">
         <list-of-filters-template>
           <template #prefix>
-            <span>{{ t("filters.prefix") }}</span>
+            <span>{{ $t("filters.prefix") }}</span>
           </template>
           <template #postfix>
             <comp-filter>
               <span style="color: #409eff; padding: 0 15px; cursor: pointer">{{
-                t("filters.advancedFilter")
+                $t("filters.advancedFilter")
               }}</span>
             </comp-filter>
           </template>
@@ -66,7 +66,7 @@
                 <span style="font-size: 12px; color: grey">{{getDateTime(v.saved)}}</span>
                 <el-row>
                   <el-col :span="24" align="right">
-                    <el-button @click="setInfoToDrawer(v)" type="text">{{t('Access.infoCard')}}</el-button>
+                    <el-button @click="setInfoToDrawer(v)" type="text">{{$t('Access.infoCard')}}</el-button>
                   </el-col>
                 </el-row>
           </div>
@@ -119,11 +119,11 @@
         align="right"
       >
         <el-button
-          size="mini"
+          size="small"
           style="width: 140px"
           plain
           @click="createExcel()"
-          >{{ t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
+          >{{ $t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
         ></el-button>
       </el-col>
     </el-row>
@@ -136,14 +136,14 @@
       <div class="bar__btn-list">
         <div
           class="bar__btn"
-          @mouseover="btnText = t('Order.addOrder')"
+          @mouseover="btnText = $t('Order.addOrder')"
           @mouseout="btnText = ''"
         >
           <el-button
             @click="setDrawer({ open: 'AddOrder', close: drawerComponent })"
             type="primary"
-            size="mini"
-            >{{ btnText }}<span v-if="btnText === ''">{{t('Order.addOrder')}}</span></el-button
+            size="small"
+            >{{ btnText }}<span v-if="btnText === ''">{{$t('Order.addOrder')}}</span></el-button
           >
         </div>
       </div>
@@ -218,6 +218,7 @@ import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vu
 import ListChips from "@/components/filters/ListChips.vue";
 import ExportExel from "@/components/excel/ExportExel.vue";
 import { EXCEL_DISPATCH } from '@/components/excel/store/excel';
+import AddOrder from "@/views/order/AddOrder.vue";
 
 const Dashboard = defineComponent({
   data() {
@@ -227,8 +228,8 @@ const Dashboard = defineComponent({
   components: {
     Back,
     Close,
-/*     AddOrder,
-    EditOrder,
+     AddOrder,
+    /*EditOrder,
     InfoOrder,
     DelOrder, */
     CompFilter,
@@ -333,7 +334,6 @@ const Dashboard = defineComponent({
       setDrawer({ open: "InfoOrder" });
     }
     const setQuery = (): void => {
-      console.table(filterStrQuery.value)
       store.dispatch(ORDER_DB_DISPATCH.CREATE_ORDER, {
         filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}` +
         `limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}` +
@@ -347,7 +347,6 @@ const Dashboard = defineComponent({
       });
     }
     return {
-      t,
       drawer,
       drawerTitle,
       setDrawer,
@@ -362,7 +361,8 @@ const Dashboard = defineComponent({
       orderStatusRef,
       tableItems,
       showVModal,
-      btnText
+      btnText,
+      handleClose
     }
 
   }

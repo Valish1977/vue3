@@ -10,7 +10,7 @@ import { computed, onMounted } from "vue";
 
 
 
-const filtersModel = () => {
+const filtersModel = (): Data => {
   const {t} = useI18n();
   const store = useStore();
   const setFilterModel = (data: Data) => store.dispatch(FILTER_DISPATCH.SET_MODEL, data);

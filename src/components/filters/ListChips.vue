@@ -1,7 +1,7 @@
 <template>
   <div>
     <span class="str-view">
-      <span class="first-text">{{t('filters.conditionFilter')}}</span>
+      <span class="first-text">{{$t('filters.conditionFilter')}}</span>
       <span class="first-text" v-for="(v, index)  in arrView" :key="index">
         <span class="operation" v-if="index != 0">{{$t(v.operation)}}</span>
         <el-tag>{{v.title}} {{$t(v.condition)}} {{v.value}}</el-tag>
@@ -28,7 +28,6 @@ const ListChips = defineComponent({
       setQuickSearch([]);
     }
     return {
-      t,
       arrView,
       clearConditions
     }

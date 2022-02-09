@@ -2,7 +2,7 @@
     <div class="login-container">
     <el-form 
       class="login-form"
-      :class="$store.getters['app/windowWidth'] < 768 ? 'login-form-mobile' : 'login-form-full'"
+      :class="windowWidth < 768 ? 'login-form-mobile' : 'login-form-full'"
       autoComplete="on"
       :model="loginForm"
       ref="loginFormElement"
@@ -34,14 +34,18 @@
 
 <script lang="ts">
 
-import { defineComponent, reactive, ref } from 'vue';
+import { computed, defineComponent, reactive, ref } from 'vue';
 import notificationComposition from "@/compositions/notification_composition";
 import authComposition from "@/compositions/auth_composition";
+import { useStore } from 'vuex';
+import { APP_GETTERS } from '@/store/modules/app';
 const LoginView = defineComponent({
   data() {
     return {}
   },
   setup() {
+    const store = useStore();
+    const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     notificationComposition();
     const {
       loginIn,
@@ -54,7 +58,8 @@ const LoginView = defineComponent({
       loginIn(() => { /**/});
     }
     
-     return {
+    return {
+      windowWidth,
       showPwd,
       doLogin,
       authProcessLoading,

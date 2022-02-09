@@ -1,6 +1,7 @@
 {
   "routes": {
     "dashboard": "Board",
+    "dashboard2": "Board 2",
     "client": "Client",
     "thirdCompany": "Third Company",
     "worker": "Worker",

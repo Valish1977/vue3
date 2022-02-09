@@ -1,21 +1,19 @@
-import { computed, onBeforeUpdate, onMounted, onUnmounted, onUpdated, reactive, Ref, ref, watch } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
 
-import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS, ORDER_FORM_STATE } from "@/store/modules/orderForm";
+import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS } from "@/store/modules/orderForm";
 import type { ElForm } from 'element-plus'
 type FormInstance = InstanceType<typeof ElForm>;
-import { SingletonCompositionClass } from '@/interfaces/composition_singleton';
 import { Data } from "@/enums/enum_other";
 import { DateTime } from "luxon";
 import { APP_BUS_STATE, APP_DISPATCH } from "@/store/modules/app";
 import UserApi from "@/domain/api/user";
-import MarkdownEditor from "@/components/MarkdownEditor.vue";
 import PropertyApi from "@/domain/api/property";
 import ThirdCompanyApi from "@/domain/api/thirdCompany";
 
-const orderFormComposition = () => {
+const orderFormComposition = (): Data => {
     const store = useStore();
     const { t } = useI18n();
     const userApi = new UserApi();
@@ -24,11 +22,9 @@ const orderFormComposition = () => {
     const isChanged = computed(() => store.getters[ORDER_FORM_GETTERS.IS_CHANGED]);
 
     const fts = computed(() => store.getters[ORDER_FORM_GETTERS.FTS]);
-    const type = computed(() => store.state[ORDER_FORM_STATE.TYPE]);
-    const isLoading = computed(() => store.state[ORDER_FORM_STATE.IS_LOADING]);
-    const isSaving = computed(() => store.state[ORDER_FORM_STATE.IS_SAVING]);
-    const isVisible = computed(() => store.state[ORDER_FORM_STATE.IS_VISIBLE]);
-
+    const isLoading = computed(() => store.getters[ORDER_FORM_GETTERS.IS_LOADING]);
+    const isSaving = computed(() => store.getters[ORDER_FORM_GETTERS.IS_SAVING]);
+    const isVisible = computed(() => store.getters[ORDER_FORM_GETTERS.IS_VISIBLE]);
     
     const refMyForm = ref<FormInstance>();
     const setProcessloadingForm = ref(false);
@@ -71,10 +67,9 @@ const orderFormComposition = () => {
     });
 
     const loadForm = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.LOAD, data);
-    const save = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.SAVE, data);
     const modify = (data: Data) => store.commit(ORDER_FORM_COMMIT.MODIFY, data);
     const reset = () => store.commit(ORDER_FORM_COMMIT.RESET_CHANGES);
-    const closeForm = () => store.commit(ORDER_FORM_DISPATCH.CLOSE);
+    const closeForm = () => store.dispatch(ORDER_FORM_DISPATCH.CLOSE);
       
       
       const validateDate = (rule: any, value: any, callback: any) => {

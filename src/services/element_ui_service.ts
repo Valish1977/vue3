@@ -7,7 +7,6 @@ export default class ElementUiService {
     this._options = {
         /* eslint-disable  @typescript-eslint/no-explicit-any */
         i18n:  (key: any): any => I18nService.Instance.i18n.global.locale,
-        size: "small"
     }
   }
   public get options(): any {

@@ -3,8 +3,8 @@
     <el-date-picker
       style="width:100%"
       :placeholder="compParam('placeholder')"
-      :format="t('filters.components.CompDate.formatTemplate')"
-      :value-format="t('filters.components.CompDate.formatTemplateValue')"
+      :format="$t('filters.components.CompDate.formatTemplate')"
+      :value-format="$t('filters.components.CompDate.formatTemplateValue')"
       @input="fieldChange()"
       v-model="fieldText"
     ></el-date-picker>
@@ -66,7 +66,6 @@ const CompDate = defineComponent({
       return props.setParam[name];
     }
     return {
-      t,
       fieldChange,
       compParam,
       fieldText

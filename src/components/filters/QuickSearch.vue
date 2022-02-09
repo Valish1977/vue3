@@ -15,20 +15,22 @@
           :content="compParam('placeholder')"
           placement="top-end"
           effect="light"
-          :open-delay="500"
+          :show-after="500"
         >
           <el-input
-            size="mini"
+            size="small"
             clearable
             :placeholder="compParam('placeholder')"
             v-model="myForm.name"
           >
-            <el-button
-              type="primary"
-              :disabled="isLoading"
-              @click="search()"
-            ><template #append></template>
-            {{$t("filters.quickSearch.form.send")}}</el-button>
+            <template #append>
+              <el-button
+                type="primary"
+                :disabled="isLoading"
+                @click="search()"
+              >
+              {{$t("filters.quickSearch.form.send")}}</el-button>
+            </template>
           </el-input>
         </el-tooltip>
       </el-form-item>
@@ -122,6 +124,7 @@ const QuickSearch = defineComponent({
     }
 
     return {
+      validateInput,
       myForm,
       isLoading,
       compParam,
