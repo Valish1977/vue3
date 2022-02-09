@@ -8,7 +8,6 @@
           icon="el-icon-search"
           circle
           type="primary"
-          size="small"
           plain
           style="margin-top:-4px"
         ></el-button>
@@ -16,7 +15,6 @@
           v-else
           circle
           type="primary"
-          size="small"
           plain
           style="margin-top:-4px"
         >
@@ -146,7 +144,6 @@
                         <el-button
                           icon="el-icon-search"
                           type="primary"
-                          size="small"
                           plain
                           @click="search(); visibleDrawer = false"
                         >{{$t('filters.search')}}</el-button>
@@ -321,7 +318,6 @@
           <el-button
             icon="el-icon-search"
             type="primary"
-            size="small"
             plain
             @click="search()"
           >{{$t('filters.search')}}</el-button>
@@ -380,7 +376,6 @@
         v-if="arrView.length == 0"
         circle
         type="primary"
-        size="small"
         plain
         style="margin-top:-4px"
       >
@@ -390,7 +385,6 @@
         v-else
         circle
         type="primary"
-        size="small"
         plain
         style="margin-top:-4px"
       >

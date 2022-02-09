@@ -119,7 +119,6 @@
         align="right"
       >
         <el-button
-          size="small"
           style="width: 140px"
           plain
           @click="createExcel()"
@@ -142,7 +141,6 @@
           <el-button
             @click="setDrawer({ open: 'AddOrder', close: drawerComponent })"
             type="primary"
-            size="small"
             >{{ btnText }}<span v-if="btnText === ''">{{$t('Order.addOrder')}}</span></el-button
           >
         </div>

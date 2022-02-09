@@ -52,7 +52,6 @@
                       </el-col>
                       <el-col v-if="params.types !== undefined" :span="params.types !== undefined && params.types.length > 1 ? 18 : 24" align="right">
                         <el-button v-for="(type, k) in params.types"  :key="k"
-                          size="small"
                           plain
                           :loading="( isProcessCreate && computedKey == fieldKey && typeResponse === type )"
                           @click="setExcelData({name: 'data', data: params, params:{created: true, group, fieldKey, typeResponse: type  }});"
@@ -60,7 +59,6 @@
                       </el-col>
                       <el-col v-if="params.types === undefined" :span="24" align="right">
                         <el-button
-                          size="small"
                           style="width:140px"
                           plain
                           :loading="( isProcessCreate && computedKey == fieldKey)"

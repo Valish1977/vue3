@@ -18,7 +18,6 @@
           :show-after="500"
         >
           <el-input
-            size="small"
             clearable
             :placeholder="compParam('placeholder')"
             v-model="myForm.name"

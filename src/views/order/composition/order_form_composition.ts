@@ -98,10 +98,10 @@ const orderFormComposition = (): Data => {
 
       // this if allows you to call hooks once when the composition is called again
     const modifyFn = (data: any, action = null): void => {
+      console.log("sdsdsds");
         if (setProcessloadingForm.value) {
           if (action === "trim") {
             data.data = data.data.trim();
-            myForm.value[data.name] = data.data;
           }
           /*       if (data.name === "plan_hour") {
             myForm.value.plan_min = myForm.value.plan_hour * 60;
@@ -110,61 +110,58 @@ const orderFormComposition = (): Data => {
           modify(data);
           if (data.name === "scheduled_dt") {
             const date = DateTime.fromFormat(
-              myForm.value.scheduled_dt,
+              data.data,
               t("filters.components.CompDateTime.formatTemplateValue") as string
             );
-            myForm.value.due_date = date.toISODate();
-            modify({ name: "due_date", data: myForm.value.due_date });
-            myForm.value.scheduled_dt =
-              date.toSQL() === null ? myForm.value.scheduled_dt : date.toSQL();
+            modify({ name: "due_date", data: date.toISODate()});
             try {
-              modify({ name: "scheduled_dt", data: myForm.value.scheduled_dt });
+              modify({ name: "scheduled_dt", data: date.toSQL() === null ? data.data: date.toSQL() });
             } catch (e) {
               // console.log(e);
             }
           }
           if (data.name === "next_arrival_dt") {
             const date = DateTime.fromFormat(
-              myForm.value.next_arrival_dt,
+              data.data,
               t("filters.components.CompDateTime.formatTemplateValue") as string
             );
-            myForm.value.next_arrival_dt =
-              date.toSQL() === null ? myForm.value.next_arrival_dt : date.toSQL();
             try {
               modify({
                 name: "next_arrival_dt",
-                data: myForm.value.next_arrival_dt
+                data: date.toSQL() === null ? data.data : date.toSQL()
               });
             } catch (e) {
               // console.log(e);
             }
           }
-          if (data.name === "canceled" && myForm.value.canceled) {
-            myForm.value.completed = false;
-            modify({ name: "completed", data: myForm.value.completed });
-          }
-          if (data.name === "completed" && myForm.value.completed) {
-            myForm.value.canceled = false;
-            modify({ name: "canceled", data: myForm.value.canceled });
-          }
-          if (data.name === "canceled" || data.name === "completed") {
-            if (myForm.value.canceled || myForm.value.completed) {
-              myForm.value.done_dt = DateTime.local().toSQL();
-              modify({ name: "done_dt", data: myForm.value.done_dt });
+          if (data.name === "canceled" ) {
+            if(data.data) {
+              modify({ name: "completed", data: false});
+            }
+            if (data.data || myForm.value.completed) {
+              modify({ name: "done_dt", data: DateTime.local().toSQL() });
             } else {
-              myForm.value.done_dt = null;
-              modify({ name: "done_dt", data: myForm.value.done_dt });
+              modify({ name: "done_dt", data: null });
             }
           }
+          if (data.name === "completed") {
+            if(data.data) {
+              modify({ name: "canceled", data: false });
+            }
+            if (data.data || myForm.value.canceled) {
+              modify({ name: "done_dt", data: DateTime.local().toSQL() });
+            } else {
+              modify({ name: "done_dt", data: null });
+            }
+          }
+
           if (data.name === "done_dt") {
             const date = DateTime.fromFormat(
-              myForm.value.done_dt,
+              data.data,
               t("filters.components.CompDateTime.formatTemplateValue") as string
             );
-            myForm.value.done_dt =
-              date.toSQL() === null ? myForm.value.done_dt : date.toSQL();
             try {
-              modify({ name: "done_dt", data: myForm.value.done_dt });
+              modify({ name: "done_dt", data: date.toSQL() === null ? data.data : date.toSQL() });
             } catch (e) {
               // console.log(e);
             }

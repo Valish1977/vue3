@@ -17,7 +17,6 @@
 #  created: true - эксель будет сразу сформирован без вывода настроек
 # }
 # <el-button
-#          size="small"
 #          style="width:140px"
 #          plain
 #          @click="$store.dispatch('excel/SET_EXCEL_DATA', {name: 'data', data: paramsExcel, params:{settings: true, group: 'allData', key: 'allData' }});"

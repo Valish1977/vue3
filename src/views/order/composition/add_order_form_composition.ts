@@ -1,4 +1,4 @@
-import { computed, onBeforeUpdate, onMounted, onUnmounted, onUpdated, reactive, Ref, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
@@ -6,7 +6,6 @@ import { useStore } from "vuex";
 import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS } from "@/store/modules/orderForm";
 import type { ElForm } from 'element-plus'
 type FormInstance = InstanceType<typeof ElForm>;
-import { SingletonCompositionClass } from '@/interfaces/composition_singleton';
 import { Data } from "@/enums/enum_other";
 import { DateTime } from "luxon";
 import OrderApi from "@/domain/api/order";
@@ -25,18 +24,12 @@ const addOrderFormComposition = (
     const { t } = useI18n();
 
     const myForm = computed(() => store.getters[ORDER_FORM_GETTERS.ITEMS]);
-    const fts = computed(() => store.getters[ORDER_FORM_GETTERS.FTS]);
-    const type = computed(() => store.getters[ORDER_FORM_GETTERS.TYPE]);
-
-    const loadForm = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.LOAD, data);
     const save = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.SAVE, data);
     const modify = (data: Data) => store.commit(ORDER_FORM_COMMIT.MODIFY, data);
     const reset = () => store.commit(ORDER_FORM_COMMIT.RESET_CHANGES);
     const refOrderStatus = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
     const refOrderType = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_TYPE)?? []);
     const refChargedFrom = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.CHANGED_FORM)?? []);
-    const refMyForm = ref<FormInstance>();
-    const setProcessloadingForm = ref(false);
     const componentIsLoading = ref(true);
     
 

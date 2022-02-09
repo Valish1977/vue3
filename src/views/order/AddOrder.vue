@@ -31,10 +31,10 @@
                           :value="myForm.priority_lvl"
                           :colors="colorsRate"
                           @change="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'priority_lvl',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         >
@@ -48,10 +48,10 @@
                         style="width: 100%"
                         :value="myForm.touch_up"
                         @change="
-                          (event) =>
+                          (value) =>
                             modifyFn({
                               name: 'touch_up',
-                              data: event.target.value,
+                              data: value,
                             })
                         "
                         >{{ $t("Order.form.touch_up.placeholder") }}</el-checkbox
@@ -87,12 +87,12 @@
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
-                          default-time="12:00:00"
+                          :default-time="defaultTime"
                           @input="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'next_arrival_dt',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         ></el-date-picker>
@@ -108,10 +108,10 @@
                         style="width: 100%"
                         :value="myForm.owner_arrival"
                         @change="
-                          (event) =>
+                          (value) =>
                             modifyFn({
                               name: 'owner_arrival',
-                              data: event.target.value,
+                              data: value,
                             })
                         "
                         >{{
@@ -140,10 +140,10 @@
                             $t('Order.form.order_type_id.placeholder')
                           "
                           @change="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'order_type_id',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         >
@@ -175,10 +175,10 @@
                             $t('Order.form.charged_from_id.placeholder')
                           "
                           @change="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'charged_from_id',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         >
@@ -221,12 +221,12 @@
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
-                          default-time="12:00:00"
+                          :default-time="defaultTime"
                           @input="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'scheduled_dt',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         ></el-date-picker>
@@ -255,10 +255,10 @@
                             $t('filters.components.CompDate.formatTemplateValue')
                           "
                           @input="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'due_date',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         ></el-date-picker>
@@ -276,10 +276,10 @@
                         style="width: 100%"
                         :value="myForm.third_company"
                         @change="
-                          (event) =>
+                          (value) =>
                             modifyFn({
                               name: 'third_company',
-                              data: event.target.value,
+                              data: value,
                             })
                         "
                         >{{
@@ -314,7 +314,7 @@
                           :value="myForm.worker_id"
                           :placeholder="$t('Order.form.worker_id.placeholder')"
                           :loading="workerIdLoading"
-                          @change="(event) => modifyWorker(event.target.value)"
+                          @change="(value) => modifyWorker(value)"
                         >
                           <el-option
                             v-for="item in workerIdItemsList"
@@ -360,7 +360,7 @@
                           "
                           :loading="thirdCompanyIdLoading"
                           @change="
-                            (event) => modifyThirdCompany(event.target.value)
+                            (value) => modifyThirdCompany(value)
                           "
                         >
                           <el-option
@@ -403,7 +403,7 @@
                           :placeholder="$t('Order.form.property_id.placeholder')"
                           :loading="propertyIdLoading"
                           @change="
-                            (event) => modifyProperty(event.target.value)
+                            (value) => modifyProperty(value)
                           "
                         >
                           <el-option
@@ -441,10 +441,10 @@
                           :placeholder="$t('Order.form.entry_code.placeholder')"
                           :value="myForm.entry_code"
                           @input="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'entry_code',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                           @change="
@@ -590,10 +590,10 @@
                         style="width: 100%"
                         :value="myForm.canceled"
                         @change="
-                          (event) =>
+                          (value) =>
                             modifyFn({
                               name: 'canceled',
-                              data: event.target.value,
+                              data: value,
                             })
                         "
                         >{{ $t("Order.form.canceled.placeholder") }}</el-checkbox
@@ -609,10 +609,10 @@
                         style="width: 100%"
                         :value="myForm.completed"
                         @change="
-                          (event) =>
+                          (value) =>
                             modifyFn({
                               name: 'completed',
-                              data: event.target.value,
+                              data: value,
                             })
                         "
                         >{{
@@ -659,12 +659,12 @@
                               'filters.components.CompDateTime.formatTemplateValue'
                             )
                           "
-                          default-time="12:00:00"
+                          :default-time="defaultTime"
                           @input="
-                            (event) =>
+                            (value) =>
                               modifyFn({
                                 name: 'done_dt',
-                                data: event.target.value,
+                                data: value,
                               })
                           "
                         ></el-date-picker>
@@ -696,18 +696,18 @@
                   style="width: 100%"
                   clearable
                   :placeholder="$t('Access.form.manager.placeholder')"
-                  v-model="myForm.manager"
+                  :value="myForm.manager"
                   @input="
-                    (event) =>
+                    (value) =>
                       modifyFn(
-                        { name: 'manager', data: event.target.value },
+                        { name: 'manager', data: value },
                         'trim'
                       )
                   "
                   @change="
-                    (event) =>
+                    (value) =>
                       modifyFn(
-                        { name: 'manager', data: event.target.value },
+                        { name: 'manager', data: value },
                         'trim'
                       )
                   "
@@ -728,19 +728,19 @@
                 <el-input
                   clearable
                   :placeholder="$t('Access.form.change_comment.placeholder')"
-                  v-model="myForm.change_comment"
+                  :value="myForm.change_comment"
                   @input="
-                    (event) =>
+                    (value) =>
                       modifyFn({
                         name: 'change_comment',
-                        data: event.target.value,
+                        data: value,
                       })
                   "
                   @change="
-                    (event) =>
+                    (value) =>
                       modifyFn({
                         name: 'change_comment',
-                        data: event.target.value,
+                        data: value,
                       })
                   "
                 ></el-input>
@@ -752,7 +752,6 @@
       <div class="footer-body">
         <el-button
           type="info"
-          size="small"
           plain
           @click="resetForm(refMyForm)"
           :disabled="!isChanged || isLoading || isSaving"
@@ -760,7 +759,6 @@
         >
         <el-button
           type="primary"
-          size="small"
           plain
           @click="submitForm(refMyForm)"
           :disabled="!isChanged || isLoading || isSaving || componentIsLoading"
@@ -819,6 +817,7 @@ const AddOrder = defineComponent({
       countDays: 10,
       nextStep: 10,
     };
+    const defaultTime = new Date(2000, 1, 1, 12, 0, 0)
 
     const {
       resetForm,
@@ -1168,6 +1167,7 @@ const AddOrder = defineComponent({
       componentIsLoading,
       isSaving,
       isVisible,
+      defaultTime,
 
       refChargedFrom,
       refOrderType,
