@@ -146,14 +146,13 @@
         </div>
       </div>
     </div>
-    <!-- :wrapperClosable="false" -->
     <el-drawer
       v-model="drawer"
-      :show-close="false"
       :close-on-click-modal="!showBack"
       :close-on-press-escape="!showBack"
-      :modal="false"
-      :before-close="handleClose"
+      :before-close="(_) => setDrawer()"
+      :modal="showVModal"
+      modal-class="drawer-modal-class"
       :size="`${windowWidth < 768 ? windowWidth : 768}px`"
       direction="rtl"
       destroy-on-close
@@ -162,45 +161,20 @@
         <div>
           <span
             style="cursor: pointer; padding-right: 15px"
-            v-if="showBack && isDialog"
+            v-if="showBack"
             @click="setDrawer({ open: 'InfoOrder', close: drawerComponent })"
           >
             <el-icon><back /></el-icon>
           </span>
           {{ drawerTitle }}
-          <button
-            @click="setDrawer()"
-            style="position: absolute; right: 15px; top: 15px"
-            aria-label="close drawer"
-            type="button"
-            class="el-drawer__close-btn"
-          >
-            <el-icon :size="24"><close /></el-icon>
-          </button>
         </div>
       </template>
-      <keep-alive>
-      <Suspense>
-        <template #default>
-           <component
-            :is="drawerComponent"
-            :parametrs="dialogInfo"
-            @setDrawer="setDrawer"
-          ></component>
-        </template>
-        <template #fallback>
-           <el-col v-loading="true" style="width: 100%; height: 100%;"></el-col>
-        </template> 
-      </Suspense>
-      
-      </keep-alive>
+      <component
+        :is="drawerComponent"
+        :parametrs="drawerInfoContent"
+        @setDrawer="setDrawer"
+      ></component>
     </el-drawer>
-    <div
-      v-show="showVModal"
-      class="v-modal"
-      tabindex="0"
-      style="z-index: 1002; opacity: 0.2"
-    ></div>
   </div>
 </template>
 
@@ -224,9 +198,14 @@ import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
 import ListChips from "@/components/filters/ListChips.vue";
 import ExportExel from "@/components/excel/ExportExel.vue";
-const AddOrder = defineAsyncComponent(() =>
-  import("@/views/order/AddOrder.vue"),
-)
+import LoadingComponent from "@/components/LoadingComponent.vue";
+const AddOrder = defineAsyncComponent({
+  loader: () => import("@/views/order/AddOrder.vue"),
+  delay: 200,
+  timeout: 3000,
+  errorComponent: LoadingComponent,
+  loadingComponent: LoadingComponent
+});
 
 const Dashboard = defineComponent({
   data() {
@@ -236,7 +215,8 @@ const Dashboard = defineComponent({
   components: {
     Back,
     Close,
-     AddOrder,
+    AddOrder,
+    LoadingComponent,
     /*EditOrder,
     InfoOrder,
     DelOrder, */
@@ -250,12 +230,16 @@ const Dashboard = defineComponent({
     const store = useStore();
     const {t} = useI18n();
     const drawer = ref(false);
-    const showBack = computed(() =>  ["DelOrder", "EditOrder"].indexOf(drawerComponent.value) !== -1);
+    const drawerInfoContent = reactive<Data>({});
+    const showBack = computed(() =>  
+      ["DelOrder", "EditOrder"].indexOf(drawerComponent.value) !== -1 &&
+      Object.keys(drawerInfoContent).length > 0
+    );
     const showVModal = computed(() =>  ["DelOrder", "EditOrder", "AddOrder"].indexOf(drawerComponent.value) !== -1);
-    const drawerComponent = ref("");
-    const dialogInfo = reactive<Data>({});
+    const drawerComponent = ref("LoadingComponent");
+    
     const drawerTitle = ref("");
-    const isDialog = computed(() => Object.keys(dialogInfo).length > 0);
+    
     const tableItems = computed(() => OrderDb.query().orderBy("last_Item_flag", "desc").orderBy("name", "asc").get().map((item: OrderDb) => item.$toJson));
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
     const orderStatusRef = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
@@ -292,23 +276,17 @@ const Dashboard = defineComponent({
     горячей подмены через внесение изменений через стор*/
     /* eslint-disable-next-line no-unused-vars */
     const handleClose = (done: any) => {
-      if (!showBack.value && isDialog.value) {
-        setDrawer();
-      }
+      setDrawer();
     }
     const setDataToObject = (object: Data, newData: Data) => {
       Object.keys(object).forEach((key: string) => delete object[key]);
       Object.keys(newData).forEach((key: string) => object[key] = newData[key]);
     }
-    const setDrawer = (v: Data | null = null) => {
-      if (v === null) {
-        setDataToObject(dialogInfo, {});
-        drawer.value = false;
-      }
+    const setDrawer = (v?: Data) => {
       if (v) {
         if (v.data && v.data.id) {
-          const items = OrderDb.query().find(v.data.id);
-          setDataToObject(dialogInfo, Object.assign({tabNum: "1"}, items?.$toJson));
+          const item = OrderDb.query().find(v.data.id);
+          setDataToObject(drawerInfoContent, Object.assign({tabNum: "1"}, item?.$toJson));
         }
         switch (v.open) {
           case "InfoOrder": 
@@ -335,11 +313,12 @@ const Dashboard = defineComponent({
         }
         return;
       }
-      drawerComponent.value = "";
+      setDataToObject(drawerInfoContent, {});
       drawer.value = false;
+      drawerComponent.value = "LoadingComponent";
     }
     const setInfoToDrawer = (row: Data) => {
-      setDataToObject(dialogInfo, Object.assign({}, row));
+      setDataToObject(drawerInfoContent, Object.assign({}, row));
       setDrawer({ open: "InfoOrder" });
     }
     const setQuery = (): void => {
@@ -363,10 +342,9 @@ const Dashboard = defineComponent({
       getDateTime,
       createExcel,
       drawerComponent,
-      dialogInfo,
+      drawerInfoContent,
       windowWidth,
       showBack,
-      isDialog,
       orderStatusRef,
       tableItems,
       showVModal,
@@ -379,6 +357,9 @@ const Dashboard = defineComponent({
 export default Dashboard;
 </script>
 <style lang="scss">
+.drawer-modal-class {
+  background-color: rgba(0,0,0,.2);
+}
 .box-card {
   .el-card__body {
     padding: 5px;

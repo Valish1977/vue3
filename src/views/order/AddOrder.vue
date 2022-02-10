@@ -7,7 +7,6 @@
     :rules="rules"
     label-position="top"
     status-icon
-    v-loading="isLoading || isSaving || componentIsLoading"
   >
     <div v-if="isVisible" class="drawer-body">
       <el-row>
@@ -519,7 +518,6 @@
                   </el-col>
                 </el-row>
                 <el-row
-                  v-loading="calendarLoading"
                   class="reservation-container"
                   :gutter="20"
                   align="bottom"
@@ -870,7 +868,6 @@ const AddOrder = defineComponent({
       worker,
       thirdCompany
     );
-
     // execute at startup ========== >>>>>>>>>>
     onMounted(() => {
       calculateDate();
