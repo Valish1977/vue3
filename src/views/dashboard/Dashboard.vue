@@ -154,8 +154,7 @@
       :close-on-press-escape="!showBack"
       :modal="false"
       :before-close="handleClose"
-      :size="`${windowWidth < 768 ? windowWidth : 768}px`
-      "
+      :size="`${windowWidth < 768 ? windowWidth : 768}px`"
       direction="rtl"
       destroy-on-close
     >
@@ -180,11 +179,21 @@
           </button>
         </div>
       </template>
-      <component
-        :is="drawerComponent"
-        :parametrs="dialogInfo"
-        @setDrawer="setDrawer"
-      ></component>
+      <keep-alive>
+      <Suspense>
+        <template #default>
+           <component
+            :is="drawerComponent"
+            :parametrs="dialogInfo"
+            @setDrawer="setDrawer"
+          ></component>
+        </template>
+        <template #fallback>
+           <el-col v-loading="true" style="width: 100%; height: 100%;"></el-col>
+        </template> 
+      </Suspense>
+      
+      </keep-alive>
     </el-drawer>
     <div
       v-show="showVModal"
@@ -200,7 +209,7 @@ import filtersModel from './composition/filters_model';
 import dateConvert from './composition/date_convert';
 import excelModel from './composition/excel_model';
 /* import { verified } from "@/api/order"; */
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import { ROUTES_GETTERS } from '@/store/modules/routes';
 import { useStore } from 'vuex';
 import { APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
@@ -215,7 +224,9 @@ import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
 import ListChips from "@/components/filters/ListChips.vue";
 import ExportExel from "@/components/excel/ExportExel.vue";
-import AddOrder from "@/views/order/AddOrder.vue";
+const AddOrder = defineAsyncComponent(() =>
+  import("@/views/order/AddOrder.vue"),
+)
 
 const Dashboard = defineComponent({
   data() {

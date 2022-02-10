@@ -548,7 +548,6 @@
                                 (item.date === selfDate ? ' today' : '')
                               "
                             >
-                              <!-- отображаем разделитель split-->
                               <div
                                 v-if="item.split"
                                 class="splitClass"
