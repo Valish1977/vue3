@@ -3,7 +3,7 @@
   <el-form
     class="selfForm drawer-content"
     ref="refMyForm"
-    :model="myForm"
+    :model="ruleForm"
     :rules="rules"
     label-position="top"
     status-icon
@@ -12,10 +12,12 @@
       <el-row>
         <el-col :span="24">
           <el-scrollbar class="page-component__scroll">
+            
             <el-row>
               <el-col :span="23">
                 <el-row :gutter="20">
                   <el-col :span="6">
+                    
                     <el-form-item
                       :label="$t('Order.form.priority_lvl.prefix')"
                       prop="priority_lvl"
@@ -27,15 +29,8 @@
                       >
                         <el-rate
                           :max="3"
-                          :model-value="myForm.priority_lvl"
+                          v-model="ruleForm.priority_lvl"
                           :colors="colorsRate"
-                          @change="
-                            (value) =>
-                              modifyFn({
-                                name: 'priority_lvl',
-                                data: value,
-                              })
-                          "
                         >
                         </el-rate>
                       </el-tooltip>
@@ -45,14 +40,7 @@
                     <el-form-item prop="touch_up" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :model-value="myForm.touch_up"
-                        @change="
-                          (value) =>
-                            modifyFn({
-                              name: 'touch_up',
-                              data: value,
-                            })
-                        "
+                        v-model="ruleForm.touch_up"
                         >{{ $t("Order.form.touch_up.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
@@ -69,32 +57,21 @@
                         placement="top-end"
                         effect="light"
                       >
+
                       <div style="width: 100%">
                         <el-date-picker
                           type="datetime"
                           :shortcuts="shortcuts"
-                          :disabledDate="disabledDate"
+                          :disabled-date="disabledDate"
                           style="width: 100%"
-                          :model-value="myForm.next_arrival_dt"
+                          v-model="ruleForm.next_arrival_dt"
                           :placeholder="
                             $t('Order.form.next_arrival_dt.placeholder')
                           "
                           :format="
                             $t('filters.components.CompDateTime.formatTemplate')
                           "
-                          :value-format="
-                            $t(
-                              'filters.components.CompDateTime.formatTemplateValue'
-                            )
-                          "
                           :default-time="defaultTime"
-                          @input="
-                            (value) =>
-                              modifyFn({
-                                name: 'next_arrival_dt',
-                                data: value,
-                              })
-                          "
                         ></el-date-picker>
                       </div>
                       </el-tooltip>
@@ -107,14 +84,7 @@
                     <el-form-item prop="owner_arrival" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :model-value="myForm.owner_arrival"
-                        @change="
-                          (value) =>
-                            modifyFn({
-                              name: 'owner_arrival',
-                              data: value,
-                            })
-                        "
+                        v-model="ruleForm.owner_arrival"
                         >{{
                           $t("Order.form.owner_arrival.placeholder")
                         }}</el-checkbox
@@ -136,16 +106,9 @@
                         <el-select
                           filterable
                           style="width: 100%"
-                          :model-value="myForm.order_type_id?? ''"
+                          v-model="ruleForm.order_type_id"
                           :placeholder="
                             $t('Order.form.order_type_id.placeholder')
-                          "
-                          @change="
-                            (value) =>
-                              modifyFn({
-                                name: 'order_type_id',
-                                data: value,
-                              })
                           "
                         >
                           <el-option
@@ -171,16 +134,9 @@
                         <el-select
                           filterable
                           style="width: 100%"
-                          :model-value="myForm.charged_from_id?? ''"
+                          v-model="ruleForm.charged_from_id"
                           :placeholder="
                             $t('Order.form.charged_from_id.placeholder')
-                          "
-                          @change="
-                            (value) =>
-                              modifyFn({
-                                name: 'charged_from_id',
-                                data: value,
-                              })
                           "
                         >
                           <el-option
@@ -211,26 +167,14 @@
                           type="datetime"
                           :shortcuts="shortcuts"
                           style="width: 100%"
-                          :model-value="myForm.scheduled_dt"
+                          v-model="ruleForm.scheduled_dt"
                           :placeholder="
                             $t('Order.form.scheduled_dt.placeholder')
                           "
                           :format="
                             $t('filters.components.CompDateTime.formatTemplate')
                           "
-                          :value-format="
-                            $t(
-                              'filters.components.CompDateTime.formatTemplateValue'
-                            )
-                          "
-                          :default-time="defaultTime"
-                          @input="
-                            (value) =>
-                              modifyFn({
-                                name: 'scheduled_dt',
-                                data: value,
-                              })
-                          "
+                          :default-time="defaultTime" })
                         ></el-date-picker>
                       </div>
                       </el-tooltip>
@@ -250,20 +194,10 @@
                       <div style="width: 100%">
                         <el-date-picker
                           style="width: 100%"
-                          :model-value="myForm.due_date"
+                          v-model="ruleForm.due_date"
                           :placeholder="$t('Order.form.due_date.placeholder')"
                           :format="
                             $t('filters.components.CompDate.formatTemplate')
-                          "
-                          :value-format="
-                            $t('filters.components.CompDate.formatTemplateValue')
-                          "
-                          @input="
-                            (value) =>
-                              modifyFn({
-                                name: 'due_date',
-                                data: value,
-                              })
                           "
                         ></el-date-picker>
                       </div>
@@ -279,14 +213,7 @@
                     <el-form-item prop="third_company" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :model-value="myForm.third_company"
-                        @change="
-                          (value) =>
-                            modifyFn({
-                              name: 'third_company',
-                              data: value,
-                            })
-                        "
+                        v-model="ruleForm.third_company"
                         >{{
                           $t("Order.form.third_company.placeholder")
                         }}</el-checkbox
@@ -295,8 +222,8 @@
                   </el-col>
                   <el-col
                     v-if="
-                      myForm.third_company === null ||
-                      myForm.third_company === false
+                      ruleForm.third_company === null ||
+                      ruleForm.third_company === false
                     "
                     :span="12"
                   >
@@ -316,7 +243,7 @@
                           reserve-keyword
                           :remote-method="workerSearch"
                           style="width: 100%"
-                          :model-value="myForm.worker_id"
+                          v-model="ruleForm.worker_id"
                           :placeholder="$t('Order.form.worker_id.placeholder')"
                           :loading="workerIdLoading"
                           @change="(value) => modifyWorker(value)"
@@ -342,7 +269,7 @@
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
-                  <el-col v-if="myForm.third_company === true" :span="12">
+                  <el-col v-if="ruleForm.third_company === true" :span="12">
                     <el-form-item
                       :label="$t('Order.form.third_company_id.prefix')"
                       prop="third_company_id"
@@ -359,7 +286,7 @@
                           reserve-keyword
                           :remote-method="thirdCompanySearch"
                           style="width: 100%"
-                          :model-value="myForm.third_company_id"
+                          v-model="ruleForm.third_company_id"
                           :placeholder="
                             $t('Order.form.third_company_id.placeholder')
                           "
@@ -404,7 +331,7 @@
                           reserve-keyword
                           :remote-method="propertySearch"
                           style="width: 100%"
-                          :model-value="myForm.property_id"
+                          v-model="ruleForm.property_id"
                           :placeholder="$t('Order.form.property_id.placeholder')"
                           :loading="propertyIdLoading"
                           @change="
@@ -444,20 +371,7 @@
                           style="width: 100%"
                           clearable
                           :placeholder="$t('Order.form.entry_code.placeholder')"
-                          :modelValue="myForm.entry_code"
-                          @input="
-                            (value) =>
-                              modifyFn({
-                                name: 'entry_code',
-                                data: value,
-                              })
-                          "
-                          @change="
-                            modifyFn(
-                              { name: 'entry_code', data: myForm.entry_code },
-                              'trim'
-                            )
-                          "
+                          v-model="ruleForm.entry_code"
                         ></el-input>
                       </el-tooltip>
                     </el-form-item>
@@ -558,7 +472,7 @@
                     </table>
                   </el-col>
                 </el-row>
-                <el-row
+                 <el-row
                   class="reservation-container top"
                   justify="center"
                   :gutter="20"
@@ -583,7 +497,7 @@
                     </div>
                   </el-col>
                 </el-row>
-                <el-row :gutter="20">
+                 <el-row :gutter="20">
                   <el-col
                     :span="6"
                     style="padding-top: 26px; padding-bottom: 26px"
@@ -591,14 +505,7 @@
                     <el-form-item prop="canceled" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :model-value="myForm.canceled"
-                        @change="
-                          (value) =>
-                            modifyFn({
-                              name: 'canceled',
-                              data: value,
-                            })
-                        "
+                        v-model="ruleForm.canceled"
                         >{{ $t("Order.form.canceled.placeholder") }}</el-checkbox
                       >
                     </el-form-item>
@@ -610,24 +517,17 @@
                     <el-form-item prop="completed" style="margin-bottom: 0">
                       <el-checkbox
                         style="width: 100%"
-                        :model-value="myForm.completed"
-                        @change="
-                          (value) =>
-                            modifyFn({
-                              name: 'completed',
-                              data: value,
-                            })
-                        "
+                        v-model="ruleForm.completed"
                         >{{
                           $t("Order.form.completed.placeholder")
                         }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
-                  <el-col v-if="myForm.canceled || myForm.completed" :span="12">
+                  <el-col v-if="ruleForm.canceled || ruleForm.completed" :span="12">
                     <el-form-item
                       :label="
-                        myForm.canceled
+                        ruleForm.canceled
                           ? $t('Order.form.done_dt.prefix')
                           : $t('Order.form.done_dt.prefix2')
                       "
@@ -635,7 +535,7 @@
                     >
                       <el-tooltip
                         :content="
-                          myForm.canceled
+                          ruleForm.canceled
                             ? $t('Order.form.done_dt.placeholder')
                             : $t('Order.form.done_dt.placeholder2')
                         "
@@ -648,28 +548,16 @@
                           type="datetime"
                           :shortcuts="shortcuts"
                           style="width: 100%"
-                          :model-value="myForm.done_dt"
+                          v-model="ruleForm.done_dt"
                           :placeholder="
-                            myForm.canceled
+                            ruleForm.canceled
                               ? $t('Order.form.done_dt.placeholder')
                               : $t('Order.form.done_dt.placeholder2')
                           "
                           :format="
                             $t('filters.components.CompDateTime.formatTemplate')
                           "
-                          :value-format="
-                            $t(
-                              'filters.components.CompDateTime.formatTemplateValue'
-                            )
-                          "
                           :default-time="defaultTime"
-                          @input="
-                            (value) =>
-                              modifyFn({
-                                name: 'done_dt',
-                                data: value,
-                              })
-                          "
                         ></el-date-picker>
                         </div>
                       </el-tooltip>
@@ -700,21 +588,7 @@
                   style="width: 100%"
                   clearable
                   :placeholder="$t('Access.form.manager.placeholder')"
-                  :modelValue="myForm.manager"
-                  @input="
-                    (value) =>
-                      modifyFn(
-                        { name: 'manager', data: value },
-                        'trim'
-                      )
-                  "
-                  @change="
-                    (value) =>
-                      modifyFn(
-                        { name: 'manager', data: value },
-                        'trim'
-                      )
-                  "
+                  v-model="ruleForm.manager"
                 ></el-input>
               </el-tooltip>
             </el-form-item>
@@ -732,21 +606,7 @@
                 <el-input
                   clearable
                   :placeholder="$t('Access.form.change_comment.placeholder')"
-                  :modelValue="myForm.change_comment"
-                  @input="
-                    (value) =>
-                      modifyFn({
-                        name: 'change_comment',
-                        data: value,
-                      })
-                  "
-                  @change="
-                    (value) =>
-                      modifyFn({
-                        name: 'change_comment',
-                        data: value,
-                      })
-                  "
+                  v-model="ruleForm.change_comment"
                 ></el-input>
               </el-tooltip>
             </el-form-item>
@@ -828,6 +688,7 @@ const AddOrder = defineComponent({
       loadForm,
       closeForm,
       myForm,
+      ruleForm,
       refMyForm,
       rules,
       componentIsLoading,
@@ -897,24 +758,24 @@ const AddOrder = defineComponent({
     const shortcuts = [
       {
         text: "Today",
-        onClick(picker: any) {
-          picker.$emit("pick", new Date());
+        value: () => {
+          return new Date()
         },
       },
       {
         text: "Yesterday",
-        onClick(picker: any) {
+        value: () => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24);
-          picker.$emit("pick", date);
+          return date
         },
       },
       {
         text: "A week ago",
-        onClick(picker: any) {
+        value: () => {
           const date = new Date();
           date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-          picker.$emit("pick", date);
+          return date
         },
       },
     ];
@@ -1151,6 +1012,7 @@ const AddOrder = defineComponent({
       submitForm,
       resetForm,
       myForm,
+      ruleForm,
       refMyForm,
       rules,
       modifyFn,

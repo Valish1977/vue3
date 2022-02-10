@@ -39,6 +39,26 @@ const orderFormComposition = (): Data => {
     const propertyIdItemsList = reactive<Data[]>([]);
     const workerIdItemsList = reactive<Data[]>([]);
     const thirdCompanyIdItemsList = reactive<Data[]>([]);
+    const ruleForm = reactive<Data>({
+      priority_lvl: 2,
+      touch_up: false,
+      next_arrival_dt: '',
+      owner_arrival: false,
+      order_type_id: '',
+      charged_from_id: '',
+      scheduled_dt: '',
+      due_date: '',
+      third_company: false,
+      worker_id: '',
+      third_company_id: '',
+      property_id: '',
+      entry_code: '',
+      canceled: false,
+      completed: false,
+      done_dt: '',
+      manager: '',
+      change_comment: ''
+    });
     const rules = reactive<Data>({
         order_type_id: [
           { required: true, message: t('Order.form.order_type_id.error'), trigger: 'change'},
@@ -260,6 +280,7 @@ const orderFormComposition = (): Data => {
         resetForm,
         loadForm,
         myForm,
+        ruleForm,
         refMyForm,
         rules,
         componentIsLoading,

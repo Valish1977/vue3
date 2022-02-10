@@ -1148,12 +1148,12 @@
     },
     "components": {
       "CompDate": {
-        "formatTemplate": "MM/dd/yyyy",
-        "formatTemplateValue": "yyyy-MM-dd"
+        "formatTemplate": "YYYY/MM/DD",
+        "formatTemplateValue": "YYYY/MM/DD"
       },
       "CompDateTime" : {
         "errText" : "date format MM.dd.yyyy", 
-        "formatTemplate" : "MM/dd/yyyy HH:mm", 
+        "formatTemplate" : "YYYY/MM/DD hh:mm", 
         "formatTemplateValue" : "yyyy-MM-dd HH:mm",
         "now" : "Now",
         "tomorrow": "Tomorrow",
