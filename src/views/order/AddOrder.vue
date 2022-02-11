@@ -1,5 +1,4 @@
 <template>
-
   <el-form
     class="selfForm drawer-content"
     ref="refMyForm"
@@ -12,12 +11,10 @@
       <el-row>
         <el-col :span="24">
           <el-scrollbar class="page-component__scroll">
-            
             <el-row>
               <el-col :span="23">
                 <el-row :gutter="20">
                   <el-col :span="6">
-                    
                     <el-form-item
                       :label="$t('Order.form.priority_lvl.prefix')"
                       prop="priority_lvl"
@@ -41,7 +38,9 @@
                       <el-checkbox
                         style="width: 100%"
                         v-model="ruleForm.touch_up"
-                        >{{ $t("Order.form.touch_up.placeholder") }}</el-checkbox
+                        >{{
+                          $t("Order.form.touch_up.placeholder")
+                        }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -57,23 +56,24 @@
                         placement="top-end"
                         effect="light"
                       >
-
-                      <div style="width: 100%">
-                        <el-date-picker
-                          type="datetime"
-                          :shortcuts="shortcuts"
-                          :disabled-date="disabledDate"
-                          style="width: 100%"
-                          v-model="ruleForm.next_arrival_dt"
-                          :placeholder="
-                            $t('Order.form.next_arrival_dt.placeholder')
-                          "
-                          :format="
-                            $t('filters.components.CompDateTime.formatTemplate')
-                          "
-                          :default-time="defaultTime"
-                        ></el-date-picker>
-                      </div>
+                        <div style="width: 100%">
+                          <el-date-picker
+                            type="datetime"
+                            :shortcuts="shortcuts"
+                            :disabled-date="disabledDate"
+                            style="width: 100%"
+                            v-model="ruleForm.next_arrival_dt"
+                            :placeholder="
+                              $t('Order.form.next_arrival_dt.placeholder')
+                            "
+                            :format="
+                              $t(
+                                'filters.components.CompDateTime.formatTemplate'
+                              )
+                            "
+                            :default-time="defaultTime"
+                          ></el-date-picker>
+                        </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -162,21 +162,24 @@
                         effect="light"
                         :show-after="500"
                       >
-                      <div style="width: 100%">
-                        <el-date-picker
-                          type="datetime"
-                          :shortcuts="shortcuts"
-                          style="width: 100%"
-                          v-model="ruleForm.scheduled_dt"
-                          :placeholder="
-                            $t('Order.form.scheduled_dt.placeholder')
-                          "
-                          :format="
-                            $t('filters.components.CompDateTime.formatTemplate')
-                          "
-                          :default-time="defaultTime" })
-                        ></el-date-picker>
-                      </div>
+                        <div style="width: 100%">
+                          <el-date-picker
+                            type="datetime"
+                            :shortcuts="shortcuts"
+                            style="width: 100%"
+                            v-model="ruleForm.scheduled_dt"
+                            :placeholder="
+                              $t('Order.form.scheduled_dt.placeholder')
+                            "
+                            :format="
+                              $t(
+                                'filters.components.CompDateTime.formatTemplate'
+                              )
+                            "
+                            :default-time="defaultTime"
+                            })
+                          ></el-date-picker>
+                        </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -191,16 +194,16 @@
                         effect="light"
                         :show-after="500"
                       >
-                      <div style="width: 100%">
-                        <el-date-picker
-                          style="width: 100%"
-                          v-model="ruleForm.due_date"
-                          :placeholder="$t('Order.form.due_date.placeholder')"
-                          :format="
-                            $t('filters.components.CompDate.formatTemplate')
-                          "
-                        ></el-date-picker>
-                      </div>
+                        <div style="width: 100%">
+                          <el-date-picker
+                            style="width: 100%"
+                            v-model="ruleForm.due_date"
+                            :placeholder="$t('Order.form.due_date.placeholder')"
+                            :format="
+                              $t('filters.components.CompDate.formatTemplate')
+                            "
+                          ></el-date-picker>
+                        </div>
                       </el-tooltip>
                     </el-form-item>
                   </el-col>
@@ -291,9 +294,7 @@
                             $t('Order.form.third_company_id.placeholder')
                           "
                           :loading="thirdCompanyIdLoading"
-                          @change="
-                            (value) => modifyThirdCompany(value)
-                          "
+                          @change="(value) => modifyThirdCompany(value)"
                         >
                           <el-option
                             v-for="item in thirdCompanyIdItemsList"
@@ -332,11 +333,11 @@
                           :remote-method="propertySearch"
                           style="width: 100%"
                           v-model="ruleForm.property_id"
-                          :placeholder="$t('Order.form.property_id.placeholder')"
-                          :loading="propertyIdLoading"
-                          @change="
-                            (value) => modifyProperty(value)
+                          :placeholder="
+                            $t('Order.form.property_id.placeholder')
                           "
+                          :loading="propertyIdLoading"
+                          @change="(value) => modifyProperty(value)"
                         >
                           <el-option
                             v-for="item in propertyIdItemsList"
@@ -473,7 +474,7 @@
                     </table>
                   </el-col>
                 </el-row>
-                 <el-row
+                <el-row
                   class="reservation-container top"
                   justify="center"
                   :gutter="20"
@@ -498,7 +499,7 @@
                     </div>
                   </el-col>
                 </el-row>
-                 <el-row :gutter="20">
+                <el-row :gutter="20">
                   <el-col
                     :span="6"
                     style="padding-top: 26px; padding-bottom: 26px"
@@ -507,7 +508,9 @@
                       <el-checkbox
                         style="width: 100%"
                         v-model="ruleForm.canceled"
-                        >{{ $t("Order.form.canceled.placeholder") }}</el-checkbox
+                        >{{
+                          $t("Order.form.canceled.placeholder")
+                        }}</el-checkbox
                       >
                     </el-form-item>
                   </el-col>
@@ -525,7 +528,10 @@
                       >
                     </el-form-item>
                   </el-col>
-                  <el-col v-if="ruleForm.canceled || ruleForm.completed" :span="12">
+                  <el-col
+                    v-if="ruleForm.canceled || ruleForm.completed"
+                    :span="12"
+                  >
                     <el-form-item
                       :label="
                         ruleForm.canceled
@@ -545,21 +551,23 @@
                         :show-after="500"
                       >
                         <div style="width: 100%">
-                        <el-date-picker
-                          type="datetime"
-                          :shortcuts="shortcuts"
-                          style="width: 100%"
-                          v-model="ruleForm.done_dt"
-                          :placeholder="
-                            ruleForm.canceled
-                              ? $t('Order.form.done_dt.placeholder')
-                              : $t('Order.form.done_dt.placeholder2')
-                          "
-                          :format="
-                            $t('filters.components.CompDateTime.formatTemplate')
-                          "
-                          :default-time="defaultTime"
-                        ></el-date-picker>
+                          <el-date-picker
+                            type="datetime"
+                            :shortcuts="shortcuts"
+                            style="width: 100%"
+                            v-model="ruleForm.done_dt"
+                            :placeholder="
+                              ruleForm.canceled
+                                ? $t('Order.form.done_dt.placeholder')
+                                : $t('Order.form.done_dt.placeholder2')
+                            "
+                            :format="
+                              $t(
+                                'filters.components.CompDateTime.formatTemplate'
+                              )
+                            "
+                            :default-time="defaultTime"
+                          ></el-date-picker>
                         </div>
                       </el-tooltip>
                     </el-form-item>
@@ -635,7 +643,6 @@
 </template>
 
 <script lang='ts'>
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import orderFormComposition from "./composition/order_form_composition";
 import calendarComposition from "./composition/calendar_composition";
 import datepickerComposition from "./composition/datepicker_composition";
@@ -643,8 +650,6 @@ import { defineComponent } from "@vue/runtime-core";
 
 const AddOrder = defineComponent({
   setup(_, { emit }) {
-    
-
     const {
       resetForm,
       myForm,
@@ -674,7 +679,7 @@ const AddOrder = defineComponent({
       submitForm,
       refChargedFrom,
       refOrderType,
-      lrID
+      lrID,
     } = orderFormComposition(emit, (): Promise<void> => getCalendarList());
 
     const {
@@ -686,16 +691,11 @@ const AddOrder = defineComponent({
       prevDate,
       nextDate,
       colorsRate,
-      getCalendarList
+      getCalendarList,
     } = calendarComposition(lrID);
-  
-    const {
-      shortcuts,
-      disabledDate,
-      defaultTime,
-      selfDate
-    } = datepickerComposition();
 
+    const { shortcuts, disabledDate, defaultTime, selfDate } =
+      datepickerComposition();
 
     return {
       submitForm,
@@ -715,9 +715,9 @@ const AddOrder = defineComponent({
 
       refChargedFrom,
       refOrderType,
-      
+
       colorsRate,
-    
+
       property,
       propertyIdItemsList,
       propertySearch,
@@ -735,7 +735,7 @@ const AddOrder = defineComponent({
       thirdCompanySearch,
       thirdCompanyIdLoading,
       modifyThirdCompany,
-      
+
       calendarLoading,
       calendarList,
       dates,

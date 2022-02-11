@@ -1,11 +1,7 @@
 <template>
   <div
     class="components-container"
-    :style="
-      windowWidth < 768
-        ? 'margin-right: 15px; margin-left: 15px'
-        : ''
-    "
+    :style="windowWidth < 768 ? 'margin-right: 15px; margin-left: 15px' : ''"
   >
     <el-row
       type="flex"
@@ -42,86 +38,98 @@
       </el-col>
     </el-row>
     <el-scrollbar>
-    <el-row
-      :gutter="20"
-      style="width: 100%"
-      type="flex"
-      justify="space-between">
-      <el-col
-        v-for="t in orderStatusRef.filter((f) => f.id !== 5 && f.id !== 7)"
-        :key="t.id"
+      <el-row
+        :gutter="20"
+        style="width: 100%"
+        type="flex"
+        justify="space-between"
       >
-        <el-card style="margin-bottom: 15px;" class="box-card">
-          <template  #header>
-            <div class="clearfix" >
-              <span>{{ t.name }}</span>
+        <el-col
+          v-for="t in orderStatusRef.filter((f) => f.id !== 5 && f.id !== 7)"
+          :key="t.id"
+        >
+          <el-card style="margin-bottom: 15px" class="box-card">
+            <template #header>
+              <div class="clearfix">
+                <span>{{ t.name }}</span>
+              </div>
+            </template>
+            <div
+              class="text item"
+              v-for="v in tableItems.filter((v) => v.order_status_id === t.id)"
+              :key="v.id"
+            >
+              <p style="margin: 0" align="right">{{ v.id }}</p>
+              <strong>{{ v.property.name }}</strong
+              ><br />
+              <span style="font-size: 12px">{{ v.property.full_address }}</span
+              ><br />
+              <span style="font-size: 12px; font-weight: bold">{{
+                v.title
+              }}</span
+              ><br />
+              <span style="font-size: 12px; color: grey">{{
+                getDateTime(v.saved)
+              }}</span>
+              <el-row>
+                <el-col :span="24" align="right">
+                  <el-button @click="setInfoToDrawer(v)" type="text">{{
+                    $t("Access.infoCard")
+                  }}</el-button>
+                </el-col>
+              </el-row>
             </div>
-          </template>
-          <div class="text item" v-for="v in tableItems.filter((v) => v.order_status_id === t.id)"
-              :key="v.id">
-                <p style="margin: 0" align="right">{{v.id}}</p>
-                <strong>{{v.property.name}}</strong><br />
-                <span style="font-size: 12px">{{v.property.full_address}}</span><br />
-                <span style="font-size: 12px; font-weight: bold">{{v.title}}</span><br />
-                <span style="font-size: 12px; color: grey">{{getDateTime(v.saved)}}</span>
-                <el-row>
-                  <el-col :span="24" align="right">
-                    <el-button @click="setInfoToDrawer(v)" type="text">{{$t('Access.infoCard')}}</el-button>
-                  </el-col>
-                </el-row>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-scrollbar>
     <el-row :gutter="20" justify="space-around">
       <el-col :span="windowWidth < 768 ? 24 : 19">
-      <el-scrollbar>
-        <el-pagination
-          background
-          @size-change="
-            (val) => {
-              $store.dispatch('app/setPaginationData', {
-                paginationName: 'currentRoute',
-                name: 'limit',
-                data: val,
-              });
-              setQuery();
-            }
-          "
-          @current-change="
-            (val) => {
-              $store.dispatch('app/setPaginationData', {
-                paginationName: 'currentRoute',
-                name: 'page',
-                data: val,
-              });
-              setQuery();
-            }
-          "
-          :current-page="
-            $store.getters['app/getPaginationData']('currentRoute').page
-          "
-          :page-sizes="
-            $store.getters['app/getPaginationData']('currentRoute').pageSize
-          "
-          :page-size="
-            $store.getters['app/getPaginationData']('currentRoute').limit
-          "
-          layout="total, sizes, prev, pager, next"
-          :total="$store.getters['app/getPaginationData']('currentRoute').total"
-        ></el-pagination>
-      </el-scrollbar>
+        <el-scrollbar>
+          <el-pagination
+            background
+            @size-change="
+              (val) => {
+                $store.dispatch('app/setPaginationData', {
+                  paginationName: 'currentRoute',
+                  name: 'limit',
+                  data: val,
+                });
+                setQuery();
+              }
+            "
+            @current-change="
+              (val) => {
+                $store.dispatch('app/setPaginationData', {
+                  paginationName: 'currentRoute',
+                  name: 'page',
+                  data: val,
+                });
+                setQuery();
+              }
+            "
+            :current-page="
+              $store.getters['app/getPaginationData']('currentRoute').page
+            "
+            :page-sizes="
+              $store.getters['app/getPaginationData']('currentRoute').pageSize
+            "
+            :page-size="
+              $store.getters['app/getPaginationData']('currentRoute').limit
+            "
+            layout="total, sizes, prev, pager, next"
+            :total="
+              $store.getters['app/getPaginationData']('currentRoute').total
+            "
+          ></el-pagination>
+        </el-scrollbar>
       </el-col>
       <el-col
         :span="windowWidth < 768 ? 24 : 5"
         :style="windowWidth < 768 ? 'margin: 15px 0 30px 0' : ''"
         align="right"
       >
-        <el-button
-          style="width: 140px"
-          plain
-          @click="createExcel()"
+        <el-button style="width: 140px" plain @click="createExcel()"
           >{{ $t("excel.export") }} <i class="el-icon-setting el-icon-right"></i
         ></el-button>
       </el-col>
@@ -141,7 +149,10 @@
           <el-button
             @click="setDrawer({ open: 'AddOrder', close: drawerComponent })"
             type="primary"
-            >{{ btnText }}<span v-if="btnText === ''">{{$t('Order.addOrder')}}</span></el-button
+            >{{ btnText
+            }}<span v-if="btnText === ''">{{
+              $t("Order.addOrder")
+            }}</span></el-button
           >
         </div>
       </div>
@@ -179,20 +190,31 @@
 </template>
 
 <script lang='ts'>
-import filtersModel from './composition/filters_model';
-import dateConvert from './composition/date_convert';
-import excelModel from './composition/excel_model';
+import filtersModel from "./composition/filters_model";
+import dateConvert from "./composition/date_convert";
+import excelModel from "./composition/excel_model";
 /* import { verified } from "@/api/order"; */
-import { computed, defineAsyncComponent, defineComponent, onMounted, reactive, ref, watch } from 'vue';
-import { ROUTES_GETTERS } from '@/store/modules/routes';
-import { useStore } from 'vuex';
-import { APP_DISPATCH, APP_GETTERS } from '@/store/modules/app';
+import {
+  computed,
+  defineAsyncComponent,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
+import { ROUTES_GETTERS } from "@/store/modules/routes";
+import { useStore } from "vuex";
+import { APP_DISPATCH, APP_GETTERS } from "@/store/modules/app";
 import { Data } from "@/enums/enum_other";
-import OrderDb from '@/store/models/OrderDb';
-import { ORDER_DB_DISPATCH } from '@/store/modules/orderDb';
+import OrderDb from "@/store/models/OrderDb";
+import { ORDER_DB_DISPATCH } from "@/store/modules/orderDb";
 import { useI18n } from "vue-i18n";
-import { FILTER_GETTERS, FILTER_REFERENCE } from '@/components/filters/store/filters';
-import { Back, Close } from '@element-plus/icons-vue';
+import {
+  FILTER_GETTERS,
+  FILTER_REFERENCE,
+} from "@/components/filters/store/filters";
+import { Back, Close } from "@element-plus/icons-vue";
 import CompFilter from "@/components/filters/CompFilter.vue";
 import QuickSearch from "@/components/filters/QuickSearch.vue";
 import ListOfFiltersTemplate from "@/components/filters/ListOfFiltersTemplate.vue";
@@ -204,13 +226,12 @@ const AddOrder = defineAsyncComponent({
   delay: 200,
   timeout: 3000,
   errorComponent: LoadingComponent,
-  loadingComponent: LoadingComponent
+  loadingComponent: LoadingComponent,
 });
 
 const Dashboard = defineComponent({
   data() {
-    return {
-    }
+    return {};
   },
   components: {
     Back,
@@ -224,41 +245,54 @@ const Dashboard = defineComponent({
     QuickSearch,
     ExportExel,
     ListOfFiltersTemplate,
-    ListChips
+    ListChips,
   },
   setup() {
     const store = useStore();
-    const {t} = useI18n();
+    const { t } = useI18n();
     const drawer = ref(false);
     const drawerInfoContent = reactive<Data>({});
-    const showBack = computed(() =>  
-      ["DelOrder", "EditOrder"].indexOf(drawerComponent.value) !== -1 &&
-      Object.keys(drawerInfoContent).length > 0
+    const showBack = computed(
+      () =>
+        ["DelOrder", "EditOrder"].indexOf(drawerComponent.value) !== -1 &&
+        Object.keys(drawerInfoContent).length > 0
     );
-    const showVModal = computed(() =>  ["DelOrder", "EditOrder", "AddOrder"].indexOf(drawerComponent.value) !== -1);
+    const showVModal = computed(
+      () =>
+        ["DelOrder", "EditOrder", "AddOrder"].indexOf(drawerComponent.value) !==
+        -1
+    );
     const drawerComponent = ref("LoadingComponent");
-    
+
     const drawerTitle = ref("");
-    
-    const tableItems = computed(() => OrderDb.query().orderBy("last_Item_flag", "desc").orderBy("name", "asc").get().map((item: OrderDb) => item.$toJson));
+
+    const tableItems = computed(() =>
+      OrderDb.query()
+        .orderBy("last_Item_flag", "desc")
+        .orderBy("name", "asc")
+        .get()
+        .map((item: OrderDb) => item.$toJson)
+    );
     const windowWidth = computed(() => store.getters[APP_GETTERS.WINDOW_WIDTH]);
-    const orderStatusRef = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
+    const orderStatusRef = computed(
+      () =>
+        store.getters[FILTER_GETTERS.REFERENCE](
+          FILTER_REFERENCE.ORDER_STATUS
+        ) ?? []
+    );
 
-    const {getDateTime, getDate} = dateConvert();
+    const { getDateTime, getDate } = dateConvert();
     const btnText = ref("");
-    
-    const { 
-      filterStrQuery,
-     } = filtersModel();
 
-    const {createExcel} = excelModel(getDate, getDateTime);
-    
+    const { filterStrQuery } = filtersModel();
+
+    const { createExcel } = excelModel(getDate, getDateTime);
 
     watch(filterStrQuery, () => {
       store.dispatch(APP_DISPATCH.SET_PAGINATION_DATA, {
         paginationName: "currentRoute",
         name: "page",
-        data: 1
+        data: 1,
       });
       setQuery();
     });
@@ -269,42 +303,47 @@ const Dashboard = defineComponent({
         name:
           store.getters[ROUTES_GETTERS.GET_CURRENT_ROUTE].fullPath +
           ": after mounted component",
-        value: false
+        value: false,
       }); // убираем окно после загрузки роута
     });
     /* TODO: snippet DateTime правильный вывод даты с учетом
     горячей подмены через внесение изменений через стор*/
     /* eslint-disable-next-line no-unused-vars */
-    const handleClose = (done: any) => {
+    const handleClose = () => {
       setDrawer();
-    }
+    };
     const setDataToObject = (object: Data, newData: Data) => {
       Object.keys(object).forEach((key: string) => delete object[key]);
-      Object.keys(newData).forEach((key: string) => object[key] = newData[key]);
-    }
+      Object.keys(newData).forEach(
+        (key: string) => (object[key] = newData[key])
+      );
+    };
     const setDrawer = (v?: Data) => {
       if (v) {
         if (v.data && v.data.id) {
           const item = OrderDb.query().find(v.data.id);
-          setDataToObject(drawerInfoContent, Object.assign({tabNum: "1"}, item?.$toJson));
+          setDataToObject(
+            drawerInfoContent,
+            Object.assign({ tabNum: "1" }, item?.$toJson)
+          );
         }
         switch (v.open) {
-          case "InfoOrder": 
+          case "InfoOrder":
             drawer.value = true;
             drawerTitle.value = t("Order.orderInfo") as string;
             drawerComponent.value = "InfoOrder";
             break;
-          case "AddOrder": 
+          case "AddOrder":
             drawer.value = true;
             drawerTitle.value = t("Order.addOrder") as string;
             drawerComponent.value = "AddOrder";
             break;
-          case "EditOrder": 
+          case "EditOrder":
             drawer.value = true;
             drawerTitle.value = t("Order.editOrder") as string;
             drawerComponent.value = "EditOrder";
             break;
-          case "DelOrder": 
+          case "DelOrder":
             drawer.value = true;
             drawerTitle.value = t("Order.del.title") as string;
             drawerComponent.value = "DelOrder";
@@ -316,24 +355,30 @@ const Dashboard = defineComponent({
       setDataToObject(drawerInfoContent, {});
       drawer.value = false;
       drawerComponent.value = "LoadingComponent";
-    }
+    };
     const setInfoToDrawer = (row: Data) => {
       setDataToObject(drawerInfoContent, Object.assign({}, row));
       setDrawer({ open: "InfoOrder" });
-    }
+    };
     const setQuery = (): void => {
       store.dispatch(ORDER_DB_DISPATCH.CREATE_ORDER, {
-        filters: `?${filterStrQuery.value}${(filterStrQuery.value === "" ? "" : "&")}` +
-        `limit=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit}` +
-        `&offset=${store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").offset}` +
-        `&select=*,charged_from:charged_from_id(name),order_type:order_type_id(name),` +
-        `order_status:order_status_id(name),property:property_id(name,full_address),` +
-        `third_company_obj:third_company_id(fname, sname),worker:worker_id(first_name, last_name),` +
-        `client:client_id(last_name,first_name)`,
+        filters:
+          `?${filterStrQuery.value}${filterStrQuery.value === "" ? "" : "&"}` +
+          `limit=${
+            store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute").limit
+          }` +
+          `&offset=${
+            store.getters[APP_GETTERS.GET_PAGINATION_DATA]("currentRoute")
+              .offset
+          }` +
+          `&select=*,charged_from:charged_from_id(name),order_type:order_type_id(name),` +
+          `order_status:order_status_id(name),property:property_id(name,full_address),` +
+          `third_company_obj:third_company_id(fname, sname),worker:worker_id(first_name, last_name),` +
+          `client:client_id(last_name,first_name)`,
         paginationName: "currentRoute",
-        pagination: true
+        pagination: true,
       });
-    }
+    };
     return {
       drawer,
       drawerTitle,
@@ -349,16 +394,15 @@ const Dashboard = defineComponent({
       tableItems,
       showVModal,
       btnText,
-      handleClose
-    }
-
-  }
+      handleClose,
+    };
+  },
 });
 export default Dashboard;
 </script>
 <style lang="scss">
 .drawer-modal-class {
-  background-color: rgba(0,0,0,.2);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .box-card {
   .el-card__body {
