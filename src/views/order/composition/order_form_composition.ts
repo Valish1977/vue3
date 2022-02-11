@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from "vue";
+import { computed, onBeforeUpdate, onMounted, onUnmounted, onUpdated, reactive, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
@@ -12,8 +12,10 @@ import { APP_BUS_STATE, APP_DISPATCH } from "@/store/modules/app";
 import UserApi from "@/domain/api/user";
 import PropertyApi from "@/domain/api/property";
 import ThirdCompanyApi from "@/domain/api/thirdCompany";
+import OrderApi from "@/domain/api/order";
+import { FILTER_DISPATCH, FILTER_GETTERS, FILTER_REFERENCE } from "@/components/filters/store/filters";
 
-const orderFormComposition = (): Data => {
+export default function orderFormComposition(emit: any, getCalendarList: () => Promise<void>): Data {
     const store = useStore();
     const { t } = useI18n();
     const userApi = new UserApi();
@@ -26,13 +28,20 @@ const orderFormComposition = (): Data => {
     const isSaving = computed(() => store.getters[ORDER_FORM_GETTERS.IS_SAVING]);
     const isVisible = computed(() => store.getters[ORDER_FORM_GETTERS.IS_VISIBLE]);
     
+    const refOrderStatus = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS)?? []);
+    const refOrderType = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_TYPE)?? []);
+    const refChargedFrom = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.CHANGED_FORM)?? []);
+    
+    
     const refMyForm = ref<FormInstance>();
     const setProcessloadingForm = ref(false);
-    const componentIsLoading = ref(true);
     const propertyIdLoading = ref(false);
     const thirdCompanyIdLoading = ref<boolean>(false);
     const workerIdLoading = ref<boolean>(false);
+    const lrID = ref<string | null>(null);
+    const componentIsLoading = ref(true);
 
+    const client = reactive<Data>({});
     const property = reactive<Data>({});
     const worker = reactive<Data>({});
     const thirdCompany = reactive<Data>({});
@@ -89,10 +98,44 @@ const orderFormComposition = (): Data => {
     const loadForm = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.LOAD, data);
     const modify = (data: Data) => store.commit(ORDER_FORM_COMMIT.MODIFY, data);
     const reset = () => store.commit(ORDER_FORM_COMMIT.RESET_CHANGES);
+    const save = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.SAVE, data);
     const closeForm = () => store.dispatch(ORDER_FORM_DISPATCH.CLOSE);
+    const setReference = (data: any) =>
+      store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
+    
+
+    watch(fts, () => {
+      setData();
+      setTimeout(() => {
+        componentIsLoading.value = false;
+      }, 500);
+    });
+    onMounted(() => {
+      setReference({ name: "ref_property_type" });
+      setReference({ name: "ref_order_type" });
+      setReference({ name: "ref_charged_from" });
+      loadForm();
+    });
+    onBeforeUpdate((): void => {
+      console.log("onBeforeUpdate");
+      setProcessloadingForm.value = false;
+    });
+    // life hook vue
+    onUpdated((): void => {
+      console.log("onUpdated");
+      setProcessloadingForm.value = true;
+    });
+    onUnmounted(() => {
+      closeForm();
+    });
+
+    for (const key of Object.keys(ruleForm)) {
+      watch(() => ruleForm[key], () => {
+        modifyFn({name: key, data: ruleForm[key]});
+      });
+    }
       
-      
-      const validateDate = (rule: any, value: any, callback: any) => {
+      function validateDate(rule: any, value: any, callback: any): boolean {
         if (myForm.value.due_date === undefined) {
           callback();
         } else if (componentIsLoading.value && myForm.value.due_date === null) {
@@ -114,45 +157,19 @@ const orderFormComposition = (): Data => {
           }
         }
         return true;
-      };
-
+      }
+    
+    
       // this if allows you to call hooks once when the composition is called again
-    const modifyFn = (data: any, action = null): void => {
-      console.log("sdsdsds");
+    function modifyFn(data: any, action = null): void {
         if (setProcessloadingForm.value) {
           if (action === "trim") {
             data.data = data.data.trim();
           }
-          /*       if (data.name === "plan_hour") {
-            myForm.value.plan_min = myForm.value.plan_hour * 60;
-            modifyFn({name: "plan_min", data: myForm.value.plan_min});
-          } */
           modify(data);
-          if (data.name === "scheduled_dt") {
-            const date = DateTime.fromFormat(
-              data.data,
-              t("filters.components.CompDateTime.formatTemplateValue") as string
-            );
+          if (data.name === "scheduled_dt" || data.name === "next_arrival_dt" || data.name === "done_dt") {
+            const date = DateTime.fromJSDate(data.data);
             modify({ name: "due_date", data: date.toISODate()});
-            try {
-              modify({ name: "scheduled_dt", data: date.toSQL() === null ? data.data: date.toSQL() });
-            } catch (e) {
-              // console.log(e);
-            }
-          }
-          if (data.name === "next_arrival_dt") {
-            const date = DateTime.fromFormat(
-              data.data,
-              t("filters.components.CompDateTime.formatTemplateValue") as string
-            );
-            try {
-              modify({
-                name: "next_arrival_dt",
-                data: date.toSQL() === null ? data.data : date.toSQL()
-              });
-            } catch (e) {
-              // console.log(e);
-            }
           }
           if (data.name === "canceled" ) {
             if(data.data) {
@@ -174,23 +191,43 @@ const orderFormComposition = (): Data => {
               modify({ name: "done_dt", data: null });
             }
           }
-
-          if (data.name === "done_dt") {
-            const date = DateTime.fromFormat(
-              data.data,
-              t("filters.components.CompDateTime.formatTemplateValue") as string
-            );
-            try {
-              modify({ name: "done_dt", data: date.toSQL() === null ? data.data : date.toSQL() });
-            } catch (e) {
-              // console.log(e);
-            }
-          }
         }
       }
       
-
-      const propertySearch = async (v: any) => {
+      function modifyProperty(id: number): void {
+        modify({ name: "property_id", data: id });
+        for (const v of propertyIdItemsList) {
+          if (id === v.id) {
+            setDataToObject(property, v);
+            setDataToObject(client, v.client);
+            modify({ name: "client_id", data: v.client_id });
+            modify({ name: "entry_code", data: v.entry_code });
+            lrID.value = v.lr_id;
+            getCalendarList();
+            break;
+          }
+        }
+      }
+      function modifyWorker(id: number): void {
+        modify({ name: "worker_id", data: id });
+        for (const v of workerIdItemsList) {
+          if (id === v.id) {
+            setDataToObject(worker, v);
+            break;
+          }
+        }
+      }
+      function modifyThirdCompany(id: number): void {
+        modify({ name: "third_company_id", data: id });
+        for (const v of thirdCompanyIdItemsList) {
+          if (id === v.id) {
+            setDataToObject(thirdCompany, v);
+            break;
+          }
+        }
+      }
+  
+      async function propertySearch(v: any) {
         if (v === "") {
           return true;
         }
@@ -213,7 +250,7 @@ const orderFormComposition = (): Data => {
         }
         propertyIdLoading.value = false;
       }
-      const workerSearch = async (v: any) => {
+      async function workerSearch(v: any) {
         if (v === "") {
           return true;
         }
@@ -235,7 +272,7 @@ const orderFormComposition = (): Data => {
         }
         workerIdLoading.value  = false;
       }
-      const thirdCompanySearch = async (v: any) => {
+      async function thirdCompanySearch(v: any) {
         if (v === "") {
           return true;
         }
@@ -258,24 +295,170 @@ const orderFormComposition = (): Data => {
         thirdCompanyIdLoading.value  = false;
       }
 
-      const resetForm = (formEl: FormInstance | undefined): void => {
+      function resetForm(formEl?: FormInstance): void {
         if (!formEl) return
         reset();
         formEl.resetFields();
       }
-      const setNotify = ({
+
+      function clearData(): void {
+        // сброс формы
+        setDataToObject(property, {});
+        setDataToObject(worker, {});
+        setDataToObject(thirdCompany, {});
+        setDataToObject(client, {});
+      }
+
+      function setDataToObject(object: Data, newData: Data) {
+        Object.keys(object).forEach((key: string) => delete object[key]);
+        Object.keys(newData).forEach(
+          (key: string) => (object[key] = newData[key])
+        );
+      }
+
+      function setNotify({
         title = "",
         type = "",
         message = "",
         setTimeOut = 0,
         duration = 5000,
         dangerouslyUseHTMLString = false,
-      }) => {
+      }): void {
         store.dispatch(APP_DISPATCH.SET_BUS, {
           name: APP_BUS_STATE.NOTIFY_BUS,
           data: { title, type, message, setTimeOut, duration, dangerouslyUseHTMLString },
         });
-      };
+      }
+      function setData(): void {
+        modify({ name: "due_date", data: DateTime.local().toISODate() });
+      }
+      
+      function submitForm(formEl?: FormInstance): any {
+          if (!formEl) return
+          formEl.validate((valid) => {
+            // проверка на заполнение геотегов
+            // проверка валидности формы
+            if (!valid) {
+              setNotify({
+                title: t("notify.attention") as string,
+                type: "warning",
+                message: t("notify.errorData") as string
+              });
+              return false;
+            }
+            let setOrderStatus = 1;
+            myForm.value.order_status_id = 1;
+            if (
+              myForm.value.third_company === null ||
+              myForm.value.third_company === false
+            ) {
+              myForm.value.third_company_id = null;
+              modify({
+                name: "third_company_id",
+                data: myForm.value.third_company_id
+              });
+              if (myForm.value.worker_id !== null) {
+                setOrderStatus = 2;
+              }
+            } else {
+              myForm.value.worker_id = null;
+              modify({ name: "worker_id", data: myForm.value.worker_id });
+              if (
+                myForm.value.third_company_id !== null &&
+                myForm.value.third_company_id !== ""
+              ) {
+                setOrderStatus = 2;
+              }
+            }
+            if (myForm.value.canceled || myForm.value.completed) {
+              setOrderStatus = 5;
+            } else {
+              myForm.value.done_dt = null;
+              modify({ name: "done_dt", data: myForm.value.done_dt });
+            }
+            myForm.value.order_status_id = setOrderStatus;
+            modify({
+              name: "order_status_id",
+              data: myForm.value.order_status_id
+            });
+            if (myForm.value.verified === null) {
+              myForm.value.verified = false;
+              modify({ name: "verified", data: myForm.value.verified });
+            }
+            componentIsLoading.value = true;
+            OrderApi.insertItem()
+              .then((data: any) => {
+                const max =
+                  store.getters["entities/order"]().max("last_Item_flag");
+                data.last_Item_flag = max + 1;
+                const type: any = refOrderType.value.find(
+                  (v: any) => v.id === myForm.value.order_type_id
+                );
+                data.order_type = { name: type.name };
+                const status: any = refOrderStatus.value.find(
+                  (v: any) => v.id === myForm.value.order_status_id
+                );
+                data.order_status = { name: status.name };
+                if (myForm.value.charged_from_id !== null) {
+                  const charget: any = refChargedFrom.value.find(
+                    (v: any) => v.id === myForm.value.charged_from_id
+                  );
+                  data.charged_from = { name: charget.name };
+                } else {
+                  data.charged_from = null;
+                }
+                data.property = {
+                  name: property.name,
+                  full_address: property.full_address
+                };
+                data.client = {
+                  first_name: client.first_name,
+                  last_name: client.last_name
+                };
+                if (data.worker_id !== null) {
+                  data.worker = {
+                    first_name: worker.first_name,
+                    last_name: worker.last_name
+                  };
+                } else {
+                  data.worker = null;
+                }
+                if (data.third_company_id !== null) {
+                  data.third_company_obj = {
+                    fname: thirdCompany.fname,
+                    sname: thirdCompany.sname
+                  };
+                } else {
+                  data.third_company_obj = null;
+                }
+                save(data);
+                clearData(); // сброс данных
+                resetForm(); // сброс в store и формы
+                close();
+                componentIsLoading.value = false;
+                setNotify({
+                    title: t("notify.success") as string,
+                    type: "success",
+                    message: t("notify.successText1") as string,
+                    setTimeOut: 500
+                  });
+                emit("setDrawer", {
+                  open: "InfoOrder",
+                  close: "AddOrder",
+                  data: { id: data.id }
+                });
+              })
+              .catch((error: any) => {
+              setNotify({
+                  title: t("notify.attention") as string,
+                  type: "error",
+                  message: t("notify.error") as string
+                });
+                componentIsLoading.value = false;
+                console.log(error);
+              });
+          });
+        }
     return {
         resetForm,
         loadForm,
@@ -305,8 +488,16 @@ const orderFormComposition = (): Data => {
         isVisible,
         workerSearch,
         propertySearch,
-        thirdCompanySearch
+        thirdCompanySearch,
+        modifyProperty,
+        modifyWorker,
+        modifyThirdCompany,
+        submitForm,
+        setData,
+        refChargedFrom,
+        refOrderStatus,
+        refOrderType,
+        lrID
     }
     
 }
-export default orderFormComposition;

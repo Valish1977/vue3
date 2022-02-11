@@ -1149,7 +1149,7 @@
     "components": {
       "CompDate": {
         "formatTemplate": "YYYY/MM/DD",
-        "formatTemplateValue": "YYYY/MM/DD"
+        "formatTemplateValue": "yyyy-MM-dd"
       },
       "CompDateTime" : {
         "errText" : "date format MM.dd.yyyy", 
