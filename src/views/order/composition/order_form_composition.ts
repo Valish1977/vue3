@@ -2,8 +2,6 @@ import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useStore } from "vuex";
 
-
-import { ORDER_FORM_COMMIT, ORDER_FORM_DISPATCH, ORDER_FORM_GETTERS } from "@/store/modules/orderForm";
 import type { ElForm } from 'element-plus'
 type FormInstance = InstanceType<typeof ElForm>;
 import { Data } from "@/enums/enum_other";
@@ -14,20 +12,48 @@ import PropertyApi from "@/domain/api/property";
 import ThirdCompanyApi from "@/domain/api/thirdCompany";
 import OrderApi from "@/domain/api/order";
 import { FILTER_DISPATCH, FILTER_GETTERS, FILTER_REFERENCE } from "@/components/filters/store/filters";
+import { ORDER_DB_GETTERS } from "@/store/modules/orderDb";
+import OrderDb from "@/store/models/OrderDb";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 type EmitType = ((event: string, ...args: any[]) => void) | ((event: string, ...args: any[]) => void);
+
+interface RuleForm {
+  priority_lvl: number | null,
+  touch_up: boolean | null,
+  next_arrival_dt: Date | null,
+  owner_arrival: boolean | null,
+  order_status_id: number | null,
+  order_type_id: number | null,
+  charged_from_id: number | null,
+  scheduled_dt: Date | null,
+  due_date: Date | null,
+  third_company: boolean | null,
+  worker_id: number | null,
+  third_company_id: number | null,
+  property_id: number | null,
+  entry_code: string | null,
+  canceled: boolean | null,
+  completed: boolean | null,
+  done_dt: Date | null,
+  manager: string | null,
+  change_comment: string | null,
+  user_id: number | null,
+  client_id: number | null,
+  order_status_comment: string | null,
+  title: string | null,
+  checks: boolean | null,
+  plan_min: string | null,
+  total_sum: string | null,
+}
+
 export default function orderFormComposition(emit: EmitType, getCalendarList: () => Promise<void>): Data {
   const store = useStore();
   const { t } = useI18n();
   const userApi = new UserApi();
 
-  const myForm = computed(() => store.getters[ORDER_FORM_GETTERS.ITEMS]);
-  const isChanged = computed(() => store.getters[ORDER_FORM_GETTERS.IS_CHANGED]);
-
-  const fts = computed(() => store.getters[ORDER_FORM_GETTERS.FTS]);
-  const isLoading = computed(() => store.getters[ORDER_FORM_GETTERS.IS_LOADING]);
-  const isSaving = computed(() => store.getters[ORDER_FORM_GETTERS.IS_SAVING]);
-  const isVisible = computed(() => store.getters[ORDER_FORM_GETTERS.IS_VISIBLE]);
+  const isLoading = ref(true);
+  const isChanged = ref(false);
+  const fts = ref<string | null>(null);
 
   const refOrderStatus = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_STATUS) ?? []);
   const refOrderType = computed(() => store.getters[FILTER_GETTERS.REFERENCE](FILTER_REFERENCE.ORDER_TYPE) ?? []);
@@ -39,7 +65,7 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
   const thirdCompanyIdLoading = ref<boolean>(false);
   const workerIdLoading = ref<boolean>(false);
   const lrID = ref<string | null>(null);
-  const componentIsLoading = ref(true);
+  
 
   const client = reactive<Data>({});
   const property = reactive<Data>({});
@@ -48,26 +74,45 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
   const propertyIdItemsList = reactive<Data[]>([]);
   const workerIdItemsList = reactive<Data[]>([]);
   const thirdCompanyIdItemsList = reactive<Data[]>([]);
-  const ruleForm = reactive<Data>({
-    priority_lvl: 2,
-    touch_up: false,
-    next_arrival_dt: '',
-    owner_arrival: false,
-    order_type_id: '',
-    charged_from_id: '',
-    scheduled_dt: '',
-    due_date: '',
-    third_company: false,
-    worker_id: '',
-    third_company_id: '',
-    property_id: '',
-    entry_code: '',
-    canceled: false,
-    completed: false,
-    done_dt: '',
-    manager: '',
-    change_comment: ''
+
+  const ruleForm = reactive<RuleForm>({
+    priority_lvl: null,
+    touch_up: null,
+    next_arrival_dt: null,
+    owner_arrival: null,
+    order_status_id: null,
+    order_type_id: null,
+    charged_from_id: null,
+    scheduled_dt: null,
+    due_date: null,
+    third_company: null,
+    worker_id: null,
+    third_company_id: null,
+    property_id: null,
+    entry_code: null,
+    canceled: null,
+    completed: null,
+    done_dt: null,
+    manager: null,
+    change_comment: null,
+    user_id: null,
+    client_id: null,
+    order_status_comment: null,
+    title: null,
+    checks: null,
+    plan_min: null,
+    total_sum: null,
   });
+
+  function setData(): void {
+    ruleForm.priority_lvl = 2;
+    ruleForm.due_date = DateTime.local().toJSDate();
+    setTimeout(() => {
+      // задержка нужна для отработки реактивного изменения ruleForm
+      isChanged.value = false;
+    }, 10);
+  }
+
   const rules = reactive<Data>({
     order_type_id: [
       { required: true, message: t('Order.form.order_type_id.error'), trigger: 'change' },
@@ -77,7 +122,6 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
     ],
     due_date: [
       { required: true, message: t('Order.form.due_date.error'), trigger: 'input' },
-      { validator: () => validateDate, trigger: ['blur', 'change'] }
     ],
     property_id: [
       { required: true, message: t('Order.form.property_id.error'), trigger: 'change' }
@@ -95,115 +139,92 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
     ]
   });
 
-  const loadForm = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.LOAD, data);
-  const modify = (data: Data) => store.commit(ORDER_FORM_COMMIT.MODIFY, data);
-  const reset = () => store.commit(ORDER_FORM_COMMIT.RESET_CHANGES);
-  const save = (data?: Data) => store.dispatch(ORDER_FORM_DISPATCH.SAVE, data);
-  const closeForm = () => store.dispatch(ORDER_FORM_DISPATCH.CLOSE);
-  const setReference = (data: any) =>
-    store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
+  const setReference = (data: any) => store.dispatch(FILTER_DISPATCH.SET_REFERENCE, data);
 
 
-  watch(fts, () => {
-    setData();
-    setTimeout(() => {
-      componentIsLoading.value = false;
-    }, 500);
-  });
+  
   onMounted(() => {
     setReference({ name: "ref_property_type" });
     setReference({ name: "ref_order_type" });
     setReference({ name: "ref_charged_from" });
-    loadForm();
+    fts.value = new Date().getTime().toString();
+    setData();
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 500);
   });
+
   onUnmounted(() => {
-    closeForm();
+    clearData();
   });
 
-  for (const key of Object.keys(ruleForm)) {
-    watch(() => ruleForm[key], () => {
-      modifyFn({ name: key, data: ruleForm[key] });
-    });
-  }
 
-  function validateDate(rule: any, value: any, callback: any): boolean {
-    if (myForm.value.due_date === undefined) {
-      callback();
-    } else if (componentIsLoading.value && myForm.value.due_date === null) {
-      callback();
-    } else if (!componentIsLoading.value && myForm.value.due_date === null) {
-      callback(
-        new Error(
-          ((t("Order.form.due_date.error2") as string) +
-            " " +
-            t("filters.components.CompDate.formatTemplate")) as string
-        )
-      );
+  // WATCH FIELDS
+  watch(() => ruleForm, () => {
+    isChanged.value = true;
+  }, {deep: true});
+
+  watch(() => ruleForm.scheduled_dt, (value) => {
+    const date = value instanceof Date ? DateTime.fromJSDate(value).toISODate() : null;
+  });
+
+  watch(() => ruleForm.next_arrival_dt, (value) => {
+    const date = value instanceof Date ? DateTime.fromJSDate(value).toISODate() : null;
+  });
+
+  watch(() => ruleForm.done_dt, () => {
+    const date = ruleForm.done_dt instanceof Date ? DateTime.fromJSDate(ruleForm.done_dt).toISODate() : null;
+  });
+
+  watch(() => ruleForm.canceled, () => {
+    if (ruleForm.canceled) {
+      ruleForm.completed = false;
+    }
+    if (ruleForm.canceled || ruleForm.completed) {
+      ruleForm.done_dt = DateTime.local().toJSDate();
     } else {
-      const re: any = /^\d\d\d\d-\d\d-\d\d$/;
-      if (re.test(myForm.value.due_date)) {
-        callback();
-      } else {
-        callback(new Error(t("Order.form.due_date.error2") as string));
-      }
+      ruleForm.done_dt = null;
     }
-    return true;
-  }
+  });
 
+  watch(() => ruleForm.completed, () => {
+    if (ruleForm.completed) {
+      ruleForm.canceled = false;
+    }
+    if ( ruleForm.completed || ruleForm.canceled) {
+      ruleForm.done_dt = DateTime.local().toJSDate();
+    } else {
+      ruleForm.done_dt = null;
+    }
+  });
 
-  // this if allows you to call hooks once when the composition is called again
-  function modifyFn(data: any, action = null): void {
-    if (action === "trim") {
-      data.data = data.data.trim();
-    }
-    if (data.name === "scheduled_dt" || data.name === "next_arrival_dt" || data.name === "done_dt") {
-      data.data = DateTime.fromJSDate(data.data).toISODate();
-    }
-    if (data.name === "canceled") {
-      if (data.data) {
+  watch(() => ruleForm.property_id, () => {
+    modifyProperty(ruleForm.property_id);
+  });
 
-        emit("setDrawer", {
-          open: "InfoOrder",
-          close: "AddOrder",
-          data: { id: 12 }
-        });
-        modify({ name: "completed", data: false });
-      }
-      if (data.data || myForm.value.completed) {
-        modify({ name: "done_dt", data: DateTime.local().toSQL() });
-      } else {
-        modify({ name: "done_dt", data: null });
-      }
-    }
-    if (data.name === "completed") {
-      if (data.data) {
-        modify({ name: "canceled", data: false });
-      }
-      if (data.data || myForm.value.canceled) {
-        modify({ name: "done_dt", data: DateTime.local().toSQL() });
-      } else {
-        modify({ name: "done_dt", data: null });
-      }
-    }
-    modify(data);
-  }
+  watch(() => ruleForm.third_company_id, () => {
+    modifyThirdCompany(ruleForm.third_company_id);
+  });
 
-  function modifyProperty(id: number): void {
-    modify({ name: "property_id", data: id });
+  watch(() => ruleForm.worker_id, () => {
+    modifyWorker(ruleForm.worker_id);
+  });
+
+  function modifyProperty(id: number | null): void {
     for (const v of propertyIdItemsList) {
       if (id === v.id) {
         setDataToObject(property, v);
         setDataToObject(client, v.client);
-        modify({ name: "client_id", data: v.client_id });
-        modify({ name: "entry_code", data: v.entry_code });
+        ruleForm.client_id = v.client_id;
+        ruleForm.entry_code = v.entry_code;
         lrID.value = v.lr_id;
         getCalendarList();
         break;
       }
     }
   }
-  function modifyWorker(id: number): void {
-    modify({ name: "worker_id", data: id });
+
+  function modifyWorker(id: number | null): void {
     for (const v of workerIdItemsList) {
       if (id === v.id) {
         setDataToObject(worker, v);
@@ -211,8 +232,8 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
       }
     }
   }
-  function modifyThirdCompany(id: number): void {
-    modify({ name: "third_company_id", data: id });
+
+  function modifyThirdCompany(id: number | null): void {
     for (const v of thirdCompanyIdItemsList) {
       if (id === v.id) {
         setDataToObject(thirdCompany, v);
@@ -289,11 +310,7 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
     thirdCompanyIdLoading.value = false;
   }
 
-  function resetForm(formEl?: FormInstance): void {
-    if (!formEl) return
-    reset();
-    formEl.resetFields();
-  }
+  
 
   function clearData(): void {
     // сброс формы
@@ -301,6 +318,13 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
     setDataToObject(worker, {});
     setDataToObject(thirdCompany, {});
     setDataToObject(client, {});
+    fts.value = null;
+    resetForm(refMyForm.value);
+  }
+
+  function resetForm(formEl: FormInstance | undefined): void {
+    if (!formEl) return
+    formEl.resetFields();
   }
 
   function setDataToObject(object: Data, newData: Data) {
@@ -323,13 +347,13 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
       data: { title, type, message, setTimeOut, duration, dangerouslyUseHTMLString },
     });
   }
-  function setData(): void {
-    modify({ name: "due_date", data: DateTime.local().toISODate() });
-  }
+  
 
-  function submitForm(formEl?: FormInstance): any {
-    if (!formEl) return
-    formEl.validate((valid) => {
+  function submitForm(formEl: FormInstance | undefined): any {
+    if (!formEl) {
+      return;
+    }
+    formEl.validate((valid: boolean | undefined) => {
       // проверка на заполнение геотегов
       // проверка валидности формы
       if (!valid) {
@@ -340,62 +364,49 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
         });
         return false;
       }
+      
       let setOrderStatus = 1;
-      myForm.value.order_status_id = 1;
+      ruleForm.order_type_id = 1;
       if (
-        myForm.value.third_company === null ||
-        myForm.value.third_company === false
+        ruleForm.third_company === null ||
+        ruleForm.third_company === false
       ) {
-        myForm.value.third_company_id = null;
-        modify({
-          name: "third_company_id",
-          data: myForm.value.third_company_id
-        });
-        if (myForm.value.worker_id !== null) {
+        ruleForm.third_company_id = null;
+        if (ruleForm.worker_id !== null) {
           setOrderStatus = 2;
         }
       } else {
-        myForm.value.worker_id = null;
-        modify({ name: "worker_id", data: myForm.value.worker_id });
+        ruleForm.worker_id = null;
         if (
-          myForm.value.third_company_id !== null &&
-          myForm.value.third_company_id !== ""
+          ruleForm.third_company_id !== null
         ) {
           setOrderStatus = 2;
         }
       }
-      if (myForm.value.canceled || myForm.value.completed) {
+      if (ruleForm.canceled || ruleForm.completed) {
         setOrderStatus = 5;
       } else {
-        myForm.value.done_dt = null;
-        modify({ name: "done_dt", data: myForm.value.done_dt });
+        ruleForm.done_dt = null;
       }
-      myForm.value.order_status_id = setOrderStatus;
-      modify({
-        name: "order_status_id",
-        data: myForm.value.order_status_id
-      });
-      if (myForm.value.verified === null) {
-        myForm.value.verified = false;
-        modify({ name: "verified", data: myForm.value.verified });
-      }
-      componentIsLoading.value = true;
+      ruleForm.order_status_id = setOrderStatus;
+
+      isLoading.value = true;
+      
       OrderApi.insertItem()
-        .then((data: any) => {
-          const max =
-            store.getters["entities/order"]().max("last_Item_flag");
+        .then(async (data: any) => {
+          const max = store.getters[ORDER_DB_GETTERS.ITEMS]().max("last_Item_flag");
           data.last_Item_flag = max + 1;
           const type: any = refOrderType.value.find(
-            (v: any) => v.id === myForm.value.order_type_id
+            (v: any) => v.id === ruleForm.order_type_id
           );
           data.order_type = { name: type.name };
           const status: any = refOrderStatus.value.find(
-            (v: any) => v.id === myForm.value.order_status_id
+            (v: any) => v.id === ruleForm.order_status_id
           );
           data.order_status = { name: status.name };
-          if (myForm.value.charged_from_id !== null) {
+          if (ruleForm.charged_from_id !== null) {
             const charget: any = refChargedFrom.value.find(
-              (v: any) => v.id === myForm.value.charged_from_id
+              (v: any) => v.id === ruleForm.charged_from_id
             );
             data.charged_from = { name: charget.name };
           } else {
@@ -425,11 +436,9 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
           } else {
             data.third_company_obj = null;
           }
-          save(data);
-          clearData(); // сброс данных
-          resetForm(); // сброс в store и формы
-          close();
-          componentIsLoading.value = false;
+          await OrderDb.insert( { data } );
+          clearData();
+          isLoading.value = false;
           setNotify({
             title: t("notify.success") as string,
             type: "success",
@@ -448,23 +457,18 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
             type: "error",
             message: t("notify.error") as string
           });
-          componentIsLoading.value = false;
+          isLoading.value = false;
           console.log(error);
         });
     });
   }
   return {
     resetForm,
-    loadForm,
-    myForm,
     ruleForm,
     refMyForm,
     rules,
-    componentIsLoading,
+    isLoading,
     setNotify,
-    closeForm,
-    modify,
-    modifyFn,
     fts,
     propertyIdLoading,
     thirdCompanyIdLoading,
@@ -476,9 +480,6 @@ export default function orderFormComposition(emit: EmitType, getCalendarList: ()
     workerIdItemsList,
     thirdCompanyIdItemsList,
     isChanged,
-    isLoading,
-    isSaving,
-    isVisible,
     workerSearch,
     propertySearch,
     thirdCompanySearch,

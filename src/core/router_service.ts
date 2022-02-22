@@ -39,12 +39,15 @@ export default class RouterService {
       this._defaultAllRouterNames.push(v.name);
     }
   }
+  
   public resetRouter(): void {
     const arrRoutes = this._router.getRoutes();
     for (const v of arrRoutes) {
       const name = v.name as string;
       if (this._defaultAllRouterNames.indexOf(name) === -1) {
-        this._router.removeRoute(name)
+        if( this._router.hasRoute(name) ) {
+          this._router.removeRoute(name);
+        }
       }
     }
     this.setCurrentRoutes();

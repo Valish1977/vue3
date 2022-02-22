@@ -11,7 +11,7 @@ export const ORDER_DB_DISPATCH = {
 }
 
 export const ORDER_DB_GETTERS = {
-  ITEMS: `${ORDER_STORE_NAME}`,
+  ITEMS: ORDER_STORE_NAME,
 }
 
 export default {

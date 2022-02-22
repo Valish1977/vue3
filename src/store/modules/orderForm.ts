@@ -32,6 +32,35 @@ const ACTIONS = {
 /* 
 public const
 */
+export interface RuleForm {
+  priority_lvl: number,
+  touch_up: boolean,
+  next_arrival_dt: Date | null,
+  owner_arrival: boolean | null,
+  order_status_id: number | null,
+  order_type_id: number | null,
+  charged_from_id: number | null,
+  scheduled_dt: Date | null,
+  due_date: Date | null,
+  third_company: boolean,
+  worker_id: number | null,
+  third_company_id: number | null,
+  property_id: number | null,
+  entry_code: string,
+  canceled: boolean,
+  completed: boolean,
+  done_dt: Date | null,
+  manager: string | null,
+  change_comment: string | null,
+  user_id: number | null,
+  client_id: number | null,
+  order_status_comment: string | null,
+  title: string | null,
+  checks: boolean | null,
+  plan_min: string | null,
+  total_sum: string | null,
+}
+
 export const ORDER_FORM_DISPATCH = {
   CLOSE: `${ORDER_FORM_STORE_NAME}/${ACTIONS.CLOSE}`,
   LOAD: `${ORDER_FORM_STORE_NAME}/${ACTIONS.LOAD}`,
@@ -81,7 +110,7 @@ export default {
     isSaving: false,
     origin: null,
     originVersion: null,
-    fields: {
+    fields: () => <RuleForm>{
       user_id: null,
       client_id: null,
       property_id: null,
@@ -101,12 +130,11 @@ export default {
       charged_from_id: null,
       checks: null,
       plan_min: null,
-      third_company: null,
+      third_company: false,
       third_company_id: null,
-      touch_up: null,
-      /* plan_hour: null, */
+      touch_up: false,
       total_sum: null,
-      entry_code: null,
+      entry_code: '',
       manager: null,
       change_comment: null
     }

@@ -7,7 +7,7 @@
     label-position="top"
     status-icon
   >
-    <div v-if="isVisible" class="drawer-body">
+    <div class="drawer-body">
       <el-row>
         <el-col :span="24">
           <el-scrollbar class="page-component__scroll">
@@ -249,7 +249,6 @@
                           v-model="ruleForm.worker_id"
                           :placeholder="$t('Order.form.worker_id.placeholder')"
                           :loading="workerIdLoading"
-                          @change="(value) => modifyWorker(value)"
                         >
                           <el-option
                             v-for="item in workerIdItemsList"
@@ -294,7 +293,6 @@
                             $t('Order.form.third_company_id.placeholder')
                           "
                           :loading="thirdCompanyIdLoading"
-                          @change="(value) => modifyThirdCompany(value)"
                         >
                           <el-option
                             v-for="item in thirdCompanyIdItemsList"
@@ -337,7 +335,6 @@
                             $t('Order.form.property_id.placeholder')
                           "
                           :loading="propertyIdLoading"
-                          @change="(value) => modifyProperty(value)"
                         >
                           <el-option
                             v-for="item in propertyIdItemsList"
@@ -580,7 +577,7 @@
       </el-row>
     </div>
     <div class="drawer-footer">
-      <div v-if="isVisible">
+      <div>
         <el-divider class="custom-divider"></el-divider>
         <el-row :gutter="20">
           <el-col :span="6">
@@ -627,14 +624,14 @@
           type="info"
           plain
           @click="resetForm(refMyForm)"
-          :disabled="!isChanged || isLoading || isSaving"
+          :disabled="!isChanged"
           >{{ $t("Access.clear") }}</el-button
         >
         <el-button
           type="primary"
           plain
           @click="submitForm(refMyForm)"
-          :disabled="!isChanged || isLoading || isSaving || componentIsLoading"
+          :disabled="!isChanged || isLoading"
           >{{ $t("Access.saved") }}</el-button
         >
       </div>
@@ -656,7 +653,7 @@ const AddOrder = defineComponent({
       ruleForm,
       refMyForm,
       rules,
-      componentIsLoading,
+      isLoading,
       propertyIdLoading,
       thirdCompanyIdLoading,
       workerIdLoading,
@@ -667,15 +664,9 @@ const AddOrder = defineComponent({
       workerIdItemsList,
       thirdCompanyIdItemsList,
       isChanged,
-      isLoading,
-      isSaving,
-      isVisible,
       workerSearch,
       propertySearch,
       thirdCompanySearch,
-      modifyProperty,
-      modifyWorker,
-      modifyThirdCompany,
       submitForm,
       refChargedFrom,
       refOrderType,
@@ -706,9 +697,6 @@ const AddOrder = defineComponent({
       rules,
       isChanged,
       isLoading,
-      componentIsLoading,
-      isSaving,
-      isVisible,
       defaultTime,
       shortcuts,
       disabledDate,
@@ -722,19 +710,16 @@ const AddOrder = defineComponent({
       propertyIdItemsList,
       propertySearch,
       propertyIdLoading,
-      modifyProperty,
 
       worker,
       workerIdItemsList,
       workerSearch,
       workerIdLoading,
-      modifyWorker,
 
       thirdCompany,
       thirdCompanyIdItemsList,
       thirdCompanySearch,
       thirdCompanyIdLoading,
-      modifyThirdCompany,
 
       calendarLoading,
       calendarList,
